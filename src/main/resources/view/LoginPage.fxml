@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane fx:id="loginAnc" prefHeight="690.0" prefWidth="1000.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.LoginPageController">
+   <children>
+      <HBox layoutX="200.0" layoutY="187.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="600.0" prefWidth="291.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <ImageView fitHeight="160.0" fitWidth="153.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" VBox.vgrow="ALWAYS">
+                     <image>
+                        <Image url="@../images/leaf-branch.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets top="-30.0" />
+                     </VBox.margin>
+                  </ImageView>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label prefHeight="47.0" prefWidth="477.0" text="Login" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font name="Cambria Bold" size="32.0" />
+                           </font>
+                           <padding>
+                              <Insets left="70.0" />
+                           </padding>
+                        </Label>
+                        <Label prefHeight="22.0" prefWidth="456.0" text="Elite Driving School ✇" textFill="#797979" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font name="Cambria" size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets left="70.0" />
+                           </padding>
+                        </Label>
+                        <Label prefHeight="22.0" prefWidth="456.0" text="Username">
+                           <font>
+                              <Font name="Cambria Bold" size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets left="70.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets top="40.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="usernameField" promptText="John Doe" style="-fx-border-color: black; -fx-border-radius: 10px; -fx-background-color: white; -fx-border-width: 1.5px;">
+                           <font>
+                              <Font name="Cambria" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="70.0" right="40.0" top="8.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <HBox prefHeight="1.0" prefWidth="346.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label prefHeight="28.0" prefWidth="224.0" text="Password" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Cambria Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="19.0" prefWidth="200.0" style="-fx-alignment: center;" text="Show Password" textAlignment="RIGHT" underline="true">
+                                 <font>
+                                    <Font name="Cambria" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="99.0" />
+                                 </HBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="70.0" right="40.0" top="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <PasswordField fx:id="passwordField" promptText="John@123" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1.5px; -fx-border-radius: 10px;" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets left="70.0" right="40.0" top="8.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="Cambria" size="18.0" />
+                           </font>
+                        </PasswordField>
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="467.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Login" textFill="WHITE">
+                           <font>
+                              <Font name="Cambria Bold" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="70.0" right="40.0" top="30.0" />
+                           </VBox.margin>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                        <Label prefHeight="22.0" prefWidth="456.0" style="-fx-alignment: center;" text="&quot;Steer your future, safely&quot;" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font name="Cambria Italic" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="333.0" prefHeight="22.0" prefWidth="456.0" style="-fx-alignment: center;" text="Elite Driving School" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font name="Cambria Bold" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="600.0" prefWidth="92.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <StackPane prefHeight="675.0" prefWidth="392.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <ImageView fitHeight="290.0" fitWidth="397.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                           <image>
+                              <Image url="@../images/driving-road-signal.png" />
+                           </image>
+                           <StackPane.margin>
+                              <Insets top="170.0" />
+                           </StackPane.margin>
+                        </ImageView>
+                     </children>
+                  </StackPane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
