@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="loginAnc" prefHeight="690.0" prefWidth="1000.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.LoginPageController">
    <children>
       <HBox layoutX="200.0" layoutY="187.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -73,7 +72,7 @@
                                     <Font name="Cambria Bold" size="16.0" />
                                  </font>
                               </Label>
-                              <Label prefHeight="19.0" prefWidth="200.0" style="-fx-alignment: center;" text="Show Password" textAlignment="RIGHT" underline="true">
+                              <Label fx:id="btnShowPassword" prefHeight="19.0" prefWidth="200.0" style="-fx-alignment: center;" text="Show Password" textAlignment="RIGHT" underline="true">
                                  <font>
                                     <Font name="Cambria" size="16.0" />
                                  </font>
@@ -97,7 +96,7 @@
                               <Font name="Cambria" size="18.0" />
                            </font>
                         </PasswordField>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="467.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Login" textFill="WHITE">
+                        <Button fx:id="btnLogin" mnemonicParsing="false" prefHeight="25.0" prefWidth="467.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Login" textFill="WHITE">
                            <font>
                               <Font name="Cambria Bold" size="18.0" />
                            </font>
