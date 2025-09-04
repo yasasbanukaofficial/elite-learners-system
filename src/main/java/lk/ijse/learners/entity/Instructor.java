@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,4 +38,16 @@ public class Instructor {
 
     @Column(name = "inst_availability", nullable = false)
     private boolean availability;
+
+    @OneToMany(
+            mappedBy = "instructor",
+            cascade = CascadeType.ALL
+    )
+    private List<Course> courses;
+
+    @OneToMany(
+            mappedBy = "instructor",
+            cascade = CascadeType.ALL
+    )
+    private List<Lesson> lessons;
 }

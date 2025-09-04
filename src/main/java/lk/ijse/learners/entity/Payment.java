@@ -1,14 +1,12 @@
 package lk.ijse.learners.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 @AllArgsConstructor
@@ -23,6 +21,10 @@ public class Payment {
     @Column(name = "payment_id",  nullable = false)
     private String paymentId;
 
+    @ManyToOne
+    @JoinColumn(name = "stud_id", referencedColumnName = "stud_id")
+    private Student student;
+
     @Column(name = "payment_date", nullable = false)
     private Date paymentDate;
 
@@ -30,7 +32,7 @@ public class Payment {
     private String type;
 
     @Column(name = "payment_amount", nullable = false,  scale = 2)
-    private float amount;
+    private BigDecimal amount;
 
     @Column(name = "payment_status", nullable = false)
     private boolean status;

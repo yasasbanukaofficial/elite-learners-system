@@ -1,15 +1,13 @@
 package lk.ijse.learners.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,13 +27,13 @@ public class Student {
     @Column(name = "stud_lname", nullable = false, length = 50)
     private String lastName;
 
-    @Column(name = "student_dob", nullable = false)
+    @Column(name = "stud_dob", nullable = false)
     private Date dob;
 
-    @Column(name = "student_email", nullable = false, unique = true)
+    @Column(name = "stud_email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "student_password", nullable = false, length = 50)
+    @Column(name = "stud_password", nullable = false, length = 50)
     private String password;
 
     @Column(name = "stud_contact", nullable = false, unique = true, length = 15)
@@ -44,4 +42,22 @@ public class Student {
     @Column(name = "stud_address", nullable = false)
     private String address;
 
+    @OneToMany(
+            mappedBy = "student",
+            cascade = CascadeType.ALL
+    )
+    private List<Payment> payments;
+
+    @OneToMany(
+            mappedBy = "student",
+            cascade = CascadeType.ALL
+    )
+    private List<Lesson> lessons;
+
+    @JoinTable(
+            name = "student_course_details",
+            joinColumns = @JoinColumn(name = "stud_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private List<Course> courses;
 }

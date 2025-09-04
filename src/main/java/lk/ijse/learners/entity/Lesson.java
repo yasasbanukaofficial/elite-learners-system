@@ -20,6 +20,18 @@ public class Lesson {
     @Column(name = "lesson_id",  nullable = false)
     private Long lessonId;
 
+    @ManyToOne
+    @JoinColumn(name = "inst_id", referencedColumnName = "inst_id")
+    private Instructor instructor;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
+    private Course course;
+
+    @ManyToOne
+    @JoinColumn(name = "stud_id", referencedColumnName = "stud_id")
+    private Student student;
+
     @Column(name = "lesson_name", nullable = false)
     private String name;
 
