@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import lk.ijse.learners.controller.util.ViewPath;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -27,7 +28,7 @@ public class MainLayoutController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/StudentMgmtPage.fxml"));
+            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.STUDENT.getPath()));
             anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
             anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
             ancPages.getChildren().add(anchorPane);
@@ -39,7 +40,7 @@ public class MainLayoutController implements Initializable {
     public void visitStudentPgOnAction(MouseEvent mouseEvent) {
         try {
             ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/StudentMgmtPage.fxml"));
+            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.STUDENT.getPath()));
             anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
             anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
             ancPages.getChildren().add(anchorPane);
@@ -51,7 +52,7 @@ public class MainLayoutController implements Initializable {
     public void visitUserMgmtPgOnAction(MouseEvent mouseEvent) {
         try {
             ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/UserMgmtPage.fxml"));
+            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.USER.getPath()));
             anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
             anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
             ancPages.getChildren().add(anchorPane);
@@ -63,7 +64,7 @@ public class MainLayoutController implements Initializable {
     public void visitInstructorsPgOnAction(MouseEvent mouseEvent) {
         try {
             ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/InstructorMgmtPage.fxml"));
+            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.INSTRUCTOR.getPath()));
             anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
             anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
             ancPages.getChildren().add(anchorPane);
