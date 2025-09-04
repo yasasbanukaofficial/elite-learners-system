@@ -96,7 +96,7 @@
                               <Font name="Cambria" size="18.0" />
                            </font>
                         </PasswordField>
-                        <Button fx:id="btnLogin" mnemonicParsing="false" prefHeight="25.0" prefWidth="467.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Login" textFill="WHITE">
+                        <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#loginOnAction" prefHeight="25.0" prefWidth="467.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Login" textFill="WHITE">
                            <font>
                               <Font name="Cambria Bold" size="18.0" />
                            </font>
