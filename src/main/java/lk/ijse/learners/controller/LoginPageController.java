@@ -9,6 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.learners.controller.util.ViewPath;
 
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ public class LoginPageController {
     public Button btnLogin;
 
     public void loginOnAction(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MainLayout.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ViewPath.MAIN.getPath()));
         Stage stage = new Stage();
         stage.setScene(new Scene(fxmlLoader.load()));
         stage.setMaximized(true);
