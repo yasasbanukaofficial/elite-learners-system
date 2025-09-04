@@ -3,6 +3,6 @@ module lk.ijse.learners {
     requires javafx.fxml;
 
 
-    opens lk.ijse.learners to javafx.fxml;
+    opens lk.ijse.learners.controller to javafx.fxml;
     exports lk.ijse.learners;
 }
