@@ -5,8 +5,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 public class MainLayoutController {
-    public AnchorPane pageAnc;
-    public AnchorPane mainAnc;
+    public AnchorPane ancMain;
+    public AnchorPane ancPages;
 
     public HBox btnStudentMgmt;
     public HBox btnLessonMgmt;

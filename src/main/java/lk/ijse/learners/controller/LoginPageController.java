@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 public class LoginPageController {
-    public AnchorPane loginAnc;
+    public AnchorPane ancLogin;
 
     public TextField usernameField;
     public PasswordField passwordField;

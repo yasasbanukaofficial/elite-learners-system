@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="ancUser" prefHeight="900.0" prefWidth="1365.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.UserMgmtPageController">
+   <children>
+      <Label layoutX="359.0" layoutY="184.0" text="Users" />
+   </children>
+</AnchorPane>
