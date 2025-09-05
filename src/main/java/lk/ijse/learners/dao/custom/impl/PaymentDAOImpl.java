@@ -1,8 +1,9 @@
 package lk.ijse.learners.dao.custom.impl;
 
 import lk.ijse.learners.config.FactoryConfiguration;
-import lk.ijse.learners.dao.custom.LessonDAO;
-import lk.ijse.learners.entity.Lesson;
+import lk.ijse.learners.dao.custom.PaymentDAO;
+import lk.ijse.learners.entity.Course;
+import lk.ijse.learners.entity.Payment;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -10,12 +11,12 @@ import org.hibernate.query.Query;
 import java.util.List;
 import java.util.Optional;
 
-public class LessonDAOImpl implements LessonDAO {
+public class PaymentDAOImpl implements PaymentDAO {
     private final FactoryConfiguration factoryConfiguration = FactoryConfiguration.getInstance();
     @Override
-    public List<Lesson> getAll() throws Exception {
+    public List<Payment> getAll() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
-            Query<Lesson> query = session.createQuery("from Lesson", Lesson.class);
+            Query<Payment> query = session.createQuery("from Payment", Payment.class);
             return query.list() == null ? null : query.list();
         }
     }
@@ -23,17 +24,17 @@ public class LessonDAOImpl implements LessonDAO {
     @Override
     public String getLastId() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
-            Query<String> query = session.createQuery("select l.id from Lesson l order by l.id desc", String.class).setMaxResults(1);
+            Query<String> query = session.createQuery("select p.id from Payment p order by p.id desc", String.class).setMaxResults(1);
             return query.list() == null ? null : query.list().getFirst();
         }
     }
 
     @Override
-    public boolean save(Lesson lesson) throws Exception {
+    public boolean save(Payment payment) throws Exception {
         Session session = factoryConfiguration.getSession();
         Transaction transaction = session.beginTransaction();
         try {
-            session.persist(lesson);
+            session.persist(payment);
             transaction.commit();
             return true;
         } catch (Exception e) {
@@ -46,11 +47,11 @@ public class LessonDAOImpl implements LessonDAO {
     }
 
     @Override
-    public boolean update(Lesson lesson) throws Exception {
+    public boolean update(Payment payment) throws Exception {
         Session session = factoryConfiguration.getSession();
         Transaction transaction = session.beginTransaction();
         try {
-            session.merge(lesson);
+            session.merge(payment);
             transaction.commit();
             return true;
         } catch (Exception e) {
@@ -67,30 +68,32 @@ public class LessonDAOImpl implements LessonDAO {
         Session session = factoryConfiguration.getSession();
         Transaction transaction = session.beginTransaction();
         try {
-            Lesson lesson = session.get(Lesson.class, id);
-            session.remove(lesson);
+            Payment payment = session.get(Payment.class, id);
+            session.remove(payment);
             transaction.commit();
             return true;
         } catch (Exception e) {
             transaction.rollback();
             e.printStackTrace();
             return false;
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public List<String> getAllIds() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
-            Query<String> query = session.createQuery("select l.id from Lesson l", String.class);
+            Query<String> query = session.createQuery("select p.id from Payment p", String.class);
             return query.list() == null ? null : query.list();
         }
     }
 
     @Override
-    public Optional<Lesson> findById(String id) throws Exception {
+    public Optional<Payment> findById(String id) throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
-            Lesson lesson = session.get(Lesson.class, id);
-            return Optional.ofNullable(lesson);
+            Payment payment = session.get(Payment.class, id);
+            return Optional.ofNullable(payment);
         }
     }
 }
