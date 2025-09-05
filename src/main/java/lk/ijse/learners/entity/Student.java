@@ -54,10 +54,9 @@ public class Student {
     )
     private List<Lesson> lessons;
 
-    @JoinTable(
-            name = "student_course_details",
-            joinColumns = @JoinColumn(name = "stud_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
+    @OneToMany(
+            mappedBy = "student",
+            cascade = CascadeType.ALL
     )
-    private List<Course> courses;
+    private List<StudentCourseDetails> studentCourseDetails;
 }
