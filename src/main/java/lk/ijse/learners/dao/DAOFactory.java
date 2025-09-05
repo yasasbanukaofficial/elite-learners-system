@@ -13,17 +13,12 @@ public class DAOFactory {
     }
 
     public SuperDAO getDAO(DAOTypes daoTypes) {
-        switch (daoTypes) {
-            case USER:
-                return new UserDAOImpl();
-            case STUDENT:
-                return new StudentDAOImpl();
-            case INSTRUCTOR:
-                return new InstructorDAOImpl();
-            case COURSE:
-                return new CourseDAOImpl();
-            default:
-                return null;
-        }
+        return switch (daoTypes) {
+            case USER -> new UserDAOImpl();
+            case STUDENT -> new StudentDAOImpl();
+            case INSTRUCTOR -> new InstructorDAOImpl();
+            case COURSE -> new CourseDAOImpl();
+            default -> null;
+        };
     }
 }
