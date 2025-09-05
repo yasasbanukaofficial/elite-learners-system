@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class InstructorDAOImpl implements InstructorDAO {
-    FactoryConfiguration factoryConfiguration = FactoryConfiguration.getInstance();
+    private final FactoryConfiguration factoryConfiguration = FactoryConfiguration.getInstance();
     @Override
     public List<Instructor> getAll() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
@@ -24,7 +24,7 @@ public class InstructorDAOImpl implements InstructorDAO {
     public String getLastId() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
             Query<String> query = session.createQuery("select i.id from Instructor i order by i.id desc", String.class).setMaxResults(1);
-            return query.list() == null ? null : query.list().get(0);
+            return query.list() == null ? null : query.list().getFirst();
         }
     }
 
