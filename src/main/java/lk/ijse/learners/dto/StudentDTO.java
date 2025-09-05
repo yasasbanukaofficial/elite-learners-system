@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class StudentDto {
+public class StudentDTO {
     private String studentId;
     private String firstName;
     private String lastName;
@@ -19,7 +19,7 @@ public class StudentDto {
     private String password;
     private String contactNumber;
     private String address;
-    private List<PaymentDto> payments;
-    private List<LessonDto> lessons;
-    private List<StudentCourseDetails> studentCourseDetails;
+    private List<PaymentDTO> payments;
+    private List<LessonDTO> lessons;
+    private List<StudentCourseDetailsDTO> studentCourseDetails;
 }

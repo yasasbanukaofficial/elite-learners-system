@@ -38,11 +38,11 @@ public class FactoryConfiguration {
         return factoryConfiguration == null ? factoryConfiguration = new FactoryConfiguration() : factoryConfiguration;
     }
 
-    private Session getSession() {
+    public Session getSession() {
         return sessionFactory.openSession();
     };
 
-    private Session getCurrentSession() {
+    public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }
 }

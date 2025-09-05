@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class InstructorDto {
+public class InstructorDTO {
     private int instructorId;
     private String name;
     private Date dob;
@@ -18,6 +18,6 @@ public class InstructorDto {
     private String contact;
     private String speciality;
     private boolean availability;
-    private List<CourseDto> courses;
-    private List<LessonDto> lessons;
+    private List<CourseDTO> courses;
+    private List<LessonDTO> lessons;
 }

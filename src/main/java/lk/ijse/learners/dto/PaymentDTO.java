@@ -10,9 +10,9 @@ import java.sql.Date;
 @Getter
 @Setter
 @ToString
-public class PaymentDto {
+public class PaymentDTO {
     private String paymentId;
-    private StudentDto student;
+    private StudentDTO student;
     private Date paymentDate;
     private String type;
     private BigDecimal amount;

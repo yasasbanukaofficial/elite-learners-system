@@ -9,10 +9,10 @@ import java.sql.Date;
 @Getter
 @Setter
 @ToString
-public class StudentCourseDetails {
+public class StudentCourseDetailsDTO {
     private int studentCourseDetailsId;
-    private StudentDto student;
-    private CourseDto course;
+    private StudentDTO student;
+    private CourseDTO course;
     private Date enrollmentDate;
     private String status;
     private String grade;

@@ -9,11 +9,11 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @ToString
-public class LessonDto {
+public class LessonDTO {
     private Long lessonId;
-    private InstructorDto instructor;
-    private CourseDto course;
-    private StudentDto student;
+    private InstructorDTO instructor;
+    private CourseDTO course;
+    private StudentDTO student;
     private String name;
     private Timestamp start_time;
     private Timestamp end_time;

@@ -9,12 +9,12 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class CourseDto {
+public class CourseDTO {
     private String courseId;
-    private InstructorDto instructor;
+    private InstructorDTO instructor;
     private String name;
     private String description;
     private String type;
-    private List<LessonDto> lessons;
-    private List<CourseDto> courses;
+    private List<LessonDTO> lessons;
+    private List<CourseDTO> courses;
 }
