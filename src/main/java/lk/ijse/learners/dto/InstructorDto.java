@@ -1,0 +1,24 @@
+package lk.ijse.learners.dto;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.sql.Date;
+import java.util.List;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+public class InstructorDto {
+    private int instructorId;
+    private String name;
+    private Date dob;
+    private String email;
+    private String contact;
+    private String speciality;
+    private boolean availability;
+    private List<CourseDto> courses;
+    private List<LessonDto> lessons;
+}
