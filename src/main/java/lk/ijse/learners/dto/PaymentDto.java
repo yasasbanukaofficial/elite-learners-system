@@ -1,6 +1,5 @@
 package lk.ijse.learners.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
