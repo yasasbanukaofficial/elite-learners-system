@@ -8,6 +8,9 @@ import lk.ijse.learners.dao.custom.impl.UserDAOImpl;
 public class DAOFactory {
     private static DAOFactory DAOFactory;
     private DAOFactory() {}
+    private static DAOFactory getInstance() {
+        return DAOFactory == null ? DAOFactory = new DAOFactory() : DAOFactory;
+    }
     public enum DAOTypes {
         USER, STUDENT, INSTRUCTOR, COURSE, PAYMENT, SUBJECT, LESSON, QUERY;
     }
