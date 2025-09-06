@@ -44,6 +44,13 @@ public class StudentBOImpl implements StudentBO {
 
     @Override
     public Optional<StudentDTO> findById(String id) throws Exception {
-        return Optional.empty();
+        return studentDAO.findById(id).map(student -> {
+            try {
+                return entityDTOConverter.getStudentDTO(student);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Failed to convert Student to DTO, findById", e);
+            }
+        });
     }
 }
