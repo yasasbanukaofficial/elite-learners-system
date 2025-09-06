@@ -1,4 +1,7 @@
-package lk.ijse.learners.bo;
+package lk.ijse.learners.bo.custom;
 
-public interface StudentBO {
+import lk.ijse.learners.bo.CrudBO;
+import lk.ijse.learners.dto.StudentDTO;
+
+public interface StudentBO extends CrudBO<StudentDTO> {
 }
