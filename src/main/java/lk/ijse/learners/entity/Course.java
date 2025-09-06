@@ -40,8 +40,8 @@ public class Course {
     private List<Lesson> lessons;
 
     @OneToMany(
-            mappedBy = "student",
+            mappedBy = "course",
             cascade = CascadeType.ALL
     )
-    private List<Course> courses;
+    private List<StudentCourseDetails> studentCourseDetails;
 }

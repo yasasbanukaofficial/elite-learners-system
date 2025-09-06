@@ -16,5 +16,5 @@ public class CourseDTO {
     private String description;
     private String type;
     private List<LessonDTO> lessons;
-    private List<CourseDTO> courses;
+    private List<StudentCourseDetailsDTO> studentCourseDetails;
 }

@@ -17,7 +17,7 @@ public class InstructorDTO {
     private String email;
     private String contact;
     private String speciality;
-    private boolean availability;
+    private String availability;
     private List<CourseDTO> courses;
     private List<LessonDTO> lessons;
 }
