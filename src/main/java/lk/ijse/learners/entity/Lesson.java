@@ -18,7 +18,7 @@ import java.sql.Timestamp;
 public class Lesson {
     @Id
     @Column(name = "lesson_id",  nullable = false)
-    private Long lessonId;
+    private String lessonId;
 
     @ManyToOne
     @JoinColumn(name = "inst_id", referencedColumnName = "inst_id")

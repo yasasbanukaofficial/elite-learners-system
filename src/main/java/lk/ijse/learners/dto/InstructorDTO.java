@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @ToString
 public class InstructorDTO {
-    private int instructorId;
+    private String instructorId;
     private String name;
     private Date dob;
     private String email;

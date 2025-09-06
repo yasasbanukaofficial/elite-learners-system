@@ -10,8 +10,8 @@ import java.sql.Timestamp;
 @Setter
 @ToString
 public class LessonDTO {
-    private Long lessonId;
-    private InstructorDTO instructor;
+    private String lessonId;
+    private String instructorId;
     private CourseDTO course;
     private StudentDTO student;
     private String name;

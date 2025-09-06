@@ -12,7 +12,7 @@ import java.sql.Date;
 @ToString
 public class PaymentDTO {
     private String paymentId;
-    private StudentDTO student;
+    private String studentId;
     private Date paymentDate;
     private String type;
     private BigDecimal amount;

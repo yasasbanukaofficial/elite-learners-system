@@ -10,9 +10,9 @@ import java.sql.Date;
 @Setter
 @ToString
 public class StudentCourseDetailsDTO {
-    private int studentCourseDetailsId;
-    private StudentDTO student;
-    private CourseDTO course;
+    private String studentCourseDetailsId;
+    private String studentId;
+    private String courseId;
     private Date enrollmentDate;
     private String status;
     private String grade;

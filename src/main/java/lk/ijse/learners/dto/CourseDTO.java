@@ -11,7 +11,7 @@ import java.util.List;
 @ToString
 public class CourseDTO {
     private String courseId;
-    private InstructorDTO instructor;
+    private String instructorId;
     private String name;
     private String description;
     private String type;
