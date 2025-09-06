@@ -42,5 +42,5 @@ public class Lesson {
     private Timestamp end_time;
 
     @Column(name = "lesson_status", nullable = false)
-    private boolean status;
+    private String status;
 }

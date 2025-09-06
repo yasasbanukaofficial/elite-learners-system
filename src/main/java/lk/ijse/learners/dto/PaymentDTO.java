@@ -16,5 +16,5 @@ public class PaymentDTO {
     private Date paymentDate;
     private String type;
     private BigDecimal amount;
-    private boolean status;
+    private String status;
 }

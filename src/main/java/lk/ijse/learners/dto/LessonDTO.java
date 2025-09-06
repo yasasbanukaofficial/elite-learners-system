@@ -12,10 +12,10 @@ import java.sql.Timestamp;
 public class LessonDTO {
     private String lessonId;
     private String instructorId;
-    private CourseDTO course;
-    private StudentDTO student;
+    private String courseId;
+    private String student;
     private String name;
     private Timestamp start_time;
     private Timestamp end_time;
-    private boolean status;
+    private String status;
 }

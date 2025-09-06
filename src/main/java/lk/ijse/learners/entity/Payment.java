@@ -35,5 +35,5 @@ public class Payment {
     private BigDecimal amount;
 
     @Column(name = "payment_status", nullable = false)
-    private boolean status;
+    private String status;
 }
