@@ -4,7 +4,7 @@ module lk.ijse.learners {
     requires static lombok;
     requires jakarta.persistence;
     requires org.hibernate.orm.core;
-    requires lk.ijse.learners;
+    requires java.naming;
 
 
     opens lk.ijse.learners.controller to javafx.fxml;

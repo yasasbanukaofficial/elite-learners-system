@@ -1,11 +1,150 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:id="ancStudent" prefHeight="900.0" prefWidth="1365.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.StudentMgmtPageController">
+<AnchorPane fx:id="ancStudent" prefHeight="900.0" prefWidth="1365.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.StudentMgmtPageController">
    <children>
-      <Label layoutX="359.0" layoutY="184.0" text="Student" />
+      <VBox layoutX="229.0" layoutY="135.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="79.0" prefWidth="1365.0" style="-fx-border-color: lightGrey; -fx-border-width: 0px 0px 1px 0px;">
+               <children>
+                  <VBox prefHeight="78.0" prefWidth="698.0" HBox.hgrow="ALWAYS" />
+                  <HBox prefHeight="78.0" prefWidth="193.0">
+                     <children>
+                        <StackPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="78.0" prefWidth="64.0">
+                           <children>
+                              <ImageView fitHeight="46.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/user-ico-colored.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </StackPane>
+                        <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label prefHeight="14.0" prefWidth="129.0" text="siriwardhana">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="16.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label prefHeight="14.0" prefWidth="129.0" text="Admin">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #f9f9fb;" VBox.vgrow="ALWAYS">
+               <children>
+                  <HBox prefHeight="105.0" prefWidth="1365.0">
+                     <children>
+                        <VBox prefHeight="114.0" prefWidth="1104.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="Students List">
+                                 <font>
+                                    <Font name="Calibri Bold" size="24.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="Home / Student">
+                                 <font>
+                                    <Font name="Calibri" size="20.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets left="30.0" />
+                           </padding>
+                        </VBox>
+                        <Button mnemonicParsing="false" prefHeight="48.0" prefWidth="173.0" style="-fx-background-color: #f9f9fb; -fx-border-color: #8B1ACE; -fx-border-width: 2px; -fx-border-radius: 10px;" text="+ Add Students" textFill="#8b1ace">
+                           <font>
+                              <Font name="Arial Bold" size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="30.0" top="40.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white; -fx-background-radius: 20px; -fx-border-color: black; -fx-border-radius: 20px;" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="40.0" right="30.0" top="30.0" />
+                     </VBox.margin>
+                     <children>
+                        <HBox prefHeight="76.0" prefWidth="1295.0">
+                           <children>
+                              <Label text="Students Information">
+                                 <font>
+                                    <Font name="Calibri Bold" size="24.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="30.0" top="23.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                              <HBox prefHeight="44.0" prefWidth="235.0" style="-fx-background-color: #f9f9fb; -fx-background-radius: 10px;">
+                                 <children>
+                                    <TextField prefHeight="43.0" prefWidth="204.0" promptText="Search by name or id" style="-fx-background-color: #f9f9fb; -fx-background-radius: 10px;">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </TextField>
+                                    <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/search-ico-col.png" />
+                                       </image>
+                                       <HBox.margin>
+                                          <Insets top="11.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets bottom="12.0" right="30.0" top="20.0" />
+                                 </HBox.margin>
+                              </HBox>
+                           </children>
+                        </HBox>
+                        <TableView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="C1" />
+                            <TableColumn prefWidth="75.0" text="C2" />
+                          </columns>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="30.0" right="30.0" />
+                           </VBox.margin>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
