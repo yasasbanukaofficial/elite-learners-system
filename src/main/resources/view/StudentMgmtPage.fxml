@@ -103,7 +103,7 @@
                               <Insets left="30.0" />
                            </padding>
                         </VBox>
-                        <Button fx:id="btnAddStudent" mnemonicParsing="false" onAction="#addStudent" prefHeight="39.0" prefWidth="141.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="+ Add Students" textFill="WHITE">
+                        <Button fx:id="btnOpenStdForm" mnemonicParsing="false" onAction="#openStdForm" prefHeight="39.0" prefWidth="141.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="+ Add Students" textFill="WHITE">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
