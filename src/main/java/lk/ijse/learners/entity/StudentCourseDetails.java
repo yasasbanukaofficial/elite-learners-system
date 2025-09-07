@@ -17,7 +17,6 @@ import java.sql.Date;
 @Table(name = "student_course_details")
 public class StudentCourseDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stud_course_id")
     private String studentCourseDetailsId;
 
