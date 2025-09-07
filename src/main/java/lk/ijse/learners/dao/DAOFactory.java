@@ -1,6 +1,6 @@
 package lk.ijse.learners.dao;
 
-import lk.ijse.learners.dao.custom.QueryDAOImpl;
+import lk.ijse.learners.dao.custom.impl.QueryDAOImpl;
 import lk.ijse.learners.dao.custom.impl.*;
 import lk.ijse.learners.dao.custom.impl.CourseDAOImpl;
 import lk.ijse.learners.dao.custom.impl.InstructorDAOImpl;
