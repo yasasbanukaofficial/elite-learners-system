@@ -24,12 +24,13 @@ public class FactoryConfiguration {
                     .addAnnotatedClass(Payment.class)
                     .addAnnotatedClass(Instructor.class)
                     .addAnnotatedClass(Lesson.class)
+                    .addAnnotatedClass(StudentCourseDetails.class)
                     .addAnnotatedClass(Student.class);
 
             sessionFactory = cfg.buildSessionFactory();
         } catch (Exception e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Error loading hibernate.properties").show();
+            throw new RuntimeException("Error loading hibernate properties", e);
         }
     }
 
