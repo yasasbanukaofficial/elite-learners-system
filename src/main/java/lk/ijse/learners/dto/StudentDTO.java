@@ -16,7 +16,6 @@ public class StudentDTO {
     private String lastName;
     private Date dob;
     private String email;
-    private String password;
     private String contactNumber;
     private String address;
     private List<PaymentDTO> payments;

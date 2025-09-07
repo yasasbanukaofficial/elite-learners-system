@@ -33,9 +33,6 @@ public class Student {
     @Column(name = "stud_email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "stud_password", nullable = false, length = 50)
-    private String password;
-
     @Column(name = "stud_contact", nullable = false, unique = true, length = 15)
     private String contactNumber;
 
