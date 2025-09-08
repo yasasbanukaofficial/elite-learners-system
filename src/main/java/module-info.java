@@ -5,6 +5,9 @@ module lk.ijse.learners {
     requires jakarta.persistence;
     requires org.hibernate.orm.core;
     requires java.naming;
+    requires javafx.base;
+    requires javafx.graphics;
+    requires java.sql;
 
 
     opens lk.ijse.learners.config to jakarta.persistence;

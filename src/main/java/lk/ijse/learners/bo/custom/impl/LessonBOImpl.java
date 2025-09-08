@@ -54,5 +54,17 @@ public class LessonBOImpl implements LessonBO {
             }
         });
     }
+
+    @Override
+    public String loadNextId() throws Exception {
+        String lastId = getLastId();
+        String prefix = "LSN-%03d";
+        if (lastId != null) {
+            String lastIdNumString = lastId.substring(4);
+            int lastIdNum = Integer.parseInt(lastIdNumString);
+            return String.format(prefix, lastIdNum + 1);
+        }
+        return String.format(prefix, "001");
+    }
 }
 

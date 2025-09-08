@@ -13,12 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:id="ancAddStudentForm" prefHeight="550.0" prefWidth="400.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 10px; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.StudentMgmtPageController">
+<AnchorPane fx:id="ancAddStudentForm" prefHeight="620.0" prefWidth="400.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 10px; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddStudentFormController">
    <children>
       <VBox layoutX="443.0" layoutY="102.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-radius: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox prefHeight="64.0" prefWidth="400.0" spacing="194.0">
+            <HBox prefHeight="64.0" prefWidth="400.0">
                <children>
                   <Label text="Add New Student">
                      <font>
@@ -26,6 +25,14 @@
                      </font>
                      <HBox.margin>
                         <Insets top="2.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="lblStdId" text="STD-001" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="Cambria" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="106.0" right="20.0" top="3.0" />
                      </HBox.margin>
                   </Label>
                   <ImageView fx:id="btnCloseStdForm" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#closeStudentForm" pickOnBounds="true" preserveRatio="true">
@@ -140,9 +147,38 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </VBox>
+                  <VBox prefHeight="71.0" prefWidth="400.0" spacing="5.0">
+                     <children>
+                        <Label text="Payment" textFill="#4d4d4d">
+                           <font>
+                              <Font name="Calibri" size="14.0" />
+                           </font>
+                        </Label>
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="39.0">
+                           <children>
+                              <TextField fx:id="txtPayID" minHeight="-Infinity" prefHeight="40.0" prefWidth="188.0" promptText="Pay ID" stylesheets="@../styles/text-field.css">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </TextField>
+                              <Button fx:id="btnAddPay" mnemonicParsing="false" onAction="#openPayForm" prefHeight="39.0" prefWidth="150.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 10px; -fx-border-width: 2px;" text="Add Payment">
+                                 <font>
+                                    <Font name="Arial Bold" size="14.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Button fx:id="btnAddStudent" mnemonicParsing="false" onAction="#closeStudentForm" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
+                        <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#closeStudentForm" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
@@ -150,7 +186,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addStudent" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Save" textFill="WHITE">
+                        <Button fx:id="btnNext" mnemonicParsing="false" onAction="#viewCourses" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Next" textFill="WHITE">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>

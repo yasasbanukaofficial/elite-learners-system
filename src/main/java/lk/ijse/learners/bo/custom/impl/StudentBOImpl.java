@@ -53,4 +53,16 @@ public class StudentBOImpl implements StudentBO {
             }
         });
     }
+
+    @Override
+    public String loadNextId() throws Exception {
+        String lastId = getLastId();
+        String prefix = "STD-%03d";
+        if (lastId != null) {
+            String lastIdNumString = lastId.substring(4);
+            int lastIdNum = Integer.parseInt(lastIdNumString);
+            return String.format(prefix, lastIdNum + 1);
+        }
+        return String.format(prefix, 1);
+    }
 }

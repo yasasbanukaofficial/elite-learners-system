@@ -2,4 +2,5 @@
     -fx-text-fill: black;
     -fx-border-color: white;
     -fx-background-color: #F9F9F9;
+    -fx-background-radius: 10px;
 }
