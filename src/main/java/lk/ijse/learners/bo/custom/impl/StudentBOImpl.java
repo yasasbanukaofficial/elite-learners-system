@@ -5,6 +5,8 @@ import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.dao.DAOFactory;
 import lk.ijse.learners.dao.custom.StudentDAO;
 import lk.ijse.learners.dto.StudentDTO;
+import lk.ijse.learners.entity.Payment;
+import lk.ijse.learners.entity.StudentCourseDetails;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,5 +66,15 @@ public class StudentBOImpl implements StudentBO {
             return String.format(prefix, lastIdNum + 1);
         }
         return String.format(prefix, 1);
+    }
+
+    @Override
+    public List<Payment> getAllPayments() {
+        return studentDAO.getAllPayments();
+    }
+
+    @Override
+    public List<StudentCourseDetails> getAllSCD() {
+        return studentDAO.getAllSCD();
     }
 }

@@ -2,7 +2,14 @@ package lk.ijse.learners.dao.custom;
 
 import lk.ijse.learners.dao.CrudDAO;
 import lk.ijse.learners.dao.SuperDAO;
+import lk.ijse.learners.entity.Payment;
 import lk.ijse.learners.entity.Student;
+import lk.ijse.learners.entity.StudentCourseDetails;
+
+import java.util.List;
 
 public interface StudentDAO extends CrudDAO<Student> {
+    List<Payment> getAllPayments();
+
+    List<StudentCourseDetails> getAllSCD();
 }
