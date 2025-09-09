@@ -100,6 +100,16 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
+    public boolean existsByField(String field, String fieldValue) throws Exception {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Student> query = session.createQuery("select :field from Student s where :field = :fieldValue", Student.class);
+            query.setParameter("field", field);
+            query.setParameter("fieldValue", fieldValue);
+            return query.list().isEmpty();
+        }
+    }
+
+    @Override
     public List<Payment> getAllPayments() {
         try (Session session = factoryConfiguration.getSession()) {
             Query<Payment> query = session.createQuery("select s.payments from Student s", Payment.class);
