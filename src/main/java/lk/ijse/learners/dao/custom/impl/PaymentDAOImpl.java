@@ -96,4 +96,12 @@ public class PaymentDAOImpl implements PaymentDAO {
             return Optional.ofNullable(payment);
         }
     }
+
+    @Override
+    public boolean isIdExisting(String id) {
+        try(Session session = factoryConfiguration.getSession()) {
+            String resultId = session.createQuery("select p.id from Payment p order by p.id desc", String.class).setMaxResults(1).uniqueResult();
+            return resultId != null && resultId.equals(id);
+        }
+    }
 }

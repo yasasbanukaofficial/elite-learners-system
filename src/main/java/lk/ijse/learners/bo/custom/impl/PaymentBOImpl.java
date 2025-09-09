@@ -66,5 +66,10 @@ public class PaymentBOImpl implements PaymentBO {
         }
         return String.format(prefix, "001");
     }
+
+    @Override
+    public boolean isIdExisting(String id) {
+        return paymentDAO.isIdExisting(id);
+    }
 }
 
