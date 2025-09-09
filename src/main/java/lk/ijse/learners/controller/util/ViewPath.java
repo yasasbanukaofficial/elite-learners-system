@@ -5,7 +5,12 @@ public enum ViewPath {
     MAIN("MainLayout.fxml"),
     STUDENT("StudentMgmtPage.fxml"),
     INSTRUCTOR("InstructorMgmtPage.fxml"),
-    USER("UserMgmtPage.fxml");
+    USER("UserMgmtPage.fxml"),
+
+    ADD_STUDENT_FORM("AddStudentForm.fxml"),
+    ADD_PAYMENT_FORM("AddPaymentForm.fxml"),
+
+    CHOOSE_COURSE_FORM("ChooseCourseForm.fxml");
 
     private final String fileName;
     ViewPath(String fileName) {
