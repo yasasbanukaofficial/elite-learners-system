@@ -64,7 +64,7 @@ public class PaymentBOImpl implements PaymentBO {
             int lastIdNum = Integer.parseInt(lastIdNumString);
             return String.format(prefix, lastIdNum + 1);
         }
-        return String.format(prefix, "001");
+        return String.format(prefix, 1);
     }
 
     @Override
