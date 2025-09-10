@@ -15,6 +15,7 @@ import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.custom.StudentBO;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
+import lk.ijse.learners.controller.util.ViewPath;
 import lk.ijse.learners.dto.StudentDTO;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class StudentMgmtPageController {
     public TableView tblStudents;
 
     public void openStdForm(ActionEvent actionEvent) throws Exception {
-        Parent parent = FXMLLoader.load(getClass().getResource("/view/AddStudentForm.fxml"));
+        Parent parent = FXMLLoader.load(getClass().getResource(ViewPath.ADD_STUDENT_FORM.getPath()));
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);

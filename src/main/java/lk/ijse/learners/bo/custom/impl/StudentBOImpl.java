@@ -34,10 +34,10 @@ public class StudentBOImpl implements StudentBO {
         if (studentById.isPresent()) {
             throw new DuplicateException("Student already exists");
         }
-        if (studentDAO.existsByField("s.contact", studentDto.getContactNumber())) {
+        if (studentDAO.existsByField("contactNumber", studentDto.getContactNumber())) {
             throw new InUseException("Contact number already exists");
         }
-        if (studentDAO.existsByField("s.email", studentDto.getEmail())) {
+        if (studentDAO.existsByField("email", studentDto.getEmail())) {
             throw new InUseException("Email already exists");
         }
         return studentDAO.save(entityDTOConverter.getStudentEntity(studentDto));

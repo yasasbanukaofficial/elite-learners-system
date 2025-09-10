@@ -15,7 +15,7 @@ public class PaymentBOImpl implements PaymentBO {
 
     @Override
     public List<PaymentDTO> getAll() throws Exception {
-        return entityDTOConverter.getPaymentDTOList(paymentDAO.getAll());
+        return entityDTOConverter.toPaymentDTOList(paymentDAO.getAll());
     }
 
     @Override

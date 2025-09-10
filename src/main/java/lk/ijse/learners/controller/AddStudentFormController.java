@@ -2,6 +2,7 @@ package lk.ijse.learners.controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -15,17 +16,22 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
+import lk.ijse.learners.bo.context.EnrollmentUnitOfWork;
+import lk.ijse.learners.bo.custom.PaymentBO;
 import lk.ijse.learners.bo.custom.StudentBO;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
+import lk.ijse.learners.controller.util.ViewPath;
+import lk.ijse.learners.dto.PaymentDTO;
 import lk.ijse.learners.dto.StudentDTO;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddStudentFormController implements Initializable {
@@ -41,52 +47,146 @@ public class AddStudentFormController implements Initializable {
     public TextField txtEmail;
     public TextField txtContact;
     public TextField txtAddress;
-    public TextField txtPayID;
 
+    public Label lblPayId;
     public Label lblStdId;
 
     public DatePicker dobPicker;
 
     StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
+    PaymentBO paymentBO = (PaymentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.PAYMENT);
+
+    private final EnrollmentUnitOfWork enrollmentUnitOfWork = EnrollmentUnitOfWork.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         lblStdId.setText(loadNextId());
-        txtFName.clear();
-        txtLName.clear();
-        txtEmail.clear();
-        txtContact.clear();
-        txtAddress.clear();
-        dobPicker.setValue(null);
-        txtPayID.clear();
+//        txtFName.clear();
+//        txtLName.clear();
+//        txtEmail.clear();
+//        txtContact.clear();
+//        txtAddress.clear();
+//        dobPicker.setValue(null);
+//        txtPayID.clear();
+        txtFName.setText("Student");
+        txtLName.setText("Name");
+        txtEmail.setText("y@mail.com");
+        txtContact.setText("0123456789");
+        txtAddress.setText("Address");
+        dobPicker.setValue(LocalDate.now());
+        lblPayId.setText("Pay ID: ");
     }
 
+    @FXML
     public void closeStudentForm(Event onClick) {
         Stage window = (Stage) ancAddStudentForm.getScene().getWindow();
         window.close();
     }
 
+    @FXML
+    public void nextForm(ActionEvent actionEvent) {
+        if (addStudent()) {
+            closeStudentForm(actionEvent);
+            openForms(ViewPath.CHOOSE_COURSE_FORM.getPath());
+        }
+    }
+
+    @FXML
+    public void openPayForm(ActionEvent actionEvent) {
+        try {
+            lblPayId.setText("Pay ID: " + paymentBO.loadNextId());
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Failed to set pay id");
+            e.printStackTrace();
+        }
+        openForms(ViewPath.ADD_PAYMENT_FORM.getPath());
+    }
+
+    private boolean addStudent() {
+        String sid = lblStdId.getText();
+        String firstName = txtFName.getText();
+        String lastName = txtLName.getText();
+        String email = txtEmail.getText();
+        String contact = txtContact.getText();
+        String address = txtAddress.getText();
+
+        if (dobPicker.getValue() == null){
+            AlertUtil.setErrorAlert("Student date of birth cannot be empty!");
+            return false;
+        }
+
+        Date dob = Date.valueOf(dobPicker.getValue());
+
+        if (validateStudentDetails(firstName, lastName, email, contact, address, dob.toString())){
+            enrollmentUnitOfWork.setStudentDTO(new StudentDTO(
+                    sid,
+                    firstName,
+                    lastName,
+                    dob,
+                    email,
+                    contact,
+                    address,
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>()
+            ));
+            return true;
+        }
+        return false;
+    }
+
+
+    // Utility methods
     private boolean validateStudentDetails(String fName, String lName, String email, String contact, String address, String dob) {
+        StringBuilder errorMsg = new StringBuilder();
+        boolean isValid = true;
+
         String emailPattern = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$";
         String contactPattern = " ^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$ ";
+
+        String errorStyle = "-fx-border-color: #ce0101; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
+        String normalStyle = "-fx-border-color: #000000; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
+
         if (!Auth.areRequiredFieldsFilled(fName, lName, email, contact, address, dob)){
-            AlertUtil.setErrorAlert("You must fill required fields (*)!");
-            return false;
+            errorMsg.append("Required fields are empty!\n");
+            isValid = false;
         }
 
         LocalDate birthDate = LocalDate.parse(dob, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         int age = Period.between(birthDate, LocalDate.now()).getYears();
 
         if (age < 18 || age > 60){
-            AlertUtil.setErrorAlert("Student age must be between 18 and 60 years.");
-            return false;
+            dobPicker.setStyle(errorStyle);
+            errorMsg.append("Student age must be between 18 and 60 years.\n");
+            isValid = false;
         }
 
-        if (!email.matches(emailPattern) && contact.matches(contactPattern)){
-            AlertUtil.setErrorAlert("Cannot mark a future assignment as overdue.");
-            return false;
+        if (!email.matches(emailPattern) && !contact.matches(contactPattern)){
+            txtEmail.setStyle(errorStyle);
+            txtContact.setStyle(errorStyle);
+            errorMsg.append("Invalid email or contact number.\n");
+            isValid = false;
         }
-        return true;
+        if (!isValid){
+            AlertUtil.setErrorAlert("Please solve these issues before proceeding \n\n" + errorMsg.toString());
+        }
+        return isValid;
+    }
+
+    private void openForms(String path) {
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource(path));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setMaximized(false);
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.show();
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Failed to form!");
+            e.printStackTrace();
+            return;
+        }
     }
 
     private String loadNextId() {
@@ -98,51 +198,4 @@ public class AddStudentFormController implements Initializable {
         }
     }
 
-    public void viewCourses(ActionEvent actionEvent) throws IOException {
-        String sid = lblStdId.getText();
-        String firstName = txtFName.getText();
-        String lastName = txtLName.getText();
-        String email = txtEmail.getText();
-        String contact = txtContact.getText();
-        String address = txtAddress.getText();
-        if (dobPicker.getValue() == null){
-            AlertUtil.setErrorAlert("Student date of birth cannot be empty!");
-            return;
-        }
-        Date dob = Date.valueOf(dobPicker.getValue());
-
-        if (validateStudentDetails(firstName, lastName, email, contact, address, dob.toString())){
-            closeStudentForm(actionEvent);
-            return;
-        }
-
-        StudentDTO studentDTO = new StudentDTO(
-                sid,
-                firstName,
-                lastName,
-                dob,
-                email,
-                contact,
-                address,
-                null,
-                null,
-                null
-        );
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ChooseCourseForm.fxml"));
-        Parent parent = loader.load();
-
-        ChooseCourseFormController controller = loader.getController();
-        controller.initializeStudentForm(studentDTO);
-        
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setMaximized(false);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.show();
-    }
-
-    public void openPayForm(ActionEvent actionEvent) {
-    }
 }

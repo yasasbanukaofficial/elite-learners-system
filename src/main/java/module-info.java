@@ -8,6 +8,7 @@ module lk.ijse.learners {
     requires javafx.base;
     requires javafx.graphics;
     requires java.sql;
+//    requires lk.ijse.learners;
 
 
     opens lk.ijse.learners.config to jakarta.persistence;

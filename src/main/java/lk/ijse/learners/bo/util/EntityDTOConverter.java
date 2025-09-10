@@ -21,7 +21,7 @@ public class EntityDTOConverter {
                 student.getEmail(),
                 student.getContactNumber(),
                 student.getAddress(),
-                getPaymentDTOList(student.getPayments()),
+                toPaymentDTOList(student.getPayments()),
                 toLessonDTOList(student.getLessons()),
                 toStudentCourseDetailsDTOList(student.getStudentCourseDetails())
         );
@@ -78,7 +78,7 @@ public class EntityDTOConverter {
         );
     }
 
-    public List<PaymentDTO> getPaymentDTOList(List<Payment> paymentList) throws Exception {
+    public List<PaymentDTO> toPaymentDTOList(List<Payment> paymentList) throws Exception {
         List<PaymentDTO> paymentDTOList = new ArrayList<>();
         paymentList.forEach(payment -> {
             try {
