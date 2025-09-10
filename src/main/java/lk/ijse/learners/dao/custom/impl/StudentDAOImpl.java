@@ -1,5 +1,8 @@
 package lk.ijse.learners.dao.custom.impl;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import lk.ijse.learners.config.FactoryConfiguration;
 import lk.ijse.learners.dao.custom.StudentDAO;
 import lk.ijse.learners.entity.Payment;
@@ -101,12 +104,12 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public boolean existsByField(String field, String fieldValue) throws Exception {
-        try (Session session = factoryConfiguration.getSession()) {
-            Query<Student> query = session.createQuery("select :field from Student s where :field = :fieldValue", Student.class);
-            query.setParameter("field", field);
-            query.setParameter("fieldValue", fieldValue);
-            return query.list().isEmpty();
-        }
+        CriteriaBuilder criteriaBuilder = factoryConfiguration.getSession().getCriteriaBuilder();
+        CriteriaQuery<Student> studentCriteriaQuery = criteriaBuilder.createQuery(Student.class);
+        Root<Student> root = studentCriteriaQuery.from(Student.class);
+        studentCriteriaQuery.select(root).where(criteriaBuilder.equal(root.get(field), fieldValue));
+        Query<Student> query = factoryConfiguration.getSession().createQuery(studentCriteriaQuery);
+        return !query.getResultList().isEmpty();
     }
 
     @Override
