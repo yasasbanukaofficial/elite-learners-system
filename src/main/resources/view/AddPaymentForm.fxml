@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="ancAddPayment" prefHeight="400.0" prefWidth="400.0" style="-fx-border-color: black; -fx-border-radius: 10px; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddPaymentFormController">
    <children>
       <VBox layoutX="453.0" layoutY="112.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-radius: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -37,7 +36,7 @@
                         <Insets left="169.0" right="20.0" top="3.0" />
                      </HBox.margin>
                   </Label>
-                  <ImageView fx:id="btnCloseStdForm" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#closeStudentForm" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="btnCloseStdForm" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#exitPaymentForm" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/closeicon.png" />
                      </image>
@@ -135,7 +134,7 @@
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#closeStudentForm" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
+                        <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#closePaymentForm" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>

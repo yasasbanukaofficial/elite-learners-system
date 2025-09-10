@@ -156,11 +156,14 @@
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="39.0">
                            <children>
-                              <TextField fx:id="txtPayID" minHeight="-Infinity" prefHeight="40.0" prefWidth="188.0" promptText="Pay ID" stylesheets="@../styles/text-field.css">
+                              <Label fx:id="lblPayId" prefHeight="22.0" prefWidth="165.0" HBox.hgrow="ALWAYS">
                                  <font>
-                                    <Font size="16.0" />
+                                    <Font name="Cambria" size="18.0" />
                                  </font>
-                              </TextField>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </Label>
                               <Button fx:id="btnAddPay" mnemonicParsing="false" onAction="#openPayForm" prefHeight="39.0" prefWidth="150.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 10px; -fx-border-width: 2px;" text="Add Payment">
                                  <font>
                                     <Font name="Arial Bold" size="14.0" />
@@ -186,7 +189,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="btnNext" mnemonicParsing="false" onAction="#viewCourses" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Next" textFill="WHITE">
+                        <Button fx:id="btnNext" mnemonicParsing="false" onAction="#nextForm" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Next" textFill="WHITE">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>

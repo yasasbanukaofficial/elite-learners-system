@@ -48,7 +48,7 @@
                               <Font name="Calibri" size="14.0" />
                            </font>
                         </Label>
-                        <ChoiceBox maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="358.0" style="-fx-background-color: #F9F9F9; -fx-background-radius: 10px;">
+                        <ChoiceBox fx:id="cmbCourseOne" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="358.0" style="-fx-background-color: #F9F9F9; -fx-background-radius: 10px;">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -65,7 +65,7 @@
                               <Font name="Calibri" size="14.0" />
                            </font>
                         </Label>
-                        <ChoiceBox maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="358.0" style="-fx-background-color: #F9F9F9; -fx-background-radius: 10px;">
+                        <ChoiceBox fx:id="cmbCourseTwo" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="358.0" style="-fx-background-color: #F9F9F9; -fx-background-radius: 10px;">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -79,7 +79,7 @@
                               <Font name="Calibri" size="14.0" />
                            </font>
                         </Label>
-                        <ChoiceBox maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="358.0" style="-fx-background-color: #F9F9F9; -fx-background-radius: 10px;">
+                        <ChoiceBox fx:id="cmbCourseThree" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="358.0" style="-fx-background-color: #F9F9F9; -fx-background-radius: 10px;">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -93,7 +93,7 @@
                               <Font name="Calibri" size="14.0" />
                            </font>
                         </Label>
-                        <ChoiceBox maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="358.0" style="-fx-background-color: #F9F9F9; -fx-background-radius: 10px;">
+                        <ChoiceBox fx:id="cmbCourseFour" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="358.0" style="-fx-background-color: #F9F9F9; -fx-background-radius: 10px;">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -107,7 +107,7 @@
                               <Font name="Calibri" size="14.0" />
                            </font>
                         </Label>
-                        <ChoiceBox maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="358.0" style="-fx-background-color: #F9F9F9; -fx-background-radius: 10px;">
+                        <ChoiceBox fx:id="cmbCourseFive" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="358.0" style="-fx-background-color: #F9F9F9; -fx-background-radius: 10px;">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -116,7 +116,7 @@
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Button fx:id="btnAddStudent" mnemonicParsing="false" onAction="#closeStudentForm" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
+                        <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#closeForm" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
@@ -124,7 +124,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addStudent" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Save" textFill="WHITE">
+                        <Button fx:id="btnAddCourses" mnemonicParsing="false" onAction="#addCourses" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Save" textFill="WHITE">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
