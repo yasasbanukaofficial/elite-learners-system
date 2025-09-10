@@ -13,7 +13,7 @@ public class BOFactory {
     }
     
     public enum BOTypes{
-         STUDENT, INSTRUCTOR, COURSE, PAYMENT, LESSON, STUDENT_COURSE_DETAILS, QUERY;
+         STUDENT, INSTRUCTOR, COURSE, PAYMENT, LESSON, STUDENT_COURSE_DETAILS, QUERY, ENROLLMENT;
     }
     
     public SuperBO getBO(BOTypes boTypes) {
@@ -25,6 +25,7 @@ public class BOFactory {
             case PAYMENT -> new PaymentBOImpl();
             case LESSON -> new LessonBOImpl();
             case STUDENT_COURSE_DETAILS -> new StudentCourseDetailsBOImpl();
+            case ENROLLMENT -> new EnrollmentBOImpl();
             case QUERY -> new QueryBOImpl();
         };
     }
