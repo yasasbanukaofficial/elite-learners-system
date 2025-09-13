@@ -14,7 +14,8 @@ public class CourseDTO {
     private String instructorId;
     private String name;
     private String description;
-    private String type;
+    private String duration;
+    private String fees;
     private List<LessonDTO> lessons;
     private List<StudentCourseDetailsDTO> studentCourseDetails;
 }

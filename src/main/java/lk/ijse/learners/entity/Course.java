@@ -30,8 +30,11 @@ public class Course {
     @Column(name = "course_description", nullable = false, length = 200)
     private String description;
 
-    @Column(name = "course_type", nullable = false, length = 50)
-    private String type;
+    @Column(name = "course_duration", nullable = false, length = 200)
+    private String duration;
+
+    @Column(name = "course_fee", nullable = false, length = 20)
+    private String fees;
 
     @OneToMany(
             mappedBy = "course",
