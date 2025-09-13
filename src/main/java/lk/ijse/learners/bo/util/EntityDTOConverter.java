@@ -286,7 +286,8 @@ public class EntityDTOConverter {
                 course.getInstructor().getInstructorId(),
                 course.getName(),
                 course.getDescription(),
-                course.getType(),
+                course.getDuration(),
+                course.getFees(),
                 toLessonDTOList(course.getLessons()),
                 toStudentCourseDetailsDTOList(course.getStudentCourseDetails())
         );
@@ -301,7 +302,8 @@ public class EntityDTOConverter {
                 instructor,
                 courseDTO.getName(),
                 courseDTO.getDescription(),
-                courseDTO.getType(),
+                courseDTO.getDuration(),
+                courseDTO.getFees(),
                 toLessonEntityList(courseDTO.getLessons()),
                 toStudentCourseDetailsEntityList(courseDTO.getStudentCourseDetails())
         );
