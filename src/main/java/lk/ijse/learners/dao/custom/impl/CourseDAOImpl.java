@@ -24,7 +24,7 @@ public class CourseDAOImpl implements CourseDAO {
     public String getLastId() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
             Query<String> query = session.createQuery("select c.id from Course c order by c.id desc", String.class).setMaxResults(1);
-            return query.list() == null ? null : query.list().getFirst();
+            return query.list().isEmpty() ? null : query.list().getFirst();
         }
     }
 

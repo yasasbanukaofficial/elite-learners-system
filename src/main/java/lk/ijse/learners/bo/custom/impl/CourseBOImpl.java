@@ -58,12 +58,12 @@ public class CourseBOImpl implements CourseBO {
     @Override
     public String loadNextId() throws Exception {
         String lastId = getLastId();
-        String prefix = "COS-%03d";
+        String prefix = "COU-%03d";
         if (lastId != null) {
             String lastIdNumString = lastId.substring(4);
             int lastIdNum = Integer.parseInt(lastIdNumString);
             return String.format(prefix, lastIdNum + 1);
         }
-        return String.format(prefix, "001");
+        return String.format(prefix, 1);
     }
 }
