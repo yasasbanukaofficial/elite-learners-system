@@ -110,7 +110,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </HBox>
-                        <HBox fx:id="btnCoursesMgmt" minHeight="-Infinity" prefHeight="36.0" prefWidth="220.0">
+                        <HBox fx:id="btnCoursesMgmt" minHeight="-Infinity" onMouseClicked="#visitCoursesPgOnAction" prefHeight="36.0" prefWidth="220.0">
                            <children>
                               <ImageView fitHeight="26.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                                  <HBox.margin>
