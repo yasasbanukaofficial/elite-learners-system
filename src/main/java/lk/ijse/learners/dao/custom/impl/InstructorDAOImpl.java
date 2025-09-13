@@ -24,7 +24,7 @@ public class InstructorDAOImpl implements InstructorDAO {
     public String getLastId() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
             Query<String> query = session.createQuery("select i.id from Instructor i order by i.id desc", String.class).setMaxResults(1);
-            return query.list() == null ? null : query.list().getFirst();
+            return query.list().isEmpty() ? null : query.list().getFirst();
         }
     }
 
