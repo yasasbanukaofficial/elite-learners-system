@@ -4,6 +4,7 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -12,144 +13,219 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancAddCourseForm" prefHeight="450.0" prefWidth="400.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 10px; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddCourseFormController">
+<AnchorPane fx:id="ancAddCourseForm" prefHeight="700.0" prefWidth="820.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 10px; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddCourseFormController">
    <children>
-      <VBox layoutX="443.0" layoutY="102.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-radius: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox prefHeight="64.0" prefWidth="400.0">
+            <VBox prefHeight="538.0" prefWidth="480.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-radius: 10px;" HBox.hgrow="ALWAYS">
                <children>
-                  <Label text="Add New Course">
-                     <font>
-                        <Font name="Candara Bold" size="18.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets top="2.0" />
-                     </HBox.margin>
-                  </Label>
-                  <Label fx:id="lblCourseId" prefHeight="22.0" prefWidth="78.0" text="COU-001" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font name="Cambria" size="18.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="104.0" right="20.0" top="3.0" />
-                     </HBox.margin>
-                  </Label>
-                  <ImageView fx:id="btnCloseCForm" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#closeCourseForm" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/closeicon.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-               </children>
-               <padding>
-                  <Insets left="20.0" right="20.0" top="20.0" />
-               </padding>
-            </HBox>
-            <VBox prefHeight="437.0" prefWidth="360.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <HBox prefHeight="78.0" prefWidth="360.0" spacing="10.0">
+                  <HBox prefHeight="64.0" prefWidth="400.0">
                      <children>
+                        <Label text="Add New Course">
+                           <font>
+                              <Font name="Candara Bold" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="2.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="lblCourseId" prefHeight="22.0" prefWidth="78.0" text="COU-001" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="Cambria" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="151.0" top="3.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+                  <VBox prefHeight="437.0" prefWidth="360.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <HBox prefHeight="78.0" prefWidth="360.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="71.0" prefWidth="400.0" spacing="5.0">
+                                 <children>
+                                    <Label text="Course Name" textFill="#4d4d4d">
+                                       <font>
+                                          <Font name="Calibri" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="txtCName" minHeight="-Infinity" prefHeight="40.0" prefWidth="400.0" promptText="Basic Driving" stylesheets="@../styles/text-field.css">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
                         <VBox prefHeight="71.0" prefWidth="400.0" spacing="5.0">
                            <children>
-                              <Label text="Course Name" textFill="#4d4d4d">
+                              <Label text="Description" textFill="#4d4d4d">
                                  <font>
                                     <Font name="Calibri" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtCName" minHeight="-Infinity" prefHeight="40.0" prefWidth="400.0" promptText="Basic Driving" stylesheets="@../styles/text-field.css">
+                              <TextField fx:id="txtDescription" minHeight="-Infinity" prefHeight="40.0" prefWidth="400.0" promptText="Basically this trains the basics of driving" stylesheets="@../styles/text-field.css">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </TextField>
                            </children>
+                           <VBox.margin>
+                              <Insets top="3.0" />
+                           </VBox.margin>
                         </VBox>
-                     </children>
-                  </HBox>
-                  <VBox prefHeight="71.0" prefWidth="400.0" spacing="5.0">
-                     <children>
-                        <Label text="Description" textFill="#4d4d4d">
-                           <font>
-                              <Font name="Calibri" size="14.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtDescription" minHeight="-Infinity" prefHeight="40.0" prefWidth="400.0" promptText="Basically this trains the basics of driving" stylesheets="@../styles/text-field.css">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </TextField>
+                        <VBox prefHeight="71.0" prefWidth="400.0" spacing="5.0">
+                           <children>
+                              <Label text="Course Duration" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtCDuration" minHeight="-Infinity" prefHeight="40.0" prefWidth="400.0" promptText="12 weeks" stylesheets="@../styles/text-field.css">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <VBox prefHeight="71.0" prefWidth="400.0" spacing="5.0">
+                           <children>
+                              <Label text="Course Fee" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtCFee" minHeight="-Infinity" prefHeight="40.0" prefWidth="400.0" promptText="12,000" stylesheets="@../styles/text-field.css">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <VBox prefHeight="269.0" prefWidth="358.0" spacing="5.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label text="Instructor" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                              <VBox prefHeight="255.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Button fx:id="btnAddInstructor" mnemonicParsing="false" onAction="#showAvailableInstructors" prefHeight="39.0" prefWidth="358.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 10px; -fx-border-width: 2px;" text="Add Instructor">
+                                       <font>
+                                          <Font name="Arial Bold" size="14.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <VBox.margin>
+                                          <Insets top="9.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <ListView fx:id="chosenInstructors" prefHeight="79.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </ListView>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <HBox prefHeight="40.0" prefWidth="358.0" spacing="10.0">
+                           <children>
+                              <Button fx:id="btnCancel" mnemonicParsing="false" onMouseClicked="#closeCourseForm" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
+                                 <font>
+                                    <Font name="Arial Bold" size="14.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button fx:id="btnAddCourse" mnemonicParsing="false" onAction="#addCourse" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Next" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Bold" size="14.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="140.0" />
+                           </padding>
+                        </HBox>
                      </children>
                      <VBox.margin>
-                        <Insets top="3.0" />
+                        <Insets left="20.0" right="20.0" top="10.0" />
                      </VBox.margin>
                   </VBox>
-                  <VBox prefHeight="71.0" prefWidth="400.0" spacing="5.0">
+               </children>
+            </VBox>
+            <VBox fx:id="instructorSection" prefHeight="538.0" prefWidth="502.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 0px 0px 0px 1px;">
+               <children>
+                  <HBox prefHeight="64.0" prefWidth="400.0">
                      <children>
-                        <Label text="Course Duration" textFill="#4d4d4d">
+                        <Label prefHeight="22.0" prefWidth="183.0" text="Available Instructors">
                            <font>
-                              <Font name="Calibri" size="14.0" />
+                              <Font name="Candara Bold" size="18.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets right="165.0" top="2.0" />
+                           </HBox.margin>
                         </Label>
-                        <TextField fx:id="txtCDuration" minHeight="-Infinity" prefHeight="40.0" prefWidth="400.0" promptText="12 weeks" stylesheets="@../styles/text-field.css">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </TextField>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </VBox>
-                  <VBox prefHeight="71.0" prefWidth="400.0" spacing="5.0">
-                     <children>
-                        <Label text="Course Fee" textFill="#4d4d4d">
-                           <font>
-                              <Font name="Calibri" size="14.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtCFee" minHeight="-Infinity" prefHeight="40.0" prefWidth="400.0" promptText="12,000" stylesheets="@../styles/text-field.css">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </TextField>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </VBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                     <children>
-                        <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#closeCourseForm" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
-                           <font>
-                              <Font name="Arial Bold" size="14.0" />
-                           </font>
+                        <ImageView fx:id="btnCloseStdForm" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#closeStudentForm" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/closeicon.png" />
+                           </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
-                        </Button>
-                        <Button fx:id="btnNext" mnemonicParsing="false" onAction="#nextForm" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Next" textFill="WHITE">
-                           <font>
-                              <Font name="Arial Bold" size="14.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
+                        </ImageView>
                      </children>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
                      <padding>
-                        <Insets left="140.0" top="40.0" />
+                        <Insets left="20.0" right="20.0" top="20.0" />
                      </padding>
                   </HBox>
+                  <VBox prefHeight="603.0" prefWidth="379.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox prefHeight="35.0" prefWidth="379.0" spacing="5.0">
+                           <children>
+                              <Label text="Click to select an instructor" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <ListView fx:id="availableInstructors" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                  </VBox>
                </children>
-               <VBox.margin>
-                  <Insets left="20.0" right="20.0" top="10.0" />
-               </VBox.margin>
             </VBox>
          </children>
-      </VBox>
+      </HBox>
    </children>
 </AnchorPane>
