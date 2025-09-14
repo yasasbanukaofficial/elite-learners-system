@@ -11,11 +11,11 @@ import java.util.List;
 @ToString
 public class CourseDTO {
     private String courseId;
-    private String instructorId;
     private String name;
     private String description;
     private String duration;
     private String fees;
+    private List<InstructorDTO> instructors;
     private List<LessonDTO> lessons;
     private List<StudentCourseDetailsDTO> studentCourseDetails;
 }

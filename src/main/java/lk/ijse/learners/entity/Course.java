@@ -20,10 +20,6 @@ public class Course {
     @Column(name = "course_id", nullable = false)
     private String courseId;
 
-    @ManyToOne
-    @JoinColumn(name = "inst_id", referencedColumnName = "inst_id")
-    private Instructor instructor;
-
     @Column(name = "course_name", nullable = false, length = 50)
     private String name;
 
@@ -36,14 +32,24 @@ public class Course {
     @Column(name = "course_fee", nullable = false, length = 20)
     private String fees;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "course_instructor_associate",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "inst_id")
+    )
+    private List<Instructor> instructors;
+
     @OneToMany(
             mappedBy = "course",
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
     private List<Lesson> lessons;
 
     @OneToMany(
             mappedBy = "course",
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
     private List<StudentCourseDetails> studentCourseDetails;
