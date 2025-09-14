@@ -66,5 +66,15 @@ public class InstructorBOImpl implements InstructorBO {
         }
         return String.format(prefix, 1);
     }
+
+    @Override
+    public List<String> getAllAvailableInstructors() throws Exception {
+        return instructorDAO.getAllAvailableInstructors();
+    }
+
+    @Override
+    public List<InstructorDTO> fetchInstructorListByName(List<String> instructorName) throws Exception {
+        return entityDTOConverter.toInstructorDTOList(instructorDAO.fetchInstructorListByName(instructorName));
+    }
 }
 

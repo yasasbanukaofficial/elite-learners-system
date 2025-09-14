@@ -95,4 +95,20 @@ public class InstructorDAOImpl implements InstructorDAO {
             return Optional.ofNullable(instructor);
         }
     }
+
+    public List<String> getAllAvailableInstructors() throws Exception {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<String> query = session.createQuery("select i.name from Instructor i where i.availability = 'available' ", String.class);
+            return query.list().isEmpty() ? null : query.list();
+        }
+    }
+
+    @Override
+    public List<Instructor> fetchInstructorListByName(List<String> instructorName) throws Exception {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Instructor> query = session.createQuery("from Instructor i where i.name in (:instructorName)", Instructor.class);
+            query.setParameterList("instructorName", instructorName);
+            return query.list();
+        }
+    }
 }

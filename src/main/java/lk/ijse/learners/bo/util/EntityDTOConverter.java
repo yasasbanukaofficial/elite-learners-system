@@ -283,27 +283,24 @@ public class EntityDTOConverter {
     public CourseDTO getCourseDTO(Course course) throws Exception {
         return new CourseDTO(
                 course.getCourseId(),
-                course.getInstructor().getInstructorId(),
                 course.getName(),
                 course.getDescription(),
                 course.getDuration(),
                 course.getFees(),
+                toInstructorDTOList(course.getInstructors()),
                 toLessonDTOList(course.getLessons()),
                 toStudentCourseDetailsDTOList(course.getStudentCourseDetails())
         );
     }
 
     public Course getCourseEntity(CourseDTO courseDTO) throws Exception {
-        Instructor instructor = new Instructor();
-        instructor.setInstructorId(courseDTO.getInstructorId());
-
         return new Course(
                 courseDTO.getCourseId(),
-                instructor,
                 courseDTO.getName(),
                 courseDTO.getDescription(),
                 courseDTO.getDuration(),
                 courseDTO.getFees(),
+                toInstructorEntityList(courseDTO.getInstructors()),
                 toLessonEntityList(courseDTO.getLessons()),
                 toStudentCourseDetailsEntityList(courseDTO.getStudentCourseDetails())
         );
