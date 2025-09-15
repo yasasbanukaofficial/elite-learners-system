@@ -1,7 +1,6 @@
 package lk.ijse.learners.controller;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,6 +11,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -59,26 +59,43 @@ public class AddStudentFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         lblStdId.setText(loadNextId());
-        txtFName.setText("Student");
-        txtLName.setText("Name");
-        txtEmail.setText("y@mail.com");
-        txtContact.setText("0123456789");
-        txtAddress.setText("Address");
-        dobPicker.setValue(LocalDate.now());
+//        txtFName.setText("Student");
+//        txtLName.setText("Name");
+//        txtEmail.setText("y@mail.com");
+//        txtContact.setText("0123456789");
+//        txtAddress.setText("Address");
+//        dobPicker.setValue(LocalDate.now());
         lblPayId.setText("Pay ID: ");
     }
 
     @FXML
-    public void closeStudentForm(Event onClick) {
-        Stage window = (Stage) ancAddStudentForm.getScene().getWindow();
-        window.close();
+    public void closeStudentForm(MouseEvent actionEvent) {
+        closeForm();
+    }
+
+    @FXML
+    public void closeStudentFormOnAction(ActionEvent actionEvent) {
+        closeForm();
     }
 
     @FXML
     public void nextForm(ActionEvent actionEvent) {
-        if (addStudent()) {
-            closeStudentForm(actionEvent);
-            openForms(ViewPath.CHOOSE_COURSE_FORM.getPath());
+        try {
+            if (addStudent()) {
+                closeForm();
+                if (enrollmentUnitOfWork.getPaymentDTO() == null) {
+                    AlertUtil.setErrorAlert("Please add payment details before proceeding");
+                    return;
+                }
+                if(enrollmentUnitOfWork.getPaymentDTO().getPaymentId() == null || !enrollmentUnitOfWork.getPaymentDTO().getPaymentId().equals(paymentBO.loadNextId())){
+                    AlertUtil.setErrorAlert("Please add payment before proceeding");
+                    return;
+                }
+                openForms(ViewPath.CHOOSE_COURSE_FORM.getPath());
+            }
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Failed to check for paymentDto");
+            throw new RuntimeException("Error when checking for paymentDto", e);
         }
     }
 
@@ -131,19 +148,53 @@ public class AddStudentFormController implements Initializable {
         StringBuilder errorMsg = new StringBuilder();
         boolean isValid = true;
 
-        String emailPattern = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$";
-        String contactPattern = " ^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$ ";
+        String emailPattern = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
+        String contactPattern = "^(\\d{3}[- .]?){2}\\d{4}$";
 
         String errorStyle = "-fx-border-color: #ce0101; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
         String normalStyle = "-fx-border-color: #000000; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
 
-        if (!Auth.areRequiredFieldsFilled(fName, lName, email, contact, address, dob)){
-            errorMsg.append("Required fields are empty!\n");
-            isValid = false;
-        }
+        // Initial State of UI Components
+        txtFName.setStyle(normalStyle);
+        txtLName.setStyle(normalStyle);
+        dobPicker.setStyle(normalStyle);
+        txtEmail.setStyle(normalStyle);
+        txtContact.setStyle(normalStyle);
+        txtAddress.setStyle(normalStyle);
 
         LocalDate birthDate = LocalDate.parse(dob, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         int age = Period.between(birthDate, LocalDate.now()).getYears();
+
+        if (!Auth.areRequiredFieldsFilled(fName)){
+            errorMsg.append("* First Name must not be empty\n");
+            txtFName.setStyle(errorStyle);
+            isValid = false;
+        }
+        if (!Auth.areRequiredFieldsFilled(lName)){
+            errorMsg.append("* Last Name must not be empty\n");
+            txtLName.setStyle(errorStyle);
+            isValid = false;
+        }
+        if (!Auth.areRequiredFieldsFilled(dob)){
+            errorMsg.append("* You must include student age!\n");
+            dobPicker.setStyle(errorStyle);
+            isValid = false;
+        }
+        if (!Auth.areRequiredFieldsFilled(email) || !email.matches(emailPattern)){
+            errorMsg.append("* Email must not be empty and it should be a valid one!\n");
+            txtEmail.setStyle(errorStyle);
+            isValid = false;
+        }
+        if (!Auth.areRequiredFieldsFilled(contact) || !contact.matches(contactPattern)){
+            errorMsg.append("* You must provide student contact and it should be in correct format!\n");
+            txtContact.setStyle(errorStyle);
+            isValid = false;
+        }
+        if (!Auth.areRequiredFieldsFilled(address)){
+            errorMsg.append("* You must include students address!\n");
+            txtAddress.setStyle(errorStyle);
+            isValid = false;
+        }
 
         if (age < 18 || age > 60){
             dobPicker.setStyle(errorStyle);
@@ -151,12 +202,6 @@ public class AddStudentFormController implements Initializable {
             isValid = false;
         }
 
-        if (!email.matches(emailPattern) && !contact.matches(contactPattern)){
-            txtEmail.setStyle(errorStyle);
-            txtContact.setStyle(errorStyle);
-            errorMsg.append("Invalid email or contact number.\n");
-            isValid = false;
-        }
         if (!isValid){
             AlertUtil.setErrorAlert("Please solve these issues before proceeding \n\n" + errorMsg.toString());
         }
@@ -188,4 +233,8 @@ public class AddStudentFormController implements Initializable {
         }
     }
 
+    private void closeForm() {
+        Stage window = (Stage) ancAddStudentForm.getScene().getWindow();
+        window.close();
+    }
 }

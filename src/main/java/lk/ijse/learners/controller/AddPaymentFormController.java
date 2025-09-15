@@ -1,6 +1,7 @@
 package lk.ijse.learners.controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -10,7 +11,6 @@ import javafx.stage.Stage;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.context.EnrollmentUnitOfWork;
 import lk.ijse.learners.bo.custom.PaymentBO;
-import lk.ijse.learners.bo.custom.StudentBO;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.dto.PaymentDTO;
@@ -19,23 +19,23 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class AddPaymentFormController implements Initializable {
     public AnchorPane ancAddPayment;
+
     public Label lblPayId;
-    public ImageView btnCloseStdForm;
     public DatePicker dpPayDate;
     public TextField txtAmount;
+
     public CheckBox cbCard;
     public CheckBox cbCash;
+
     public Button btnCancel;
     public Button btnPay;
+    public ImageView btnCloseStdForm;
 
     PaymentBO paymentBO = (PaymentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.PAYMENT);
-
     private final EnrollmentUnitOfWork enrollmentUnitOfWork = EnrollmentUnitOfWork.getInstance();
 
     @Override
@@ -54,16 +54,22 @@ public class AddPaymentFormController implements Initializable {
        });
     }
 
-    public void closePaymentForm(ActionEvent actionEvent) {
-        Stage window = (Stage) ancAddPayment.getScene().getWindow();
-        window.close();
+    @FXML
+    public void exitPaymentForm(MouseEvent mouseEvent) {
+        closeForm();
     }
 
+    @FXML
+    public void closePaymentForm(ActionEvent actionEvent) {
+        closeForm();
+    }
+
+    @FXML
     public void addPayment(ActionEvent actionEvent) {
         String payId = lblPayId.getText();
         String studentId = "";
         Date payDate = Date.valueOf(LocalDate.now());
-        double amount = Double.parseDouble(txtAmount.getText());
+        String amount = txtAmount.getText();
         String type = cbCard.isSelected() ? "card" : cbCash.isSelected() ? "cash" : null;
         String status = "paid";
 
@@ -73,34 +79,45 @@ public class AddPaymentFormController implements Initializable {
                     studentId,
                     payDate,
                     type,
-                    new BigDecimal(amount),
+                    new BigDecimal(Double.parseDouble(amount)),
                     status
             ));
+            closeForm();
         }
-        closePaymentForm(actionEvent);
     }
 
-    private boolean validateStudentDetails(double amount, String type, String status) {
+
+    // Utility methods
+    private boolean validateStudentDetails(String amount, String type, String status) {
         StringBuilder errorMsg = new StringBuilder();
         boolean isValid = true;
 
+
+        String amountPattern = "^(?:-(?:[1-9](?:\\d{0,2}(?:,\\d{3})+|\\d*))|(?:0|(?:[1-9](?:\\d{0,2}(?:,\\d{3})+|\\d*))))(?:.\\d+|)$";
         String errorStyle = "-fx-border-color: #ce0101; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
         String normalStyle = "-fx-border-color: #000000; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
+        String checkBoxStyle = "-fx-border-color: transparent; -fx-background-color: transparent; -fx-border-radius: 0px; -fx-border-width: 0px; -fx-background-radius: 10px";
+
+        // Initial State of UI Components
+        txtAmount.setStyle(normalStyle);
+        cbCard.setStyle(checkBoxStyle);
+        cbCash.setStyle(checkBoxStyle);
 
         if (!Auth.areRequiredFieldsFilled(String.valueOf(amount))){
             txtAmount.setStyle(errorStyle);
-            errorMsg.append("Please enter a the amount to pay\n");
+            errorMsg.append(" * Please enter a the amount to pay\n");
             isValid = false;
-        } else if (amount < 0.00) {
+        }
+        if (!amount.matches(amountPattern) || Double.parseDouble(amount) < 0.00) {
             txtAmount.setStyle(errorStyle);
-            errorMsg.append("Amount must be greater than zero.\n");
+            errorMsg.append(" * Amount must be an integer an it should be greater than zero.\n");
             isValid = false;
         }
 
         if (!Auth.areRequiredFieldsFilled(type)){
             cbCard.setStyle(errorStyle);
             cbCash.setStyle(errorStyle);
-            errorMsg.append("Please select a payment type.\n");
+            errorMsg.append(" * Please select a payment type.\n");
             isValid = false;
         }
 
@@ -109,7 +126,6 @@ public class AddPaymentFormController implements Initializable {
         }
         return isValid;
     }
-
 
     private String loadNextId() {
         try {
@@ -121,7 +137,9 @@ public class AddPaymentFormController implements Initializable {
         }
     }
 
-    public void exitPaymentForm(MouseEvent mouseEvent) {
-        closePaymentForm(new ActionEvent());
+    private void closeForm() {
+        Stage window = (Stage) ancAddPayment.getScene().getWindow();
+        window.close();
     }
+
 }

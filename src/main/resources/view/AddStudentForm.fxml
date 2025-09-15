@@ -181,7 +181,7 @@
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#closeStudentForm" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
+                        <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#closeStudentFormOnAction" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
