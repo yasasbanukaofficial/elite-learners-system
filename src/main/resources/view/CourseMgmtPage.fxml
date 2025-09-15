@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancInstructor" prefHeight="900.0" prefWidth="1365.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.InstructorMgmtPageController">
+<AnchorPane fx:id="ancCourse" prefHeight="900.0" prefWidth="1365.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.CourseMgmtPageController">
    <children>
       <VBox layoutX="239.0" layoutY="145.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -23,7 +23,7 @@
                <children>
                   <VBox prefHeight="78.0" prefWidth="698.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label text="Instructor">
+                        <Label text="Courses">
                            <font>
                               <Font name="Calibri Bold" size="28.0" />
                            </font>
@@ -71,7 +71,7 @@
                      <children>
                         <VBox prefHeight="114.0" prefWidth="1104.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label text="Instructor List">
+                              <Label text="Course List">
                                  <font>
                                     <Font name="Calibri Bold" size="24.0" />
                                  </font>
@@ -89,7 +89,7 @@
                                           <Insets top="10.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <Label text="Instructors">
+                                    <Label text="Courses">
                                        <font>
                                           <Font name="Calibri Bold" size="16.0" />
                                        </font>
@@ -104,7 +104,7 @@
                               <Insets left="30.0" />
                            </padding>
                         </VBox>
-                        <Button fx:id="btnOpenInsForm" mnemonicParsing="false" onAction="#openInsForm" prefHeight="39.0" prefWidth="141.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="+ Add Instructor" textFill="WHITE">
+                        <Button fx:id="btnOpenCourseForm" mnemonicParsing="false" onAction="#openCourseForm" prefHeight="39.0" prefWidth="141.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="+ Add Course" textFill="WHITE">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
@@ -124,7 +124,7 @@
                      <children>
                         <HBox prefHeight="76.0" prefWidth="1295.0">
                            <children>
-                              <Label text="Instructors">
+                              <Label text="Course List">
                                  <font>
                                     <Font name="Calibri Bold" size="24.0" />
                                  </font>
@@ -161,7 +161,7 @@
                               </HBox>
                            </children>
                         </HBox>
-                        <TableView fx:id="tblInstructor" prefHeight="200.0" prefWidth="200.0" styleClass=".table-view" stylesheets="@../styles/table-view.css" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tblCourse" prefHeight="200.0" prefWidth="200.0" styleClass=".table-view" stylesheets="@../styles/table-view.css" VBox.vgrow="ALWAYS">
                            <columns>
                               <TableColumn prefWidth="75.0" text="SID" />
                               <TableColumn prefWidth="119.0" text="First Name" />

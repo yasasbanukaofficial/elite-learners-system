@@ -54,5 +54,27 @@ public class InstructorBOImpl implements InstructorBO {
             }
         });
     }
+
+    @Override
+    public String loadNextId() throws Exception {
+        String lastId = getLastId();
+        String prefix = "INS-%03d";
+        if (lastId != null) {
+            String lastIdNumString = lastId.substring(4);
+            int lastIdNum = Integer.parseInt(lastIdNumString);
+            return String.format(prefix, lastIdNum + 1);
+        }
+        return String.format(prefix, 1);
+    }
+
+    @Override
+    public List<String> getAllAvailableInstructors() throws Exception {
+        return instructorDAO.getAllAvailableInstructors();
+    }
+
+    @Override
+    public List<InstructorDTO> fetchInstructorListByName(List<String> instructorName) throws Exception {
+        return entityDTOConverter.toInstructorDTOList(instructorDAO.fetchInstructorListByName(instructorName));
+    }
 }
 

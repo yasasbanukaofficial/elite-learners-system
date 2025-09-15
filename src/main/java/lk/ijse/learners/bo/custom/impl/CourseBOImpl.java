@@ -5,6 +5,7 @@ import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.dao.DAOFactory;
 import lk.ijse.learners.dao.custom.CourseDAO;
 import lk.ijse.learners.dto.CourseDTO;
+import lk.ijse.learners.entity.Course;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,5 +54,22 @@ public class CourseBOImpl implements CourseBO {
                 throw new RuntimeException("Failed to convert Course to DTO, findById", e);
             }
         });
+    }
+
+    @Override
+    public String loadNextId() throws Exception {
+        String lastId = getLastId();
+        String prefix = "COU-%03d";
+        if (lastId != null) {
+            String lastIdNumString = lastId.substring(4);
+            int lastIdNum = Integer.parseInt(lastIdNumString);
+            return String.format(prefix, lastIdNum + 1);
+        }
+        return String.format(prefix, 1);
+    }
+
+    @Override
+    public List<Course> fetchCourseListByName(List<String> courseName) throws Exception {
+        return courseDAO.fetchCourseListByName(courseName);
     }
 }

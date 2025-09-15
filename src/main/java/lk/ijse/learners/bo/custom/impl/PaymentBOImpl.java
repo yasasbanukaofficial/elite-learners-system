@@ -15,7 +15,7 @@ public class PaymentBOImpl implements PaymentBO {
 
     @Override
     public List<PaymentDTO> getAll() throws Exception {
-        return entityDTOConverter.getPaymentDTOList(paymentDAO.getAll());
+        return entityDTOConverter.toPaymentDTOList(paymentDAO.getAll());
     }
 
     @Override
@@ -53,6 +53,23 @@ public class PaymentBOImpl implements PaymentBO {
                 throw new RuntimeException("Failed to convert Payment to DTO, findById",e);
             }
         });
+    }
+
+    @Override
+    public String loadNextId() throws Exception {
+        String lastId = getLastId();
+        String prefix = "PAY-%03d";
+        if (lastId != null) {
+            String lastIdNumString = lastId.substring(4);
+            int lastIdNum = Integer.parseInt(lastIdNumString);
+            return String.format(prefix, lastIdNum + 1);
+        }
+        return String.format(prefix, 1);
+    }
+
+    @Override
+    public boolean isIdExisting(String id) {
+        return paymentDAO.isIdExisting(id);
     }
 }
 

@@ -13,18 +13,18 @@ public class BOFactory {
     }
     
     public enum BOTypes{
-        USER, STUDENT, INSTRUCTOR, COURSE, PAYMENT, LESSON, STUDENT_COURSE_DETAILS, QUERY;
+         STUDENT, INSTRUCTOR, COURSE, PAYMENT, LESSON, QUERY, ENROLLMENT;
     }
     
     public SuperBO getBO(BOTypes boTypes) {
         return switch (boTypes){
-            case USER -> new UserBOImpl();
+//            case USER -> new UserBOImpl();
             case STUDENT ->  new StudentBOImpl();
             case INSTRUCTOR -> new InstructorBOImpl();
             case COURSE -> new CourseBOImpl();
             case PAYMENT -> new PaymentBOImpl();
             case LESSON -> new LessonBOImpl();
-            case STUDENT_COURSE_DETAILS -> new StudentCourseDetailsBOImpl();
+            case ENROLLMENT -> new EnrollmentBOImpl();
             case QUERY -> new QueryBOImpl();
         };
     }

@@ -1,7 +1,11 @@
 package lk.ijse.learners.dao.custom.impl;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import lk.ijse.learners.config.FactoryConfiguration;
 import lk.ijse.learners.dao.custom.StudentDAO;
+import lk.ijse.learners.entity.Payment;
 import lk.ijse.learners.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -24,7 +28,7 @@ public class StudentDAOImpl implements StudentDAO {
     public String getLastId() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
             Query<String> query = session.createQuery("select s.id from Student s order by s.id desc", String.class).setMaxResults(1);
-            return query.list() == null ? null : query.list().getFirst();
+            return query.list().isEmpty() ? null : query.list().getFirst();
         }
     }
 
@@ -94,6 +98,24 @@ public class StudentDAOImpl implements StudentDAO {
         try (Session session = factoryConfiguration.getSession()) {
             Student student = session.get(Student.class, id);
             return Optional.ofNullable(student);
+        }
+    }
+
+    @Override
+    public boolean existsByField(String field, String fieldValue) throws Exception {
+        CriteriaBuilder criteriaBuilder = factoryConfiguration.getSession().getCriteriaBuilder();
+        CriteriaQuery<Student> studentCriteriaQuery = criteriaBuilder.createQuery(Student.class);
+        Root<Student> root = studentCriteriaQuery.from(Student.class);
+        studentCriteriaQuery.select(root).where(criteriaBuilder.equal(root.get(field), fieldValue));
+        Query<Student> query = factoryConfiguration.getSession().createQuery(studentCriteriaQuery);
+        return !query.getResultList().isEmpty();
+    }
+
+    @Override
+    public List<Payment> getAllPayments() {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Payment> query = session.createQuery("select s.payments from Student s", Payment.class);
+            return query.list() == null ? null : query.list();
         }
     }
 }

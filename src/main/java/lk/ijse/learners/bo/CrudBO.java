@@ -11,4 +11,5 @@ public interface CrudBO<T> extends SuperBO {
     boolean delete(String id) throws Exception;
     List<String> getAllIds() throws Exception;
     Optional<T> findById(String id) throws Exception;
+    String loadNextId() throws Exception;
 }

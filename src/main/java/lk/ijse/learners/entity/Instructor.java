@@ -41,12 +41,7 @@ public class Instructor {
 
     @OneToMany(
             mappedBy = "instructor",
-            cascade = CascadeType.ALL
-    )
-    private List<Course> courses;
-
-    @OneToMany(
-            mappedBy = "instructor",
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
     private List<Lesson> lessons;

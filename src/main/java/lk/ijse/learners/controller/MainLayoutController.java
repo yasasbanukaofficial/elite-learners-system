@@ -72,4 +72,17 @@ public class MainLayoutController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public void visitCoursesPgOnAction(MouseEvent mouseEvent) {
+        try {
+            ancPages.getChildren().clear();
+            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.COURSE.getPath()));
+            anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
+            anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
+            ancPages.getChildren().add(anchorPane);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

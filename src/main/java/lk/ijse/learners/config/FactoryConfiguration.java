@@ -29,7 +29,7 @@ public class FactoryConfiguration {
             sessionFactory = cfg.buildSessionFactory();
         } catch (Exception e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Error loading hibernate.properties").show();
+            throw new RuntimeException("Error loading hibernate properties", e);
         }
     }
 

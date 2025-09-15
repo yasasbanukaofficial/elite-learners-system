@@ -20,28 +20,38 @@ public class Course {
     @Column(name = "course_id", nullable = false)
     private String courseId;
 
-    @ManyToOne
-    @JoinColumn(name = "inst_id", referencedColumnName = "inst_id")
-    private Instructor instructor;
-
     @Column(name = "course_name", nullable = false, length = 50)
     private String name;
 
     @Column(name = "course_description", nullable = false, length = 200)
     private String description;
 
-    @Column(name = "course_type", nullable = false, length = 50)
-    private String type;
+    @Column(name = "course_duration", nullable = false, length = 200)
+    private String duration;
+
+    @Column(name = "course_fee", nullable = false, length = 20)
+    private String fees;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "course_instructor_associate",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "inst_id")
+    )
+    private List<Instructor> instructors;
 
     @OneToMany(
             mappedBy = "course",
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
     private List<Lesson> lessons;
 
-    @OneToMany(
-            mappedBy = "course",
-            cascade = CascadeType.ALL
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "student_course_associate",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "stud_id")
     )
-    private List<StudentCourseDetails> studentCourseDetails;
+    private List<Student> students;
 }

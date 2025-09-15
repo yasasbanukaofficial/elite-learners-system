@@ -20,5 +20,4 @@ public class StudentDTO {
     private String address;
     private List<PaymentDTO> payments;
     private List<LessonDTO> lessons;
-    private List<StudentCourseDetailsDTO> studentCourseDetails;
 }

@@ -18,6 +18,5 @@ public class InstructorDTO {
     private String contact;
     private String speciality;
     private String availability;
-    private List<CourseDTO> courses;
     private List<LessonDTO> lessons;
 }

@@ -24,7 +24,7 @@ public class InstructorDAOImpl implements InstructorDAO {
     public String getLastId() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
             Query<String> query = session.createQuery("select i.id from Instructor i order by i.id desc", String.class).setMaxResults(1);
-            return query.list() == null ? null : query.list().getFirst();
+            return query.list().isEmpty() ? null : query.list().getFirst();
         }
     }
 
@@ -93,6 +93,22 @@ public class InstructorDAOImpl implements InstructorDAO {
         try (Session session = factoryConfiguration.getSession()) {
             Instructor instructor = session.get(Instructor.class, id);
             return Optional.ofNullable(instructor);
+        }
+    }
+
+    public List<String> getAllAvailableInstructors() throws Exception {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<String> query = session.createQuery("select i.name from Instructor i where i.availability = 'available' ", String.class);
+            return query.list().isEmpty() ? null : query.list();
+        }
+    }
+
+    @Override
+    public List<Instructor> fetchInstructorListByName(List<String> instructorName) throws Exception {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Instructor> query = session.createQuery("from Instructor i where i.name in (:instructorName)", Instructor.class);
+            query.setParameterList("instructorName", instructorName);
+            return query.list();
         }
     }
 }

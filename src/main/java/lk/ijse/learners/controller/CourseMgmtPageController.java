@@ -13,13 +13,13 @@ import lk.ijse.learners.controller.util.ViewPath;
 
 import java.io.IOException;
 
-public class InstructorMgmtPageController {
-    public AnchorPane ancInstructor;
-    public Button btnOpenInsForm;
-    public TableView tblInstructor;
+public class CourseMgmtPageController {
+    public AnchorPane ancCourse;
+    public Button btnOpenCourseForm;
+    public TableView tblCourse;
 
-    public void openInsForm(ActionEvent event) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource(ViewPath.ADD_INSTRUCTOR_FORM.getPath()));
+    public void openCourseForm(ActionEvent event) throws IOException {
+        Parent parent = FXMLLoader.load(getClass().getResource(ViewPath.ADD_COURSE_FORM.getPath()));
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
