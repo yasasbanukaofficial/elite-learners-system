@@ -30,10 +30,10 @@ public class Student {
     @Column(name = "stud_dob", nullable = false)
     private Date dob;
 
-    @Column(name = "stud_email", nullable = false, unique = true)
+    @Column(name = "stud_email", nullable = false)
     private String email;
 
-    @Column(name = "stud_contact", nullable = false, unique = true, length = 15)
+    @Column(name = "stud_contact", nullable = false, length = 15)
     private String contactNumber;
 
     @Column(name = "stud_address", nullable = false)
@@ -41,6 +41,7 @@ public class Student {
 
     @OneToMany(
             mappedBy = "student",
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
     private List<Payment> payments;
@@ -50,10 +51,4 @@ public class Student {
             cascade = CascadeType.ALL
     )
     private List<Lesson> lessons;
-
-    @OneToMany(
-            mappedBy = "student",
-            cascade = CascadeType.ALL
-    )
-    private List<StudentCourseDetails> studentCourseDetails;
 }

@@ -24,7 +24,6 @@ public class FactoryConfiguration {
                     .addAnnotatedClass(Payment.class)
                     .addAnnotatedClass(Instructor.class)
                     .addAnnotatedClass(Lesson.class)
-                    .addAnnotatedClass(StudentCourseDetails.class)
                     .addAnnotatedClass(Student.class);
 
             sessionFactory = cfg.buildSessionFactory();

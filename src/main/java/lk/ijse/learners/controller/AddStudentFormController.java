@@ -22,7 +22,6 @@ import lk.ijse.learners.bo.custom.StudentBO;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.ViewPath;
-import lk.ijse.learners.dto.PaymentDTO;
 import lk.ijse.learners.dto.StudentDTO;
 
 import java.net.URL;
@@ -31,7 +30,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddStudentFormController implements Initializable {
@@ -61,13 +59,6 @@ public class AddStudentFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         lblStdId.setText(loadNextId());
-//        txtFName.clear();
-//        txtLName.clear();
-//        txtEmail.clear();
-//        txtContact.clear();
-//        txtAddress.clear();
-//        dobPicker.setValue(null);
-//        txtPayID.clear();
         txtFName.setText("Student");
         txtLName.setText("Name");
         txtEmail.setText("y@mail.com");
@@ -126,7 +117,6 @@ public class AddStudentFormController implements Initializable {
                     email,
                     contact,
                     address,
-                    new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>()
             ));

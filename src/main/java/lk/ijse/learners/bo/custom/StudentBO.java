@@ -3,11 +3,9 @@ package lk.ijse.learners.bo.custom;
 import lk.ijse.learners.bo.CrudBO;
 import lk.ijse.learners.dto.StudentDTO;
 import lk.ijse.learners.entity.Payment;
-import lk.ijse.learners.entity.StudentCourseDetails;
 
 import java.util.List;
 
 public interface StudentBO extends CrudBO<StudentDTO> {
     List<Payment> getAllPayments();
-    List<StudentCourseDetails> getAllSCD();
 }

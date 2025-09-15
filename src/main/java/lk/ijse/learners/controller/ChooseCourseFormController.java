@@ -1,23 +1,29 @@
 package lk.ijse.learners.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.context.EnrollmentUnitOfWork;
+import lk.ijse.learners.bo.custom.CourseBO;
 import lk.ijse.learners.bo.custom.EnrollmentBO;
+import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.dto.CourseDTO;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -27,30 +33,29 @@ public class ChooseCourseFormController implements Initializable {
     public Button btnAddCourses;
     public Button btnCancel;
 
-    public ImageView btnCloseStdForm;
-
-    public ChoiceBox<String> cmbCourseOne;
-    public ChoiceBox<String> cmbCourseTwo;
-    public ChoiceBox<String> cmbCourseThree;
-    public ChoiceBox<String> cmbCourseFour;
-    public ChoiceBox<String> cmbCourseFive;
-
     private final EnrollmentUnitOfWork enrollmentUnitOfWork = EnrollmentUnitOfWork.getInstance();
-    EnrollmentBO enrollmentBO = (EnrollmentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.ENROLLMENT);
+    public ListView<String> selectedCourses;
+    public ListView<String> courseList;
 
+    EntityDTOConverter entityDTOConverter = new EntityDTOConverter();
+    EnrollmentBO enrollmentBO = (EnrollmentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.ENROLLMENT);
+    CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
+
+    private List<String> selectedCourseList = new ArrayList<>();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        List<String> courseList1 = Arrays.asList("Mathematics", "Physics", "Chemistry");
-        List<String> courseList2 = Arrays.asList("Biology", "Accounting", "Economics");
-        List<String> courseList3 = Arrays.asList("English", "History", "ICT");
-        List<String> courseList4 = Arrays.asList("Geography", "Business Studies", "Art");
-        List<String> courseList5 = Arrays.asList("Music", "Drama", "Sports Science");
-
-        cmbCourseOne.getItems().addAll(courseList1);
-        cmbCourseTwo.getItems().addAll(courseList2);
-        cmbCourseThree.getItems().addAll(courseList3);
-        cmbCourseFour.getItems().addAll(courseList4);
-        cmbCourseFive.getItems().addAll(courseList5);
+        courseList.getItems().addAll(fetchAllCourseNames());
+        courseList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                String selected = courseList.getSelectionModel().getSelectedItem();
+                if (selected != null && !selectedCourseList.contains(selected)) {
+                    selectedCourseList.add(selected);
+                    selectedCourses.getItems().add(selected);
+                    selectedCourses.refresh();
+                }
+            }
+        });
     }
 
     public void closeForm(Event onClick) {
@@ -60,25 +65,50 @@ public class ChooseCourseFormController implements Initializable {
     }
 
     public void addCourses(Event onClick) {
-        enrollmentUnitOfWork.setCourseDTO(
-                new CourseDTO(
-                        "COS-001",
-                        "INS-001",
-                        "Basic Drive",
-                        "BAsic",
-                        "JIdiao",
-                        new ArrayList<>(),
-                        new ArrayList<>()
-                )
-        );
-        if (!enrollmentBO.enrollStudent()) {
-            AlertUtil.setErrorAlert("Failed to enroll student");
-            return;
+        try {
+            enrollmentUnitOfWork.setCourseDTO(
+                    entityDTOConverter.toCourseDTOList(
+                            courseBO.fetchCourseListByName(selectedCourseList)
+                    )
+            );
+            if (!enrollmentBO.enrollStudent()) {
+                AlertUtil.setErrorAlert("Failed to enroll student");
+                return;
+            }
+            closeForm(onClick);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        closeForm(onClick);
     }
 
     public void closeStudentForm(MouseEvent mouseEvent) {
         closeForm(new ActionEvent());
+    }
+
+    private List<String> fetchAllCourseNames() {
+        try {
+            List<CourseDTO> courseDTOList = courseBO.getAll();
+            List<String> courseNames = new ArrayList<>();
+            courseDTOList.forEach(course -> courseNames.add(course.getName()));
+            return courseNames;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void openForms(String path) {
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource(path));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setMaximized(false);
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.show();
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Failed to form!");
+            e.printStackTrace();
+            return;
+        }
     }
 }

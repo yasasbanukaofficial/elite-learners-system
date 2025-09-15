@@ -144,7 +144,7 @@
                         </VBox>
                         <HBox prefHeight="40.0" prefWidth="358.0" spacing="10.0">
                            <children>
-                              <Button fx:id="btnCancel" mnemonicParsing="false" onMouseClicked="#closeCourseForm" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
+                              <Button fx:id="btnCancel" mnemonicParsing="false" onMouseClicked="#closeCourseFormOnAction" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
                                  <font>
                                     <Font name="Arial Bold" size="14.0" />
                                  </font>
@@ -187,7 +187,7 @@
                               <Insets right="165.0" top="2.0" />
                            </HBox.margin>
                         </Label>
-                        <ImageView fx:id="btnCloseStdForm" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#closeStudentForm" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="btnCloseStdForm" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#closeCourseFormOnAction" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/closeicon.png" />
                            </image>

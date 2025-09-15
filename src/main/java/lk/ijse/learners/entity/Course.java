@@ -47,10 +47,11 @@ public class Course {
     )
     private List<Lesson> lessons;
 
-    @OneToMany(
-            mappedBy = "course",
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "student_course_associate",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "stud_id")
     )
-    private List<StudentCourseDetails> studentCourseDetails;
+    private List<Student> students;
 }

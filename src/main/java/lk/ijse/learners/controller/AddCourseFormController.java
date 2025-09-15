@@ -1,8 +1,10 @@
 package lk.ijse.learners.controller;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,6 +23,7 @@ import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.custom.CourseBO;
 import lk.ijse.learners.bo.custom.InstructorBO;
+import lk.ijse.learners.bo.exception.NotAvailableException;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.dto.CourseDTO;
@@ -64,22 +67,46 @@ public class AddCourseFormController implements Initializable {
         txtCDuration.setText("10");
         txtCFee.setText("100");
 
-        availableInstructors.getItems().addAll(fetchAvailableInstructors());
+        try {
+            List<String> instructors = fetchAvailableInstructors();
+            if (instructors.isEmpty()) {
+                Platform.runLater(() -> {
+                    AlertUtil.setErrorAlert("Please add some instructors first!!");
+                });
+                btnAddCourse.setDisable(true);
+                btnAddInstructor.setDisable(true);
+                return;
+            }
+            availableInstructors.getItems().addAll(instructors);
+        } catch (Exception e) {
+            btnAddCourse.setDisable(true);
+            btnAddInstructor.setDisable(true);
+            AlertUtil.setErrorAlert("No instructors available. Please add instructors first.");
+            return;
+        }
+
         availableInstructors.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                selectedInstructors.add(availableInstructors.getSelectionModel().getSelectedItem());
-                chosenInstructors.getItems().addAll(selectedInstructors);
-                chosenInstructors.refresh();
+                String selected = availableInstructors.getSelectionModel().getSelectedItem();
+                if (selected != null && !selectedInstructors.contains(selected)) {
+                    selectedInstructors.add(selected);
+                    chosenInstructors.getItems().add(selected);
+                }
             }
         });
     }
 
     @FXML
-    public void closeCourseForm(MouseEvent mouseEvent) {
+    public void closeCourseFormOnAction(MouseEvent mouseEvent) {
+        closeForm();
+    }
+
+    private void closeForm() {
         Stage window = (Stage) ancAddCourseForm.getScene().getWindow();
         window.close();
     }
+
 
     @FXML
     public boolean addCourse() {
@@ -162,14 +189,14 @@ public class AddCourseFormController implements Initializable {
         }
     }
 
-    private List<String> fetchAvailableInstructors() {
-        try {
-            return instructorBO.getAllAvailableInstructors();
-        } catch (Exception e) {
-            AlertUtil.setErrorAlert("Failed to fetch available instructors");
-            throw new RuntimeException(e);
+    private List<String> fetchAvailableInstructors() throws Exception {
+        List<String> instructors = instructorBO.getAllAvailableInstructors();
+        if (instructors == null || instructors.isEmpty()) {
+            return new ArrayList<>();
         }
+        return instructors;
     }
+
 
     public void showAvailableInstructors(ActionEvent event) {
     }

@@ -7,7 +7,6 @@ import lk.ijse.learners.config.FactoryConfiguration;
 import lk.ijse.learners.dao.custom.StudentDAO;
 import lk.ijse.learners.entity.Payment;
 import lk.ijse.learners.entity.Student;
-import lk.ijse.learners.entity.StudentCourseDetails;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -116,14 +115,6 @@ public class StudentDAOImpl implements StudentDAO {
     public List<Payment> getAllPayments() {
         try (Session session = factoryConfiguration.getSession()) {
             Query<Payment> query = session.createQuery("select s.payments from Student s", Payment.class);
-            return query.list() == null ? null : query.list();
-        }
-    }
-
-    @Override
-    public List<StudentCourseDetails> getAllSCD() {
-        try (Session session = factoryConfiguration.getSession()) {
-            Query<StudentCourseDetails> query = session.createQuery("select s.studentCourseDetails from Student s", StudentCourseDetails.class);
             return query.list() == null ? null : query.list();
         }
     }

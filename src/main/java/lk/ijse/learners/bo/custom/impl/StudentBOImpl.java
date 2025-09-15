@@ -10,7 +10,6 @@ import lk.ijse.learners.dao.custom.StudentDAO;
 import lk.ijse.learners.dto.StudentDTO;
 import lk.ijse.learners.entity.Payment;
 import lk.ijse.learners.entity.Student;
-import lk.ijse.learners.entity.StudentCourseDetails;
 
 import java.util.List;
 import java.util.Optional;
@@ -104,10 +103,5 @@ public class StudentBOImpl implements StudentBO {
     @Override
     public List<Payment> getAllPayments() {
         return studentDAO.getAllPayments();
-    }
-
-    @Override
-    public List<StudentCourseDetails> getAllSCD() {
-        return studentDAO.getAllSCD();
     }
 }

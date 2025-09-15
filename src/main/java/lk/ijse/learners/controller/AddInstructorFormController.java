@@ -81,7 +81,6 @@ public class AddInstructorFormController implements Initializable {
                         contact,
                         speciality,
                         "available",
-                        new ArrayList<>(),
                         new ArrayList<>()
                 ));
                 AlertUtil.setInfoAlert("Successfully added instructor!");

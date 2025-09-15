@@ -17,5 +17,5 @@ public class CourseDTO {
     private String fees;
     private List<InstructorDTO> instructors;
     private List<LessonDTO> lessons;
-    private List<StudentCourseDetailsDTO> studentCourseDetails;
+    private List<StudentDTO> students;
 }

@@ -22,8 +22,7 @@ public class EntityDTOConverter {
                 student.getContactNumber(),
                 student.getAddress(),
                 toPaymentDTOList(student.getPayments()),
-                toLessonDTOList(student.getLessons()),
-                toStudentCourseDetailsDTOList(student.getStudentCourseDetails())
+                toLessonDTOList(student.getLessons())
         );
     }
 
@@ -49,8 +48,7 @@ public class EntityDTOConverter {
                 studentDTO.getContactNumber(),
                 studentDTO.getAddress(),
                 toPaymentEntityList(studentDTO.getPayments()),
-                toLessonEntityList(studentDTO.getLessons()),
-                toStudentCourseDetailsEntityList(studentDTO.getStudentCourseDetails())
+                toLessonEntityList(studentDTO.getLessons())
         );
     }
 
@@ -173,60 +171,6 @@ public class EntityDTOConverter {
         return lessonEntityList;
     }
 
-
-    public StudentCourseDetailsDTO getStudentCourseDetailsDTO(StudentCourseDetails studentCourseDetails) throws Exception {
-        return new StudentCourseDetailsDTO(
-                studentCourseDetails.getStudentCourseDetailsId(),
-                studentCourseDetails.getStudent().getStudentId(),
-                studentCourseDetails.getCourse().getCourseId(),
-                studentCourseDetails.getEnrollmentDate(),
-                studentCourseDetails.getStatus(),
-                studentCourseDetails.getGrade()
-        );
-    }
-
-    public List<StudentCourseDetailsDTO> toStudentCourseDetailsDTOList(List<StudentCourseDetails> studentCourseDetailsList) throws Exception {
-        List<StudentCourseDetailsDTO> studentCourseDetailsDTOList = new ArrayList<>();
-        studentCourseDetailsList.forEach(studentCourseDetails -> {
-            try {
-                studentCourseDetailsDTOList.add(getStudentCourseDetailsDTO(studentCourseDetails));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        return studentCourseDetailsDTOList;
-    }
-
-    public StudentCourseDetails getStudentCourseDetailsEntity(StudentCourseDetailsDTO studentCourseDetailsDTO) throws Exception {
-        Student student = new Student();
-        student.setStudentId(studentCourseDetailsDTO.getStudentId());
-
-        Course course = new Course();
-        course.setCourseId(studentCourseDetailsDTO.getCourseId());
-
-        return new StudentCourseDetails(
-                studentCourseDetailsDTO.getStudentCourseDetailsId(),
-                student,
-                course,
-                studentCourseDetailsDTO.getEnrollmentDate(),
-                studentCourseDetailsDTO.getStatus(),
-                studentCourseDetailsDTO.getGrade()
-        );
-    }
-
-    public List<StudentCourseDetails> toStudentCourseDetailsEntityList(List<StudentCourseDetailsDTO> studentCourseDetailsDTOList) throws Exception {
-        List<StudentCourseDetails> studentCourseDetailsEntityList = new ArrayList<>();
-        studentCourseDetailsDTOList.forEach(studentCourseDetailsDTO -> {
-            try {
-                studentCourseDetailsEntityList.add(getStudentCourseDetailsEntity(studentCourseDetailsDTO));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        return studentCourseDetailsEntityList;
-    }
-
-
     public InstructorDTO getInstructorDTO(Instructor instructor) throws Exception {
         return new InstructorDTO(
                 instructor.getInstructorId(),
@@ -287,7 +231,7 @@ public class EntityDTOConverter {
                 course.getFees(),
                 toInstructorDTOList(course.getInstructors()),
                 toLessonDTOList(course.getLessons()),
-                toStudentCourseDetailsDTOList(course.getStudentCourseDetails())
+                toStudentDTOList(course.getStudents())
         );
     }
 
@@ -300,7 +244,7 @@ public class EntityDTOConverter {
                 courseDTO.getFees(),
                 toInstructorEntityList(courseDTO.getInstructors()),
                 toLessonEntityList(courseDTO.getLessons()),
-                toStudentCourseDetailsEntityList(courseDTO.getStudentCourseDetails())
+                toStudentEntityList(courseDTO.getStudents())
         );
     }
 

@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -17,7 +19,7 @@ public class EnrollmentUnitOfWork {
 
     private StudentDTO studentDTO;
     private PaymentDTO paymentDTO;
-    private CourseDTO courseDTO;
+    private List<CourseDTO> courseDTO;
 
     public static EnrollmentUnitOfWork getInstance() {
         return enrollmentUnitOfWork == null ? enrollmentUnitOfWork = new EnrollmentUnitOfWork() : enrollmentUnitOfWork;
