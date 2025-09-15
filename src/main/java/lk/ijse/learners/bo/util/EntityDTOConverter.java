@@ -236,7 +236,6 @@ public class EntityDTOConverter {
                 instructor.getContact(),
                 instructor.getSpeciality(),
                 instructor.getAvailability(),
-                toCourseDTOList(instructor.getCourses()),
                 toLessonDTOList(instructor.getLessons())
         );
     }
@@ -262,7 +261,6 @@ public class EntityDTOConverter {
                 instructorDTO.getContact(),
                 instructorDTO.getSpeciality(),
                 instructorDTO.getAvailability(),
-                toCourseEntityList(instructorDTO.getCourses()),
                 toLessonEntityList(instructorDTO.getLessons())
         );
     }
