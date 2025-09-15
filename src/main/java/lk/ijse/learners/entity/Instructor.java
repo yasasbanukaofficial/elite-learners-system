@@ -39,9 +39,6 @@ public class Instructor {
     @Column(name = "inst_availability", nullable = false)
     private String availability;
 
-    @ManyToMany(mappedBy = "instructors", fetch = FetchType.EAGER)
-    private List<Course> courses;
-
     @OneToMany(
             mappedBy = "instructor",
             fetch = FetchType.EAGER,
