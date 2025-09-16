@@ -59,10 +59,10 @@ public class AddStudentFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         lblStdId.setText(loadNextId());
-//        txtFName.setText("Student");
+//        txtFName.setText("DDDD");
 //        txtLName.setText("Name");
-//        txtEmail.setText("y@mail.com");
-//        txtContact.setText("0123456789");
+//        txtEmail.setText("y@msaail.com");
+//        txtContact.setText("1023456789");
 //        txtAddress.setText("Address");
 //        dobPicker.setValue(LocalDate.now());
         lblPayId.setText("Pay ID: ");

@@ -1,9 +1,8 @@
 package lk.ijse.learners.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -42,30 +41,34 @@ public class ChooseCourseFormController implements Initializable {
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
 
     private List<String> selectedCourseList = new ArrayList<>();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         courseList.getItems().addAll(fetchAllCourseNames());
-        courseList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                String selected = courseList.getSelectionModel().getSelectedItem();
-                if (selected != null && !selectedCourseList.contains(selected)) {
-                    selectedCourseList.add(selected);
-                    selectedCourses.getItems().add(selected);
-                    selectedCourses.refresh();
-                }
+        courseList.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
+            String selected = courseList.getSelectionModel().getSelectedItem();
+            if (selected != null && !selectedCourseList.contains(selected)) {
+                selectedCourseList.add(selected);
+                selectedCourses.getItems().add(selected);
+                selectedCourses.refresh();
             }
         });
     }
 
+    @FXML
     public void closeForm(Event onClick) {
         enrollmentUnitOfWork.clear();
         Stage window = (Stage) ancChooseCourseForm.getScene().getWindow();
         window.close();
     }
 
+    @FXML
     public void addCourses(Event onClick) {
         try {
+            if(selectedCourseList.isEmpty()) {
+                AlertUtil.setErrorAlert("Please select at least one course");
+                return;
+            }
             enrollmentUnitOfWork.setCourseDTO(
                     entityDTOConverter.toCourseDTOList(
                             courseBO.fetchCourseListByName(selectedCourseList)
@@ -81,6 +84,7 @@ public class ChooseCourseFormController implements Initializable {
         }
     }
 
+    @FXML
     public void closeStudentForm(MouseEvent mouseEvent) {
         closeForm(new ActionEvent());
     }
