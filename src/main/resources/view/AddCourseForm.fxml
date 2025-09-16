@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancAddCourseForm" prefHeight="700.0" prefWidth="820.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 10px; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddCourseFormController">
+<AnchorPane fx:id="ancAddCourseForm" prefHeight="720.0" prefWidth="820.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 10px; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddCourseFormController">
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -122,17 +122,6 @@
                               </Label>
                               <VBox prefHeight="255.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Button fx:id="btnAddInstructor" mnemonicParsing="false" onAction="#showAvailableInstructors" prefHeight="39.0" prefWidth="358.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 10px; -fx-border-width: 2px;" text="Add Instructor">
-                                       <font>
-                                          <Font name="Arial Bold" size="14.0" />
-                                       </font>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                       <VBox.margin>
-                                          <Insets top="9.0" />
-                                       </VBox.margin>
-                                    </Button>
                                     <ListView fx:id="chosenInstructors" prefHeight="79.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
                                        <VBox.margin>
                                           <Insets top="20.0" />

@@ -13,6 +13,7 @@ import lk.ijse.learners.bo.context.EnrollmentUnitOfWork;
 import lk.ijse.learners.bo.custom.PaymentBO;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
+import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.PaymentDTO;
 
 import java.math.BigDecimal;
@@ -56,12 +57,12 @@ public class AddPaymentFormController implements Initializable {
 
     @FXML
     public void exitPaymentForm(MouseEvent mouseEvent) {
-        closeForm();
+        WindowManagerUtil.closeForm(ancAddPayment);
     }
 
     @FXML
     public void closePaymentForm(ActionEvent actionEvent) {
-        closeForm();
+        WindowManagerUtil.closeForm(ancAddPayment);
     }
 
     @FXML
@@ -73,7 +74,7 @@ public class AddPaymentFormController implements Initializable {
         String type = cbCard.isSelected() ? "card" : cbCash.isSelected() ? "cash" : null;
         String status = "paid";
 
-        if (validateStudentDetails(amount, type, status)) {
+        if (validateStudentDetails(amount, type)) {
             enrollmentUnitOfWork.setPaymentDTO(new PaymentDTO(
                     payId,
                     studentId,
@@ -82,13 +83,13 @@ public class AddPaymentFormController implements Initializable {
                     new BigDecimal(Double.parseDouble(amount)),
                     status
             ));
-            closeForm();
+            WindowManagerUtil.closeForm(ancAddPayment);
         }
     }
 
 
     // Utility methods
-    private boolean validateStudentDetails(String amount, String type, String status) {
+    private boolean validateStudentDetails(String amount, String type) {
         StringBuilder errorMsg = new StringBuilder();
         boolean isValid = true;
 
@@ -136,10 +137,4 @@ public class AddPaymentFormController implements Initializable {
             return "PAY-000";
         }
     }
-
-    private void closeForm() {
-        Stage window = (Stage) ancAddPayment.getScene().getWindow();
-        window.close();
-    }
-
 }

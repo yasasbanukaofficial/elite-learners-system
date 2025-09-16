@@ -17,6 +17,7 @@ import lk.ijse.learners.bo.custom.InstructorBO;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.ViewPath;
+import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.InstructorDTO;
 
 import java.net.URL;
@@ -39,7 +40,7 @@ public class AddInstructorFormController implements Initializable {
 
     public ImageView btnCloseInsForm;
     public Button btnCancel;
-    public Button btnNext;
+    public Button btnAddInstructor;
 
     public DatePicker dobPicker;
 
@@ -52,8 +53,12 @@ public class AddInstructorFormController implements Initializable {
 
     @FXML
     public void closeInsForm(MouseEvent mouseEvent) {
-        Stage window = (Stage) ancAddInstructorForm.getScene().getWindow();
-        window.close();
+        WindowManagerUtil.closeForm(ancAddInstructorForm);
+    }
+
+    @FXML
+    public void closeInsFormOnAction(ActionEvent actionEvent) {
+        WindowManagerUtil.closeForm(ancAddInstructorForm);
     }
 
     @FXML
@@ -64,19 +69,12 @@ public class AddInstructorFormController implements Initializable {
         String contact = txtContact.getText();
         String speciality = txtSpeciality.getText();
 
-        if (dobPicker.getValue() == null){
-            AlertUtil.setErrorAlert("Instructor date of birth cannot be empty!");
-            return false;
-        }
-
-        Date dob = Date.valueOf(dobPicker.getValue());
-
-        if (validateInstructorDetails(name, email, contact, speciality, dob.toString())){
+        if (validateInstructorDetails(name, email, contact, speciality)){
             try {
                 instructorBO.save(new InstructorDTO(
                         insId,
                         name,
-                        dob,
+                        Date.valueOf(dobPicker.getValue()),
                         email,
                         contact,
                         speciality,
@@ -93,56 +91,71 @@ public class AddInstructorFormController implements Initializable {
     }
 
     // Utility methods
-    private boolean validateInstructorDetails(String name, String email, String contact, String speciality, String dob) {
+    private boolean validateInstructorDetails(String name, String email, String contact, String speciality) {
         StringBuilder errorMsg = new StringBuilder();
         boolean isValid = true;
 
-        String emailPattern = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$";
-        String contactPattern = " ^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$ ";
+        String emailPattern = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
+        String contactPattern = "/^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$/";
 
         String errorStyle = "-fx-border-color: #ce0101; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
         String normalStyle = "-fx-border-color: #000000; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
 
-        if (!Auth.areRequiredFieldsFilled(name, email, contact, speciality, dob)){
-            errorMsg.append("Required fields are empty!\n");
+        // Initial State of UI Components
+        txtFName.setStyle(normalStyle);
+        txtEmail.setStyle(normalStyle);
+        txtContact.setStyle(normalStyle);
+        txtSpeciality.setStyle(normalStyle);
+        dobPicker.setStyle(normalStyle);
+
+        if (!Auth.areRequiredFieldsFilled(name)){
+            errorMsg.append("* Instructor's Name must not be empty\n");
+            txtFName.setStyle(errorStyle);
             isValid = false;
         }
-
-        LocalDate birthDate = LocalDate.parse(dob, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        int age = Period.between(birthDate, LocalDate.now()).getYears();
-
-        if (age < 18){
-            dobPicker.setStyle(errorStyle);
-            errorMsg.append("Instructor age must be greater than 18.\n");
-            isValid = false;
-        }
-
-        if (!email.matches(emailPattern) && !contact.matches(contactPattern)){
+        if (!Auth.areRequiredFieldsFilled(email)){
+            errorMsg.append("* Email must not be empty!\n");
             txtEmail.setStyle(errorStyle);
-            txtContact.setStyle(errorStyle);
-            errorMsg.append("Invalid email or contact number.\n");
+            isValid = false;
+        } else if (!email.matches(emailPattern)){
+            errorMsg.append("* Email should be a valid one (ex: john@mail.com) !\n");
+            txtEmail.setStyle(errorStyle);
             isValid = false;
         }
+        if (!Auth.areRequiredFieldsFilled(contact)){
+            errorMsg.append("* You must include instructor's contact!\n");
+            txtContact.setStyle(errorStyle);
+            isValid = false;
+        } else if (!contact.matches(contactPattern)){
+            errorMsg.append("* Contact should be a valid one (ex: 0721231231 (LK), 4615555679 (US))!\n");
+            txtContact.setStyle(errorStyle);
+            isValid = false;
+        }
+
+        if (dobPicker.getValue() == null){
+            errorMsg.append("* You must include student date of birth!\n");
+            dobPicker.setStyle(errorStyle);
+            isValid = false;
+        } else {
+            LocalDate birthDate = LocalDate.parse(dobPicker.getValue().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            int age = Period.between(birthDate, LocalDate.now()).getYears();
+            if (age < 18 || age > 60){
+                errorMsg.append("* Instructor's age must be between 18 and 60 years.\n");
+                dobPicker.setStyle(errorStyle);
+                isValid = false;
+            }
+        }
+
+        if (!Auth.areRequiredFieldsFilled(speciality)){
+            errorMsg.append("* You must include instructor's speciality!\n");
+            txtSpeciality.setStyle(errorStyle);
+            isValid = false;
+        }
+
         if (!isValid){
             AlertUtil.setErrorAlert("Please solve these issues before proceeding \n\n" + errorMsg.toString());
         }
         return isValid;
-    }
-
-    private void openForms(String path) {
-        try {
-            Parent parent = FXMLLoader.load(getClass().getResource(path));
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setMaximized(false);
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
-        } catch (Exception e) {
-            AlertUtil.setErrorAlert("Failed to form!");
-            e.printStackTrace();
-            return;
-        }
     }
 
     private String loadNextId() {

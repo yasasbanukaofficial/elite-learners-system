@@ -2,10 +2,7 @@ package lk.ijse.learners.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -14,13 +11,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.context.EnrollmentUnitOfWork;
 import lk.ijse.learners.bo.custom.PaymentBO;
 import lk.ijse.learners.bo.custom.StudentBO;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
+import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.controller.util.ViewPath;
 import lk.ijse.learners.dto.StudentDTO;
 
@@ -70,19 +67,19 @@ public class AddStudentFormController implements Initializable {
 
     @FXML
     public void closeStudentForm(MouseEvent actionEvent) {
-        closeForm();
+        WindowManagerUtil.closeForm(ancAddStudentForm);
     }
 
     @FXML
     public void closeStudentFormOnAction(ActionEvent actionEvent) {
-        closeForm();
+        WindowManagerUtil.closeForm(ancAddStudentForm);
     }
 
     @FXML
     public void nextForm(ActionEvent actionEvent) {
         try {
             if (addStudent()) {
-                closeForm();
+                WindowManagerUtil.closeForm(ancAddStudentForm);
                 if (enrollmentUnitOfWork.getPaymentDTO() == null) {
                     AlertUtil.setErrorAlert("Please add payment details before proceeding");
                     return;
@@ -91,7 +88,7 @@ public class AddStudentFormController implements Initializable {
                     AlertUtil.setErrorAlert("Please add payment before proceeding");
                     return;
                 }
-                openForms(ViewPath.CHOOSE_COURSE_FORM.getPath());
+                WindowManagerUtil.openForm(ViewPath.CHOOSE_COURSE_FORM.getPath());
             }
         } catch (Exception e) {
             AlertUtil.setErrorAlert("Failed to check for paymentDto");
@@ -107,7 +104,7 @@ public class AddStudentFormController implements Initializable {
             AlertUtil.setErrorAlert("Failed to set pay id");
             e.printStackTrace();
         }
-        openForms(ViewPath.ADD_PAYMENT_FORM.getPath());
+        WindowManagerUtil.openForm(ViewPath.ADD_PAYMENT_FORM.getPath());
     }
 
     private boolean addStudent() {
@@ -118,19 +115,12 @@ public class AddStudentFormController implements Initializable {
         String contact = txtContact.getText();
         String address = txtAddress.getText();
 
-        if (dobPicker.getValue() == null){
-            AlertUtil.setErrorAlert("Student date of birth cannot be empty!");
-            return false;
-        }
-
-        Date dob = Date.valueOf(dobPicker.getValue());
-
-        if (validateStudentDetails(firstName, lastName, email, contact, address, dob.toString())){
+        if (validateStudentDetails(firstName, lastName, email, contact, address)){
             enrollmentUnitOfWork.setStudentDTO(new StudentDTO(
                     sid,
                     firstName,
                     lastName,
-                    dob,
+                    Date.valueOf(dobPicker.getValue()),
                     email,
                     contact,
                     address,
@@ -144,12 +134,12 @@ public class AddStudentFormController implements Initializable {
 
 
     // Utility methods
-    private boolean validateStudentDetails(String fName, String lName, String email, String contact, String address, String dob) {
+    private boolean validateStudentDetails(String fName, String lName, String email, String contact, String address) {
         StringBuilder errorMsg = new StringBuilder();
         boolean isValid = true;
 
         String emailPattern = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
-        String contactPattern = "^(\\d{3}[- .]?){2}\\d{4}$";
+        String contactPattern = "/^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$/";
 
         String errorStyle = "-fx-border-color: #ce0101; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
         String normalStyle = "-fx-border-color: #000000; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
@@ -162,9 +152,6 @@ public class AddStudentFormController implements Initializable {
         txtContact.setStyle(normalStyle);
         txtAddress.setStyle(normalStyle);
 
-        LocalDate birthDate = LocalDate.parse(dob, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        int age = Period.between(birthDate, LocalDate.now()).getYears();
-
         if (!Auth.areRequiredFieldsFilled(fName)){
             errorMsg.append("* First Name must not be empty\n");
             txtFName.setStyle(errorStyle);
@@ -175,18 +162,35 @@ public class AddStudentFormController implements Initializable {
             txtLName.setStyle(errorStyle);
             isValid = false;
         }
-        if (!Auth.areRequiredFieldsFilled(dob)){
-            errorMsg.append("* You must include student age!\n");
+
+        if (dobPicker.getValue() == null){
+            errorMsg.append("* You must include student date of birth!\n");
             dobPicker.setStyle(errorStyle);
             isValid = false;
+        } else {
+            LocalDate birthDate = LocalDate.parse(dobPicker.getValue().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            int age = Period.between(birthDate, LocalDate.now()).getYears();
+            if (age < 18 || age > 60){
+                errorMsg.append("* Student age must be between 18 and 60 years.\n");
+                dobPicker.setStyle(errorStyle);
+                isValid = false;
+            }
         }
-        if (!Auth.areRequiredFieldsFilled(email) || !email.matches(emailPattern)){
-            errorMsg.append("* Email must not be empty and it should be a valid one!\n");
+        if (!Auth.areRequiredFieldsFilled(email)){
+            errorMsg.append("* Must include instructor's email!\n");
+            txtEmail.setStyle(errorStyle);
+            isValid = false;
+        } else if (!email.matches(emailPattern)){
+            errorMsg.append("* Email should be a valid one (ex: john@mail.com) !\n");
             txtEmail.setStyle(errorStyle);
             isValid = false;
         }
-        if (!Auth.areRequiredFieldsFilled(contact) || !contact.matches(contactPattern)){
-            errorMsg.append("* You must provide student contact and it should be in correct format!\n");
+        if (!Auth.areRequiredFieldsFilled(contact)){
+            errorMsg.append("* You must include student's contact!\n");
+            txtContact.setStyle(errorStyle);
+            isValid = false;
+        } else if (!contact.matches(contactPattern)){
+            errorMsg.append("* Contact should be a valid one (ex: 0721231231 (LK), 4615555679 (US))!\n");
             txtContact.setStyle(errorStyle);
             isValid = false;
         }
@@ -196,32 +200,10 @@ public class AddStudentFormController implements Initializable {
             isValid = false;
         }
 
-        if (age < 18 || age > 60){
-            dobPicker.setStyle(errorStyle);
-            errorMsg.append("Student age must be between 18 and 60 years.\n");
-            isValid = false;
-        }
-
         if (!isValid){
             AlertUtil.setErrorAlert("Please solve these issues before proceeding \n\n" + errorMsg.toString());
         }
         return isValid;
-    }
-
-    private void openForms(String path) {
-        try {
-            Parent parent = FXMLLoader.load(getClass().getResource(path));
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setMaximized(false);
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
-        } catch (Exception e) {
-            AlertUtil.setErrorAlert("Failed to form!");
-            e.printStackTrace();
-            return;
-        }
     }
 
     private String loadNextId() {
@@ -233,8 +215,4 @@ public class AddStudentFormController implements Initializable {
         }
     }
 
-    private void closeForm() {
-        Stage window = (Stage) ancAddStudentForm.getScene().getWindow();
-        window.close();
-    }
 }

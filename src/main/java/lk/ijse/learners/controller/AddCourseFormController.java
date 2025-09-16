@@ -26,6 +26,7 @@ import lk.ijse.learners.bo.custom.InstructorBO;
 import lk.ijse.learners.bo.exception.NotAvailableException;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
+import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.CourseDTO;
 import lk.ijse.learners.dto.InstructorDTO;
 
@@ -68,7 +69,7 @@ public class AddCourseFormController implements Initializable {
         txtCFee.setText("100");
 
         try {
-            List<String> instructors = fetchAvailableInstructors();
+            List<String> instructors = instructorBO.getAllAvailableInstructors();
             if (instructors.isEmpty()) {
                 Platform.runLater(() -> {
                     AlertUtil.setErrorAlert("Please add some instructors first!!");
@@ -99,14 +100,8 @@ public class AddCourseFormController implements Initializable {
 
     @FXML
     public void closeCourseFormOnAction(MouseEvent mouseEvent) {
-        closeForm();
+        WindowManagerUtil.closeForm(ancAddCourseForm);
     }
-
-    private void closeForm() {
-        Stage window = (Stage) ancAddCourseForm.getScene().getWindow();
-        window.close();
-    }
-
 
     @FXML
     public boolean addCourse() {
@@ -147,12 +142,35 @@ public class AddCourseFormController implements Initializable {
         String errorStyle = "-fx-border-color: #ce0101; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
         String normalStyle = "-fx-border-color: #000000; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
 
-        if (!Auth.areRequiredFieldsFilled(cName, cDescription, cDuration, cFee)){
-            errorMsg.append("Required fields are empty!\n");
+        // Initial State of UI Components
+        txtCName.setStyle(normalStyle);
+        txtDescription.setStyle(normalStyle);
+        txtCDuration.setStyle(normalStyle);
+        txtCFee.setStyle(normalStyle);
+
+        if (!Auth.areRequiredFieldsFilled(cName)){
+            errorMsg.append("* Course name can't be empty!\n");
+            txtCName.setStyle(errorStyle);
             isValid = false;
         }
 
-        if (Integer.parseInt(cFee) < 0){
+        if (!Auth.areRequiredFieldsFilled(cDescription)){
+            errorMsg.append("* Course description can't be empty!\n");
+            txtDescription.setStyle(errorStyle);
+            isValid = false;
+        }
+
+        if (!Auth.areRequiredFieldsFilled(cDuration)){
+            errorMsg.append("* Course duration can't be empty!\n");
+            txtCDuration.setStyle(errorStyle);
+            isValid = false;
+        }
+
+        if (!Auth.areRequiredFieldsFilled(cFee)){
+            errorMsg.append("* Course fee can't be empty!\n");
+            txtCFee.setStyle(errorStyle);
+            isValid = false;
+        } else if (Integer.parseInt(cFee) < 0){
             txtCFee.setStyle(errorStyle);
             errorMsg.append("Course fee must not be a negative value\n");
             isValid = false;
@@ -164,22 +182,6 @@ public class AddCourseFormController implements Initializable {
         return isValid;
     }
 
-    private void openForms(String path) {
-        try {
-            Parent parent = FXMLLoader.load(getClass().getResource(path));
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setMaximized(false);
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
-        } catch (Exception e) {
-            AlertUtil.setErrorAlert("Failed to form!");
-            e.printStackTrace();
-            return;
-        }
-    }
-
     private String loadNextId() {
         try {
             return courseBO.loadNextId();
@@ -189,18 +191,4 @@ public class AddCourseFormController implements Initializable {
         }
     }
 
-    private List<String> fetchAvailableInstructors() throws Exception {
-        List<String> instructors = instructorBO.getAllAvailableInstructors();
-        if (instructors == null || instructors.isEmpty()) {
-            return new ArrayList<>();
-        }
-        return instructors;
-    }
-
-
-    public void showAvailableInstructors(ActionEvent event) {
-    }
-
-    public void closeStudentForm(MouseEvent mouseEvent) {
-    }
 }

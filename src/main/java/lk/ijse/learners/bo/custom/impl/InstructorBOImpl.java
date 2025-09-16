@@ -6,6 +6,7 @@ import lk.ijse.learners.dao.DAOFactory;
 import lk.ijse.learners.dao.custom.InstructorDAO;
 import lk.ijse.learners.dto.InstructorDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +70,7 @@ public class InstructorBOImpl implements InstructorBO {
 
     @Override
     public List<String> getAllAvailableInstructors() throws Exception {
-        return instructorDAO.getAllAvailableInstructors();
+        return instructorDAO.getAllAvailableInstructors() == null || instructorDAO.getAllAvailableInstructors().isEmpty() ? new ArrayList<>() : instructorDAO.getAllAvailableInstructors();
     }
 
     @Override
