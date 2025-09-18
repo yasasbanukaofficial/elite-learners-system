@@ -171,6 +171,7 @@ public class EntityDTOConverter {
         return lessonEntityList;
     }
 
+
     public InstructorDTO getInstructorDTO(Instructor instructor) throws Exception {
         return new InstructorDTO(
                 instructor.getInstructorId(),

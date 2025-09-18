@@ -10,9 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import lk.ijse.learners.bo.BOFactory;
-import lk.ijse.learners.bo.context.EnrollmentUnitOfWork;
+import lk.ijse.learners.bo.context.EnrollmentContext;
 import lk.ijse.learners.bo.custom.PaymentBO;
 import lk.ijse.learners.bo.custom.StudentBO;
 import lk.ijse.learners.controller.auth.Auth;
@@ -51,7 +50,7 @@ public class AddStudentFormController implements Initializable {
     StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
     PaymentBO paymentBO = (PaymentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.PAYMENT);
 
-    private final EnrollmentUnitOfWork enrollmentUnitOfWork = EnrollmentUnitOfWork.getInstance();
+    private final EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -80,11 +79,11 @@ public class AddStudentFormController implements Initializable {
         try {
             if (addStudent()) {
                 WindowManagerUtil.closeForm(ancAddStudentForm);
-                if (enrollmentUnitOfWork.getPaymentDTO() == null) {
+                if (enrollmentContext.getPaymentDTO() == null) {
                     AlertUtil.setErrorAlert("Please add payment details before proceeding");
                     return;
                 }
-                if(enrollmentUnitOfWork.getPaymentDTO().getPaymentId() == null || !enrollmentUnitOfWork.getPaymentDTO().getPaymentId().equals(paymentBO.loadNextId())){
+                if(enrollmentContext.getPaymentDTO().getPaymentId() == null || !enrollmentContext.getPaymentDTO().getPaymentId().equals(paymentBO.loadNextId())){
                     AlertUtil.setErrorAlert("Please add payment before proceeding");
                     return;
                 }
@@ -116,7 +115,7 @@ public class AddStudentFormController implements Initializable {
         String address = txtAddress.getText();
 
         if (validateStudentDetails(firstName, lastName, email, contact, address)){
-            enrollmentUnitOfWork.setStudentDTO(new StudentDTO(
+            enrollmentContext.setStudentDTO(new StudentDTO(
                     sid,
                     firstName,
                     lastName,
@@ -139,7 +138,7 @@ public class AddStudentFormController implements Initializable {
         boolean isValid = true;
 
         String emailPattern = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
-        String contactPattern = "/^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$/";
+        String contactPattern = "/^(?![ -])(?!.*[- ]$)(?!.*[- ]{2})[0-9- ]+$/gm";
 
         String errorStyle = "-fx-border-color: #ce0101; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
         String normalStyle = "-fx-border-color: #000000; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
@@ -189,11 +188,12 @@ public class AddStudentFormController implements Initializable {
             errorMsg.append("* You must include student's contact!\n");
             txtContact.setStyle(errorStyle);
             isValid = false;
-        } else if (!contact.matches(contactPattern)){
-            errorMsg.append("* Contact should be a valid one (ex: 0721231231 (LK), 4615555679 (US))!\n");
-            txtContact.setStyle(errorStyle);
-            isValid = false;
         }
+//        else if (!contact.matches(contactPattern)){
+//            errorMsg.append("* Contact should be a valid one (ex: 0721231231 (LK), 4615555679 (US))!\n");
+//            txtContact.setStyle(errorStyle);
+//            isValid = false;
+//        }
         if (!Auth.areRequiredFieldsFilled(address)){
             errorMsg.append("* You must include students address!\n");
             txtAddress.setStyle(errorStyle);

@@ -1,7 +1,7 @@
 package lk.ijse.learners.bo.custom.impl;
 
 import lk.ijse.learners.bo.BOFactory;
-import lk.ijse.learners.bo.context.EnrollmentUnitOfWork;
+import lk.ijse.learners.bo.context.EnrollmentContext;
 import lk.ijse.learners.bo.custom.*;
 import lk.ijse.learners.bo.exception.NotFoundException;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
@@ -15,7 +15,7 @@ import org.hibernate.Transaction;
 import java.util.List;
 
 public class EnrollmentBOImpl implements EnrollmentBO {
-    private final EnrollmentUnitOfWork enrollmentUnitOfWork = EnrollmentUnitOfWork.getInstance();
+    private final EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
     private final EntityDTOConverter entityDTOConverter = new EntityDTOConverter();
 
     StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
@@ -27,9 +27,9 @@ public class EnrollmentBOImpl implements EnrollmentBO {
         Transaction tx = session.beginTransaction();
 
         try {
-            StudentDTO studentDTO = enrollmentUnitOfWork.getStudentDTO();
-            PaymentDTO paymentDTO = enrollmentUnitOfWork.getPaymentDTO();
-            List<CourseDTO> courseDTOList = enrollmentUnitOfWork.getCourseDTO();
+            StudentDTO studentDTO = enrollmentContext.getStudentDTO();
+            PaymentDTO paymentDTO = enrollmentContext.getPaymentDTO();
+            List<CourseDTO> courseDTOList = enrollmentContext.getCourseDTO();
 
             courseDTOList.forEach(courseDTO -> {
                 try {

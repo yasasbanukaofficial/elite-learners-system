@@ -14,15 +14,15 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class EnrollmentUnitOfWork {
-    private static EnrollmentUnitOfWork enrollmentUnitOfWork = new EnrollmentUnitOfWork();
+public class EnrollmentContext {
+    private static EnrollmentContext enrollmentContext = new EnrollmentContext();
 
     private StudentDTO studentDTO;
     private PaymentDTO paymentDTO;
     private List<CourseDTO> courseDTO;
 
-    public static EnrollmentUnitOfWork getInstance() {
-        return enrollmentUnitOfWork == null ? enrollmentUnitOfWork = new EnrollmentUnitOfWork() : enrollmentUnitOfWork;
+    public static EnrollmentContext getInstance() {
+        return enrollmentContext == null ? enrollmentContext = new EnrollmentContext() : enrollmentContext;
     }
 
     public void clear() {

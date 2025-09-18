@@ -7,9 +7,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import lk.ijse.learners.bo.BOFactory;
-import lk.ijse.learners.bo.context.EnrollmentUnitOfWork;
+import lk.ijse.learners.bo.context.EnrollmentContext;
 import lk.ijse.learners.bo.custom.PaymentBO;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
@@ -37,7 +36,7 @@ public class AddPaymentFormController implements Initializable {
     public ImageView btnCloseStdForm;
 
     PaymentBO paymentBO = (PaymentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.PAYMENT);
-    private final EnrollmentUnitOfWork enrollmentUnitOfWork = EnrollmentUnitOfWork.getInstance();
+    private final EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -75,7 +74,7 @@ public class AddPaymentFormController implements Initializable {
         String status = "paid";
 
         if (validateStudentDetails(amount, type)) {
-            enrollmentUnitOfWork.setPaymentDTO(new PaymentDTO(
+            enrollmentContext.setPaymentDTO(new PaymentDTO(
                     payId,
                     studentId,
                     payDate,

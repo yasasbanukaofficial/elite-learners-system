@@ -14,7 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
-import lk.ijse.learners.bo.context.EnrollmentUnitOfWork;
+import lk.ijse.learners.bo.context.EnrollmentContext;
 import lk.ijse.learners.bo.custom.CourseBO;
 import lk.ijse.learners.bo.custom.EnrollmentBO;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
@@ -32,7 +32,7 @@ public class ChooseCourseFormController implements Initializable {
     public Button btnAddCourses;
     public Button btnCancel;
 
-    private final EnrollmentUnitOfWork enrollmentUnitOfWork = EnrollmentUnitOfWork.getInstance();
+    private final EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
     public ListView<String> selectedCourses;
     public ListView<String> courseList;
 
@@ -57,7 +57,7 @@ public class ChooseCourseFormController implements Initializable {
 
     @FXML
     public void closeForm(Event onClick) {
-        enrollmentUnitOfWork.clear();
+        enrollmentContext.clear();
         Stage window = (Stage) ancChooseCourseForm.getScene().getWindow();
         window.close();
     }
@@ -69,7 +69,7 @@ public class ChooseCourseFormController implements Initializable {
                 AlertUtil.setErrorAlert("Please select at least one course");
                 return;
             }
-            enrollmentUnitOfWork.setCourseDTO(
+            enrollmentContext.setCourseDTO(
                     entityDTOConverter.toCourseDTOList(
                             courseBO.fetchCourseListByName(selectedCourseList)
                     )
