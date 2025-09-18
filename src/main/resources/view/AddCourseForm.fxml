@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancAddCourseForm" prefHeight="720.0" prefWidth="820.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 10px; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddCourseFormController">
+<AnchorPane fx:id="ancAddCourseForm" prefHeight="720.0" prefWidth="820.0" style="-fx-background-color: white; -fx-border-color: lightGrey;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddCourseFormController">
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -122,7 +122,7 @@
                               </Label>
                               <VBox prefHeight="255.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <ListView fx:id="chosenInstructors" prefHeight="79.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
+                                    <ListView fx:id="chosenInstructors" prefHeight="79.0" prefWidth="358.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
                                        <VBox.margin>
                                           <Insets bottom="20.0" top="20.0" />
                                        </VBox.margin>
@@ -177,7 +177,7 @@
                               <Insets top="5.0" />
                            </VBox.margin>
                         </VBox>
-                        <ListView fx:id="availableInstructors" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                        <ListView fx:id="availableInstructors" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS" />
                      </children>
                      <VBox.margin>
                         <Insets left="20.0" right="20.0" top="10.0" />
@@ -188,7 +188,7 @@
                   </VBox>
                   <HBox prefHeight="56.0" prefWidth="419.0" spacing="10.0">
                      <children>
-                        <Button fx:id="btnCancel" mnemonicParsing="false" onMouseClicked="#closeCourseFormOnAction" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
+                        <Button fx:id="btnCancel" mnemonicParsing="false" onMouseClicked="#closeCourseFormOnAction" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="#868686">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>

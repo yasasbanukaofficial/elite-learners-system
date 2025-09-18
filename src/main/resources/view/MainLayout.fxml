@@ -2,54 +2,40 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="ancMain" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.MainLayoutController">
    <children>
       <HBox layoutX="87.0" layoutY="129.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="235.0" style="-fx-background-color: white;" HBox.hgrow="ALWAYS">
+            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="118.0" style="-fx-background-color: linear-gradient(to bottom, #F0F0F2, #DBE3EE);" HBox.hgrow="ALWAYS">
                <children>
-                  <Label prefHeight="17.0" prefWidth="245.0" text="elite." textFill="#0011ff" VBox.vgrow="ALWAYS">
-                     <font>
-                        <Font name="Comic Sans MS Bold" size="36.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="30.0" />
-                     </VBox.margin>
-                     <padding>
-                        <Insets left="55.0" />
-                     </padding>
-                  </Label>
-                  <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
-                     <VBox.margin>
-                        <Insets top="50.0" />
-                     </VBox.margin>
+                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: black; -fx-background-radius: 900px;">
                      <children>
-                        <HBox fx:id="btnStudentMgmt" minHeight="-Infinity" onMouseClicked="#visitStudentPgOnAction" prefHeight="36.0" prefWidth="220.0">
+                        <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/house-regular-full.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </StackPane>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+                     <children>
+                        <StackPane fx:id="btnStudentMgmt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#visitStudentPgOnAction" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
                            <children>
-                              <ImageView fitHeight="25.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-                                 <HBox.margin>
-                                    <Insets left="24.0" top="7.0" />
-                                 </HBox.margin>
+                              <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/students-ico.png" />
+                                    <Image url="@../images/book-open-reader-regular-full.png" />
                                  </image>
                               </ImageView>
-                              <Label prefHeight="40.0" prefWidth="199.0" text="Student" HBox.hgrow="ALWAYS">
-                                 <font>
-                                    <Font name="Candara Bold" size="22.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="12.0" />
-                                 </HBox.margin>
-                              </Label>
                            </children>
                            <VBox.margin>
                               <Insets />
@@ -57,175 +43,110 @@
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
-                        </HBox>
-                        <HBox fx:id="btnLessonMgmt" minHeight="-Infinity" prefHeight="36.0" prefWidth="220.0">
+                        </StackPane>
+                        <StackPane fx:id="btnLessonMgmt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
                            <children>
-                              <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-                                 <HBox.margin>
-                                    <Insets left="33.0" top="7.0" />
-                                 </HBox.margin>
+                              <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/lessons-ico.png" />
+                                    <Image url="@../images/book-regular-full(1).png" />
                                  </image>
                               </ImageView>
-                              <Label prefHeight="40.0" prefWidth="199.0" text="Lessons" HBox.hgrow="ALWAYS">
-                                 <font>
-                                    <Font name="Candara Bold" size="22.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="22.0" />
-                                 </HBox.margin>
-                              </Label>
                            </children>
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
-                        </HBox>
-                        <HBox fx:id="btnPaymentMgmt" minHeight="-Infinity" prefHeight="36.0" prefWidth="220.0">
+                        </StackPane>
+                        <StackPane fx:id="btnCoursesMgmt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#visitCoursesPgOnAction" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
                            <children>
-                              <ImageView fitHeight="26.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-                                 <HBox.margin>
-                                    <Insets left="31.0" top="8.0" />
-                                 </HBox.margin>
+                              <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/money-ico.png" />
+                                    <Image url="@../images/certificate-regular-full.png" />
                                  </image>
                               </ImageView>
-                              <Label prefHeight="40.0" prefWidth="199.0" text="Payment" HBox.hgrow="ALWAYS">
-                                 <font>
-                                    <Font name="Candara Bold" size="22.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="21.0" />
-                                 </HBox.margin>
-                              </Label>
                            </children>
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
-                        </HBox>
-                        <HBox fx:id="btnCoursesMgmt" minHeight="-Infinity" onMouseClicked="#visitCoursesPgOnAction" prefHeight="36.0" prefWidth="220.0">
+                        </StackPane>
+                        <StackPane fx:id="btnPaymentMgmt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
                            <children>
-                              <ImageView fitHeight="26.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-                                 <HBox.margin>
-                                    <Insets left="34.0" top="7.0" />
-                                 </HBox.margin>
+                              <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/courses-ico.png" />
+                                    <Image url="@../images/file-invoice-dollar-regular-full.png" />
                                  </image>
                               </ImageView>
-                              <Label prefHeight="40.0" prefWidth="199.0" text="Courses" HBox.hgrow="ALWAYS">
-                                 <font>
-                                    <Font name="Candara Bold" size="22.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="22.0" />
-                                 </HBox.margin>
-                              </Label>
                            </children>
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
-                        </HBox>
-                        <HBox fx:id="btnUserMgmt" minHeight="-Infinity" onMouseClicked="#visitUserMgmtPgOnAction" prefHeight="36.0" prefWidth="220.0">
+                        </StackPane>
+                        <StackPane fx:id="btnUserMgmt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#visitUserMgmtPgOnAction" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
                            <children>
-                              <ImageView fitHeight="24.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-                                 <HBox.margin>
-                                    <Insets left="35.0" top="8.0" />
-                                 </HBox.margin>
+                              <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/user-ico.png" />
+                                    <Image url="@../images/users-regular-full.png" />
                                  </image>
                               </ImageView>
-                              <Label prefHeight="40.0" prefWidth="199.0" text="Staff" HBox.hgrow="ALWAYS">
-                                 <font>
-                                    <Font name="Candara Bold" size="22.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="25.0" />
-                                 </HBox.margin>
-                              </Label>
                            </children>
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
-                        </HBox>
-                        <HBox fx:id="btnInstructorMgmt" minHeight="-Infinity" onMouseClicked="#visitInstructorsPgOnAction" prefHeight="36.0" prefWidth="220.0">
+                        </StackPane>
+                        <StackPane fx:id="btnInstructorMgmt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#visitInstructorsPgOnAction" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
                            <children>
-                              <ImageView fitHeight="32.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-                                 <HBox.margin>
-                                    <Insets left="29.0" top="3.0" />
-                                 </HBox.margin>
+                              <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/instructor.png" />
                                  </image>
                               </ImageView>
-                              <Label prefHeight="40.0" prefWidth="199.0" text="Instructors" HBox.hgrow="ALWAYS">
-                                 <font>
-                                    <Font name="Candara Bold" size="22.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="16.0" />
-                                 </HBox.margin>
-                              </Label>
                            </children>
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
-                        </HBox>
-                        <VBox prefHeight="245.0" prefWidth="235.0" VBox.vgrow="ALWAYS" />
-                        <HBox fx:id="btnSettingsPage" prefHeight="43.0" prefWidth="235.0" VBox.vgrow="ALWAYS">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <children>
-                              <ImageView fitHeight="42.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/profile-pic-ico.png" />
-                                 </image>
-                                 <HBox.margin>
-                                    <Insets left="30.0" top="5.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <Label prefHeight="23.0" prefWidth="161.0" text="Settings">
-                                 <font>
-                                    <Font name="Candara Bold" size="22.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="11.0" top="10.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <VBox prefHeight="148.0" prefWidth="235.0" />
-                        <ImageView fx:id="btnLogout" fitHeight="25.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/logout-ico.png" />
-                           </image>
-                           <VBox.margin>
-                              <Insets bottom="10.0" left="10.0" />
-                           </VBox.margin>
-                        </ImageView>
+                        </StackPane>
                      </children>
+                     <VBox.margin>
+                        <Insets top="210.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox prefHeight="258.0" prefWidth="102.0" VBox.vgrow="ALWAYS" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="25.0">
+                     <children>
+                        <StackPane fx:id="btnSettingsPage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
+                           <children>
+                              <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/bars-regular-full.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </StackPane>
+                        <StackPane fx:id="btnLogout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
+                           <children>
+                              <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/right-from-bracket-regular-full.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </StackPane>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </VBox>
                </children>
+               <padding>
+                  <Insets left="50.0" top="20.0" />
+               </padding>
             </VBox>
-            <AnchorPane fx:id="ancPages" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <AnchorPane fx:id="ancPages" prefHeight="900.0" prefWidth="1497.0" style="-fx-background-color: linear-gradient(to bottom, #F0F0F2, #DBE3EE);" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
    </children>

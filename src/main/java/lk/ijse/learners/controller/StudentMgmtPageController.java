@@ -8,7 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
@@ -28,11 +30,12 @@ import java.util.ResourceBundle;
 
 public class StudentMgmtPageController {
     public AnchorPane ancStudent;
-    public Button btnOpenStdForm;
+    public StackPane btnOpenStdForm;
 
     public TableView tblStudents;
 
-    public void openStdForm(ActionEvent actionEvent) throws Exception {
+
+    public void openStdForm(MouseEvent mouseEvent) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(ViewPath.ADD_STUDENT_FORM.getPath()));
         Scene scene = new Scene(parent);
         Stage stage = new Stage();

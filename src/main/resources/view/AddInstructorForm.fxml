@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancAddInstructorForm" prefHeight="550.0" prefWidth="400.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 10px; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddInstructorFormController">
+<AnchorPane fx:id="ancAddInstructorForm" prefHeight="550.0" prefWidth="400.0" style="-fx-background-color: white; -fx-border-color: lightGrey;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddInstructorFormController">
    <children>
       <VBox layoutX="443.0" layoutY="102.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-radius: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

@@ -13,11 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancAddStudentForm" prefHeight="630.0" prefWidth="400.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 10px; -fx-background-radius: 10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddStudentFormController">
+<AnchorPane fx:id="ancAddStudentForm" prefHeight="630.0" prefWidth="400.0" style="-fx-background-color: white; -fx-border-color: lightGrey; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0.1, 0, 5);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddStudentFormController">
    <children>
-      <VBox layoutX="443.0" layoutY="102.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-radius: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="443.0" layoutY="102.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: transaprent; -fx-background-radius: 20px; -fx-border-radius: 20px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox prefHeight="64.0" prefWidth="400.0">
+            <HBox prefHeight="64.0" prefWidth="400.0" style="-fx-background-radius: 30px;">
                <children>
                   <Label text="Add New Student">
                      <font>
@@ -181,7 +181,7 @@
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#closeStudentFormOnAction" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
+                        <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#closeStudentFormOnAction" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: #a19d9d; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="#a19d9d">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>

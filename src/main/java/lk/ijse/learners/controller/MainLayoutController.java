@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import lk.ijse.learners.controller.util.ViewPath;
 
 import java.net.URL;
@@ -15,14 +16,14 @@ public class MainLayoutController implements Initializable {
     public AnchorPane ancMain;
     public AnchorPane ancPages;
 
-    public HBox btnStudentMgmt;
-    public HBox btnLessonMgmt;
-    public HBox btnPaymentMgmt;
-    public HBox btnCoursesMgmt;
-    public HBox btnUserMgmt;
-    public HBox btnInstructorMgmt;
-    public HBox btnSettingsPage;
-    public ImageView btnLogout;
+    public StackPane btnStudentMgmt;
+    public StackPane btnLessonMgmt;
+    public StackPane btnPaymentMgmt;
+    public StackPane btnCoursesMgmt;
+    public StackPane btnUserMgmt;
+    public StackPane btnInstructorMgmt;
+    public StackPane btnSettingsPage;
+    public StackPane btnLogout;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
