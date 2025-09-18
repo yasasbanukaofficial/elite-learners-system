@@ -58,7 +58,7 @@ public class AddCourseFormController implements Initializable {
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
     InstructorBO instructorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
 
-    private List<String> selectedInstructors = new ArrayList<>();
+    private final List<String> selectedInstructors = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -124,6 +124,7 @@ public class AddCourseFormController implements Initializable {
                         new ArrayList<>()
                 ));
                 AlertUtil.setInfoAlert("Successfully added course!");
+                WindowManagerUtil.closeForm(ancAddCourseForm);
                 return true;
             } catch (Exception e) {
                 AlertUtil.setErrorAlert("Failed to add course!");

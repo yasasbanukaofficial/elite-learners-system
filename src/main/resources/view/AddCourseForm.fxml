@@ -124,39 +124,13 @@
                                  <children>
                                     <ListView fx:id="chosenInstructors" prefHeight="79.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
                                        <VBox.margin>
-                                          <Insets top="20.0" />
+                                          <Insets bottom="20.0" top="20.0" />
                                        </VBox.margin>
                                     </ListView>
                                  </children>
                               </VBox>
                            </children>
                         </VBox>
-                        <HBox prefHeight="40.0" prefWidth="358.0" spacing="10.0">
-                           <children>
-                              <Button fx:id="btnCancel" mnemonicParsing="false" onMouseClicked="#closeCourseFormOnAction" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
-                                 <font>
-                                    <Font name="Arial Bold" size="14.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Button>
-                              <Button fx:id="btnAddCourse" mnemonicParsing="false" onAction="#addCourse" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Next" textFill="WHITE">
-                                 <font>
-                                    <Font name="Arial Bold" size="14.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Button>
-                           </children>
-                           <VBox.margin>
-                              <Insets bottom="10.0" top="10.0" />
-                           </VBox.margin>
-                           <padding>
-                              <Insets left="140.0" />
-                           </padding>
-                        </HBox>
                      </children>
                      <VBox.margin>
                         <Insets left="20.0" right="20.0" top="10.0" />
@@ -212,6 +186,35 @@
                         <Insets bottom="10.0" />
                      </padding>
                   </VBox>
+                  <HBox prefHeight="56.0" prefWidth="419.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="btnCancel" mnemonicParsing="false" onMouseClicked="#closeCourseFormOnAction" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">
+                           <font>
+                              <Font name="Arial Bold" size="14.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnAddCourse" mnemonicParsing="false" onAction="#addCourse" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Next" textFill="WHITE">
+                           <font>
+                              <Font name="Arial Bold" size="14.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="140.0" />
+                     </padding>
+                  </HBox>
                </children>
             </VBox>
          </children>

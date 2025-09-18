@@ -138,7 +138,7 @@ public class AddStudentFormController implements Initializable {
         boolean isValid = true;
 
         String emailPattern = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
-        String contactPattern = "/^(?![ -])(?!.*[- ]$)(?!.*[- ]{2})[0-9- ]+$/gm";
+        String contactPattern = "^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$";
 
         String errorStyle = "-fx-border-color: #ce0101; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
         String normalStyle = "-fx-border-color: #000000; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
@@ -167,8 +167,8 @@ public class AddStudentFormController implements Initializable {
             dobPicker.setStyle(errorStyle);
             isValid = false;
         } else {
-            LocalDate birthDate = LocalDate.parse(dobPicker.getValue().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            int age = Period.between(birthDate, LocalDate.now()).getYears();
+            LocalDate birthDate = dobPicker.getValue();
+            int age = LocalDate.now().getYear() - birthDate.getYear();
             if (age < 18 || age > 60){
                 errorMsg.append("* Student age must be between 18 and 60 years.\n");
                 dobPicker.setStyle(errorStyle);
@@ -188,12 +188,11 @@ public class AddStudentFormController implements Initializable {
             errorMsg.append("* You must include student's contact!\n");
             txtContact.setStyle(errorStyle);
             isValid = false;
+        } else if (!contact.matches(contactPattern)){
+            errorMsg.append("* Contact should be a valid one (ex: 0721231231 (LK), 4615555679 (US))!\n");
+            txtContact.setStyle(errorStyle);
+            isValid = false;
         }
-//        else if (!contact.matches(contactPattern)){
-//            errorMsg.append("* Contact should be a valid one (ex: 0721231231 (LK), 4615555679 (US))!\n");
-//            txtContact.setStyle(errorStyle);
-//            isValid = false;
-//        }
         if (!Auth.areRequiredFieldsFilled(address)){
             errorMsg.append("* You must include students address!\n");
             txtAddress.setStyle(errorStyle);

@@ -40,7 +40,7 @@ public class ChooseCourseFormController implements Initializable {
     EnrollmentBO enrollmentBO = (EnrollmentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.ENROLLMENT);
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
 
-    private List<String> selectedCourseList = new ArrayList<>();
+    private final List<String> selectedCourseList = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
