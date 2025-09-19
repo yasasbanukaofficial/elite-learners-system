@@ -105,7 +105,7 @@
                               </VBox>
                               <TableView fx:id="tblStudents" prefHeight="200.0" prefWidth="200.0" styleClass=".table-view" stylesheets="@../styles/table-view.css" VBox.vgrow="ALWAYS">
                                 <columns>
-                                  <TableColumn fx:id="colSid" prefWidth="75.0" text="SID" />
+                                  <TableColumn fx:id="colSid" prefWidth="75.0" text="ID" />
                                   <TableColumn fx:id="colFname" prefWidth="119.0" text="First Name" />
                                     <TableColumn fx:id="colLname" prefWidth="119.0" text="Last Name" />
                                     <TableColumn fx:id="colDob" prefWidth="133.0" text="Date of Birth" />

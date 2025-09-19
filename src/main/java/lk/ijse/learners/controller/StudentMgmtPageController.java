@@ -47,6 +47,11 @@ public class StudentMgmtPageController implements Initializable{
 
     StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setupTblColumn();
+        loadTbl();
+    }
 
     public void openStdForm(MouseEvent mouseEvent) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(ViewPath.ADD_STUDENT_FORM.getPath()));
@@ -56,12 +61,6 @@ public class StudentMgmtPageController implements Initializable{
         stage.setMaximized(false);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setupTblColumn();
-        loadTbl();
     }
 
     private void setupTblColumn() {
