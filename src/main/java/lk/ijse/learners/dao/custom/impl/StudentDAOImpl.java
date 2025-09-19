@@ -3,6 +3,7 @@ package lk.ijse.learners.dao.custom.impl;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.config.FactoryConfiguration;
 import lk.ijse.learners.dao.custom.StudentDAO;
 import lk.ijse.learners.entity.Payment;
@@ -19,8 +20,16 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public List<Student> getAll() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
-            Query<Student> query = session.createQuery("from Student", Student.class);
-            return query.list();
+            Transaction transaction = session.beginTransaction();
+
+            List<Student> students = session.createQuery(
+                    "SELECT DISTINCT s FROM Student s LEFT JOIN FETCH s.lessons",
+                    Student.class
+            ).getResultList();
+
+            transaction.commit();
+
+            return students;
         }
     }
 
