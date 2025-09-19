@@ -87,7 +87,7 @@ public class AddStudentFormController implements Initializable {
                     AlertUtil.setErrorAlert("Please add payment before proceeding");
                     return;
                 }
-                WindowManagerUtil.openForm(ViewPath.CHOOSE_COURSE_FORM.getPath());
+                WindowManagerUtil.openForm(ViewPath.CHOOSE_COURSE_FORM.getPath(), false);
             }
         } catch (Exception e) {
             AlertUtil.setErrorAlert("Failed to check for paymentDto");
@@ -103,7 +103,7 @@ public class AddStudentFormController implements Initializable {
             AlertUtil.setErrorAlert("Failed to set pay id");
             e.printStackTrace();
         }
-        WindowManagerUtil.openForm(ViewPath.ADD_PAYMENT_FORM.getPath());
+        WindowManagerUtil.openForm(ViewPath.ADD_PAYMENT_FORM.getPath(), false);
     }
 
     private boolean addStudent() {

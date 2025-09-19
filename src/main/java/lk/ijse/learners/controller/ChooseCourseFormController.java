@@ -19,6 +19,7 @@ import lk.ijse.learners.bo.custom.CourseBO;
 import lk.ijse.learners.bo.custom.EnrollmentBO;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.controller.util.AlertUtil;
+import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.CourseDTO;
 
 import java.net.URL;
@@ -57,9 +58,7 @@ public class ChooseCourseFormController implements Initializable {
 
     @FXML
     public void closeForm(Event onClick) {
-        enrollmentContext.clear();
-        Stage window = (Stage) ancChooseCourseForm.getScene().getWindow();
-        window.close();
+        WindowManagerUtil.closeForm(ancChooseCourseForm);
     }
 
     @FXML
@@ -77,8 +76,10 @@ public class ChooseCourseFormController implements Initializable {
             if (!enrollmentBO.enrollStudent()) {
                 AlertUtil.setErrorAlert("Failed to enroll student");
                 return;
+            } else {
+                enrollmentContext.clear();
+                WindowManagerUtil.closeForm(ancChooseCourseForm);
             }
-            closeForm(onClick);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -86,7 +87,7 @@ public class ChooseCourseFormController implements Initializable {
 
     @FXML
     public void closeStudentForm(MouseEvent mouseEvent) {
-        closeForm(new ActionEvent());
+        WindowManagerUtil.closeForm(ancChooseCourseForm);
     }
 
     private List<String> fetchAllCourseNames() {

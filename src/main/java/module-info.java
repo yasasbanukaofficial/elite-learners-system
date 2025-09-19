@@ -17,5 +17,6 @@ module lk.ijse.learners {
 
     opens lk.ijse.learners.controller to javafx.fxml;
     opens lk.ijse.learners.dto to javafx.base;
+    opens lk.ijse.learners.tm to javafx.base;
     exports lk.ijse.learners;
 }

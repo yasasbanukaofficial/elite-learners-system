@@ -15,7 +15,7 @@
 .table-view .filler {
     -fx-size: 35;
     -fx-border-color: white;
-    -fx-text-fill: #88838C;
+    -fx-text-fill: black;
     -fx-border-width: 0px 0px 1px 0px;
     -fx-background-color: transparent;
 }
@@ -25,7 +25,7 @@
     -fx-font-family: Calibri;
     -fx-alignment: CENTER_LEFT;
     -fx-label-padding: 0px 5px;
-    -fx-text-fill: #88838C;
+    -fx-text-fill: black;
 }
 
 .table-row-cell {

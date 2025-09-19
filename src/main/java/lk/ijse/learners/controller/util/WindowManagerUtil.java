@@ -1,6 +1,7 @@
 package lk.ijse.learners.controller.util;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -16,9 +17,9 @@ public class WindowManagerUtil {
 
     private WindowManagerUtil() {}
 
-    public static void openForm(String path) {
+    public static void openForm(String path, boolean cache) {
         try {
-            Parent parent = getView(path);
+            Parent parent = getView(path, cache);
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
             stage.setScene(scene);
@@ -26,22 +27,29 @@ public class WindowManagerUtil {
             stage.initStyle(StageStyle.TRANSPARENT);
             stage.show();
         } catch (Exception e) {
-            AlertUtil.setErrorAlert("Failed to form!");
+            AlertUtil.setErrorAlert("Failed to load form!");
             e.printStackTrace();
         }
     }
 
-    private static Parent getView(String path) throws Exception{
-        if(!viewCache.containsKey(path)) {
+    private static Parent getView(String path, boolean cache) throws Exception {
+        if (cache) {
+            if (!viewCache.containsKey(path)) {
+                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(WindowManagerUtil.class.getResource(path)));
+                Parent parent = loader.load();
+                viewCache.put(path, parent);
+            }
+            return viewCache.get(path);
+        } else {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(WindowManagerUtil.class.getResource(path)));
-            Parent parent = loader.load();
-            viewCache.put(path, parent);
+            return loader.load();
         }
-        return viewCache.get(path);
     }
 
-    public static void closeForm(AnchorPane anchorPane) {
-        Stage window = (Stage) anchorPane.getScene().getWindow();
-        window.close();
+    public static void closeForm(Node node) {
+        Stage window = (Stage) node.getScene().getWindow();
+        if (window != null) {
+            window.close();
+        }
     }
 }

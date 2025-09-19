@@ -3,6 +3,8 @@ package lk.ijse.learners.bo.custom.impl;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.context.EnrollmentContext;
 import lk.ijse.learners.bo.custom.*;
+import lk.ijse.learners.bo.exception.DuplicateException;
+import lk.ijse.learners.bo.exception.InUseException;
 import lk.ijse.learners.bo.exception.NotFoundException;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.config.FactoryConfiguration;
@@ -42,10 +44,23 @@ public class EnrollmentBOImpl implements EnrollmentBO {
                 }
             });
 
-            if (!studentBO.save(studentDTO)) {
+            try {
+                if (!studentBO.save(studentDTO)) {
+                    tx.rollback();
+                    AlertUtil.setErrorAlert("Failed to save student");
+                }
+            } catch (DuplicateException e) {
                 tx.rollback();
-                throw new RuntimeException("Failed to save student");
+                AlertUtil.setErrorAlert("Duplicate student: " + e.getMessage());
+            } catch (InUseException e) {
+                tx.rollback();
+                AlertUtil.setErrorAlert("Validation error: " + e.getMessage());
+            } catch (Exception e) {
+                tx.rollback();
+                AlertUtil.setErrorAlert("Unexpected error: Something went wrong. Please try again.");
+                e.printStackTrace();
             }
+
 
             courseDTOList.forEach(courseDTO -> {
                 try {

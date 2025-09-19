@@ -105,11 +105,11 @@
                               </VBox>
                               <TableView fx:id="tblStudents" prefHeight="200.0" prefWidth="200.0" styleClass=".table-view" stylesheets="@../styles/table-view.css" VBox.vgrow="ALWAYS">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="SID" />
-                                  <TableColumn prefWidth="119.0" text="First Name" />
-                                    <TableColumn prefWidth="119.0" text="Last Name" />
-                                    <TableColumn prefWidth="133.0" text="Date of Birth" />
-                                    <TableColumn prefWidth="150.0" text="Contact" />
+                                  <TableColumn fx:id="colSid" prefWidth="75.0" text="SID" />
+                                  <TableColumn fx:id="colFname" prefWidth="119.0" text="First Name" />
+                                    <TableColumn fx:id="colLname" prefWidth="119.0" text="Last Name" />
+                                    <TableColumn fx:id="colDob" prefWidth="133.0" text="Date of Birth" />
+                                    <TableColumn fx:id="colContact" prefWidth="150.0" text="Contact" />
                                 </columns>
                                  <VBox.margin>
                                     <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
