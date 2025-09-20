@@ -1,6 +1,7 @@
 package lk.ijse.learners.bo.custom.impl;
 
 import lk.ijse.learners.bo.custom.CourseBO;
+import lk.ijse.learners.bo.exception.NotFoundException;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.dao.DAOFactory;
 import lk.ijse.learners.dao.custom.CourseDAO;
@@ -72,4 +73,11 @@ public class CourseBOImpl implements CourseBO {
     public List<Course> fetchCourseListByName(List<String> courseName) throws Exception {
         return courseDAO.fetchCourseListByName(courseName);
     }
+
+    @Override
+    public List<Course> getAllEnrolledCoursesByStdId(String stdId) throws Exception {
+        return courseDAO.getAllEnrolledCoursesByStdId(stdId);
+    }
+
+
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CourseDAO extends CrudDAO<Course> {
     List<Course> fetchCourseListByName(List<String> instructorName) throws Exception;
+    List<Course> getAllEnrolledCoursesByStdId(String stdId) throws Exception;
 }

@@ -105,4 +105,14 @@ public class CourseDAOImpl implements CourseDAO {
             return query.list();
         }
     }
+
+
+    @Override
+    public List<Course> getAllEnrolledCoursesByStdId(String stdId) throws Exception {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Course> query = session.createQuery("select c from Course c join c.students s where s.id = :stdId", Course.class);
+            query.setParameter("stdId", stdId);
+            return query.list();
+        }
+    }
 }

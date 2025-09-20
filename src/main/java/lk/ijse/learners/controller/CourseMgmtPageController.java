@@ -41,8 +41,6 @@ public class CourseMgmtPageController implements Initializable {
     public TableColumn <CourseTM, String> colFee;
 
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
-    InstructorBO instructorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
-
 
     public void openCourseForm(MouseEvent mouseEvent) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(ViewPath.ADD_COURSE_FORM.getPath()));

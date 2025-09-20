@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface CourseBO extends CrudBO<CourseDTO> {
     List<Course> fetchCourseListByName(List<String> courseName) throws Exception;
+    List<Course> getAllEnrolledCoursesByStdId(String stdId) throws Exception;
 }
 
