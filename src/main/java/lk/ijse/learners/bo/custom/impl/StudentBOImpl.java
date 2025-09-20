@@ -8,6 +8,7 @@ import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.dao.DAOFactory;
 import lk.ijse.learners.dao.custom.StudentDAO;
 import lk.ijse.learners.dto.StudentDTO;
+import lk.ijse.learners.entity.Lesson;
 import lk.ijse.learners.entity.Payment;
 import lk.ijse.learners.entity.Student;
 
@@ -50,12 +51,12 @@ public class StudentBOImpl implements StudentBO {
         }
         Student existingStudent = existingStudent = studentById.get();
         if (!existingStudent.getContactNumber().equals(studentDto.getContactNumber())) {
-            if (studentDAO.existsByField("s.contact", studentDto.getContactNumber())) {
+            if (studentDAO.existsByField("contactNumber", studentDto.getContactNumber())) {
                 throw new InUseException("Contact number already exists to another student");
             }
         }
         if (!existingStudent.getEmail().equals(studentDto.getEmail())) {
-            if (studentDAO.existsByField("s.email", studentDto.getEmail())) {
+            if (studentDAO.existsByField("email", studentDto.getEmail())) {
                 throw new InUseException("Email already exists to another student");
             }
         }
@@ -103,5 +104,14 @@ public class StudentBOImpl implements StudentBO {
     @Override
     public List<Payment> getAllPayments() {
         return studentDAO.getAllPayments();
+    }
+
+    public List<Payment> getAllPaymentsBySid(String sid) {
+        return studentDAO.getAllPaymentsBySid(sid);
+    }
+
+    @Override
+    public List<Lesson> getAllLessonsBySid(String sid) {
+        return studentDAO.getAllLessonsBySid(sid);
     }
 }

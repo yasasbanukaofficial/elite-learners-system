@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
@@ -86,7 +87,7 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: linear-gradient(to bottom, #F2F2F4, #E5ECF2); -fx-background-radius: 20px;" HBox.hgrow="ALWAYS">
                      <children>
-                        <HBox prefHeight="110.0" prefWidth="734.0">
+                        <HBox prefHeight="108.0" prefWidth="734.0">
                            <children>
                               <VBox prefHeight="97.0" prefWidth="626.0" spacing="5.0" HBox.hgrow="ALWAYS">
                                  <children>
@@ -128,7 +129,7 @@
                               </StackPane>
                            </children>
                         </HBox>
-                        <VBox prefHeight="268.0" prefWidth="653.0" style="-fx-background-color: #F5F3F8; -fx-background-radius: 20px;">
+                        <VBox prefHeight="312.0" prefWidth="653.0" style="-fx-background-color: #F5F3F8; -fx-background-radius: 20px;">
                            <VBox.margin>
                               <Insets left="36.0" right="45.0" />
                            </VBox.margin>
@@ -149,7 +150,7 @@
                                  <children>
                                     <VBox prefHeight="156.0" prefWidth="191.0" style="-fx-border-color: lightGrey; -fx-border-radius: 30px;">
                                        <children>
-                                          <TextField fx:id="txtAge" prefHeight="80.0" prefWidth="149.0" promptText="100" style="-fx-background-color: transparent;">
+                                          <TextField fx:id="txtAge" editable="false" prefHeight="80.0" prefWidth="149.0" promptText="100" style="-fx-background-color: transparent;">
                                              <font>
                                                 <Font name="SansSerif Bold" size="70.0" />
                                              </font>
@@ -172,7 +173,7 @@
                                     </VBox>
                                     <VBox prefHeight="164.0" prefWidth="345.0" style="-fx-border-color: lightGrey; -fx-border-radius: 30px;" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <TextField fx:id="txtContact" editable="false" promptText="0721440872" style="-fx-background-color: transparent;">
+                                          <TextField fx:id="txtContact" promptText="0721440872" style="-fx-background-color: transparent;">
                                              <font>
                                                 <Font name="SansSerif Bold" size="65.0" />
                                              </font>
@@ -195,12 +196,31 @@
                                     </VBox>
                                  </children>
                               </HBox>
+                              <Label text="Date of Birth">
+                                 <font>
+                                    <Font name="SansSerif Bold" size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <DatePicker fx:id="stdDob" maxWidth="1.7976931348623157E308" opacity="0.73" prefHeight="35.0" prefWidth="360.0" promptText="01/01/2001" stylesheets="@../styles/date-picker-dark.css">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="10.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="3.0" />
+                                 </padding>
+                              </DatePicker>
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
                         </VBox>
-                        <VBox prefHeight="274.0" prefWidth="653.0" style="-fx-background-color: #F5F3F8; -fx-background-radius: 20px;" VBox.vgrow="ALWAYS">
+                        <VBox prefHeight="209.0" prefWidth="653.0" style="-fx-background-color: #F5F3F8; -fx-background-radius: 20px;" VBox.vgrow="ALWAYS">
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
@@ -230,7 +250,7 @@
                                     <Insets />
                                  </HBox.margin>
                               </VBox>
-                              <Button fx:id="btnDeleteStd" mnemonicParsing="false" onAction="#deleteStudent" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="#868686">
+                              <Button fx:id="btnDeleteStd" mnemonicParsing="false" onAction="#deleteStudent" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Delete" textFill="#868686">
                                  <font>
                                     <Font name="Arial Bold" size="14.0" />
                                  </font>

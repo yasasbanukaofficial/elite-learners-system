@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.Root;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.config.FactoryConfiguration;
 import lk.ijse.learners.dao.custom.StudentDAO;
+import lk.ijse.learners.entity.Lesson;
 import lk.ijse.learners.entity.Payment;
 import lk.ijse.learners.entity.Student;
 import org.hibernate.Session;
@@ -127,4 +128,24 @@ public class StudentDAOImpl implements StudentDAO {
             return query.list() == null ? null : query.list();
         }
     }
+
+    @Override
+    public List<Payment> getAllPaymentsBySid(String sid) {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Payment> query = session.createQuery("select s.payments from Student s where s.id = :sid", Payment.class);
+            query.setParameter("sid", sid);
+            return query.list() == null ? null : query.list();
+        }
+    }
+
+    @Override
+    public List<Lesson> getAllLessonsBySid(String sid) {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Lesson> query = session.createQuery("select s.lessons from Student s where s.id = :sid", Lesson.class);
+            query.setParameter("sid", sid);
+            return query.list() == null ? null : query.list();
+        }
+    }
+
+
 }

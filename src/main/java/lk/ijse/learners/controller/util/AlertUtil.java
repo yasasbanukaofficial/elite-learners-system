@@ -19,11 +19,13 @@ public class AlertUtil {
         infoAlert.show();
     }
 
-    public static Optional<ButtonType> setConfirmationAlert(String message, String subMessage) {
+    public static boolean setConfirmationAlert(String message, String subMessage) {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setHeaderText(message);
         confirmationAlert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
         confirmationAlert.setContentText(subMessage);
-        return confirmationAlert.showAndWait();
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.YES;
     }
 }
