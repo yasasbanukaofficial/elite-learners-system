@@ -1,5 +1,6 @@
 package lk.ijse.learners.controller;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.context.EnrollmentContext;
+import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.bo.custom.CourseBO;
 import lk.ijse.learners.bo.custom.StudentBO;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
@@ -66,6 +68,24 @@ public class StudentMgmtPageController implements Initializable{
 
         tblStudents.getSelectionModel().selectedItemProperty().addListener((observableValue, oldSel, newSel) -> {
             if (newSel != null) setupForm(newSel);
+        });
+
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.STUDENT).addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                Platform.runLater(() -> {
+                    loadTbl();
+                    RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.STUDENT, false);
+                });
+            }
+        });
+
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.COURSES_ENROLLED_LIST).addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                Platform.runLater(() -> {
+                    setupForm(tblStudents.getSelectionModel().getSelectedItem());
+                    RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES_ENROLLED_LIST, false);
+                });
+            }
         });
     }
 

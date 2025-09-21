@@ -24,6 +24,7 @@ public class EnrollmentBOImpl implements EnrollmentBO {
     PaymentBO paymentBO = (PaymentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.PAYMENT);
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
 
+
     @Override
     public boolean enrollStudent() {
         Session session = FactoryConfiguration.getInstance().getCurrentSession();
@@ -34,53 +35,24 @@ public class EnrollmentBOImpl implements EnrollmentBO {
             PaymentDTO paymentDTO = enrollmentContext.getPaymentDTO();
             List<CourseDTO> courseDTOList = enrollmentContext.getCourseDTOList();
 
-            courseDTOList.forEach(courseDTO -> {
-                try {
-                    if (courseBO.findById(courseDTO.getCourseId()).isEmpty()) {
-                        tx.rollback();
-                        throw new NotFoundException("Course does not exist");
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException("Error when checking course id's", e);
+            for (CourseDTO courseDTO : courseDTOList) {
+                if (courseBO.findById(courseDTO.getCourseId()).isEmpty()) {
+                    throw new NotFoundException("Course does not exist");
                 }
-            });
-
-            try {
-                if (!studentBO.save(studentDTO)) {
-                    tx.rollback();
-                    AlertUtil.setErrorAlert("Failed to save student");
-                }
-            } catch (DuplicateException e) {
-                tx.rollback();
-                AlertUtil.setErrorAlert("Duplicate student: " + e.getMessage());
-            } catch (InUseException e) {
-                tx.rollback();
-                AlertUtil.setErrorAlert("Validation error: " + e.getMessage());
-            } catch (Exception e) {
-                tx.rollback();
-                AlertUtil.setErrorAlert("Unexpected error: Something went wrong. Please try again.");
-                e.printStackTrace();
             }
 
+            if (!studentBO.save(studentDTO)) {
+                throw new RuntimeException("Failed to save student");
+            }
 
-            courseDTOList.forEach(courseDTO -> {
-                try {
-                    Course course = session.get(Course.class, courseDTO.getCourseId());
-                    course.getStudents().add(entityDTOConverter.getStudentEntity(studentDTO));
-                    session.merge(course);
-                    if (!courseBO.update(courseDTO)) {
-                        tx.rollback();
-                        throw new RuntimeException("Failed to update course");
-                    }
-                } catch (Exception e) {
-                    tx.rollback();
-                    throw new RuntimeException("Error when updating courses", e);
-                }
-            });
+            for (CourseDTO courseDTO : courseDTOList) {
+                Course course = session.get(Course.class, courseDTO.getCourseId());
+                course.getStudents().add(entityDTOConverter.getStudentEntity(studentDTO));
+                session.merge(course);
+            }
 
             paymentDTO.setStudentId(studentDTO.getStudentId());
             if (!paymentBO.save(paymentDTO)) {
-                tx.rollback();
                 throw new RuntimeException("Failed to save payment");
             }
 
@@ -88,7 +60,10 @@ public class EnrollmentBOImpl implements EnrollmentBO {
             AlertUtil.setInfoAlert("Successfully enrolled student!");
             return true;
         } catch (Exception e) {
-            tx.rollback();
+            if (tx != null) {
+                tx.rollback();
+            }
+            AlertUtil.setErrorAlert("Enrollment failed: " + e.getMessage());
             e.printStackTrace();
             return false;
         } finally {
@@ -96,29 +71,37 @@ public class EnrollmentBOImpl implements EnrollmentBO {
         }
     }
 
+
     @Override
     public boolean updateEnrolledStudent() {
         Session session = FactoryConfiguration.getInstance().getCurrentSession();
         Transaction tx = session.beginTransaction();
 
-        StudentDTO studentDTO = enrollmentContext.getStudentDTO();
-        List<CourseDTO> courseDTOList = enrollmentContext.getCourseDTOList();
-        courseDTOList.forEach(course -> {
-            if (!course.getStudents().contains(studentDTO)) {
-                course.getStudents().add(studentDTO);
-            }
-            try {
+        try {
+            StudentDTO studentDTO = enrollmentContext.getStudentDTO();
+            List<CourseDTO> courseDTOList = enrollmentContext.getCourseDTOList();
+
+            for (CourseDTO course : courseDTOList) {
+                if (!course.getStudents().contains(studentDTO)) {
+                    course.getStudents().add(studentDTO);
+                }
                 if (!courseBO.update(course)) {
-                    tx.rollback();
                     throw new RuntimeException("Failed to update course");
                 }
-            } catch (Exception e) {
-                tx.rollback();
-            } finally {
-                session.close();
             }
-        });
-        return true;
+
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            AlertUtil.setErrorAlert("Failed to update enrolled courses");
+            e.printStackTrace();
+            return false;
+        } finally {
+            session.close();
+        }
     }
 
 }

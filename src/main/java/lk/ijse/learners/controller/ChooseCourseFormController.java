@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.context.EnrollmentContext;
+import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.bo.custom.CourseBO;
 import lk.ijse.learners.bo.custom.EnrollmentBO;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
@@ -76,6 +77,7 @@ public class ChooseCourseFormController implements Initializable {
                 AlertUtil.setErrorAlert("Failed to enroll student");
                 return;
             } else {
+                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.STUDENT, true);
                 enrollmentContext.clear();
                 WindowManagerUtil.closeForm(ancChooseCourseForm);
             }

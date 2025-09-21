@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.context.EnrollmentContext;
+import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.bo.custom.CourseBO;
 import lk.ijse.learners.bo.custom.EnrollmentBO;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
@@ -85,6 +86,7 @@ public class EditEnrolledCoursesController implements Initializable {
                 CourseDTO course = courseDTO.get();
                 course.getStudents().removeIf(std -> std.getStudentId().equals(enrollmentContext.getStudentDTO().getStudentId()));
                 courseBO.update(course);
+                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES_ENROLLED_LIST, true);
             }
         } catch (Exception e) {
             AlertUtil.setErrorAlert("Failed to update course when removing student");
@@ -112,6 +114,7 @@ public class EditEnrolledCoursesController implements Initializable {
             if (!enrollmentBO.updateEnrolledStudent()) {
                 AlertUtil.setErrorAlert("Failed to update enrolled courses");
             } else {
+                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES_ENROLLED_LIST, true);
                 enrollmentContext.clear();
                 WindowManagerUtil.closeForm(ancChooseCourseForm);
             }
