@@ -1,5 +1,6 @@
 package lk.ijse.learners.controller;
 
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +21,7 @@ import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.CourseDTO;
+import lk.ijse.learners.entity.Course;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ import java.util.ResourceBundle;
 public class EditEnrolledCoursesController implements Initializable {
     public AnchorPane ancChooseCourseForm;
 
-    public Button btnAddCourses;
+    public Button btnEditCourses;
     public Button btnCancel;
 
     private final EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
@@ -44,6 +46,12 @@ public class EditEnrolledCoursesController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        List<String> alreadyEnrolledCourseList = new ArrayList<>();
+
+        enrollmentContext.getCourseDTOList().forEach(courseDTO -> {
+            alreadyEnrolledCourseList.add(courseDTO.getName());
+        });
+        selectedCourses.getItems().addAll(alreadyEnrolledCourseList);
         courseList.getItems().addAll(fetchAllCourseNames());
         courseList.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
             String selected = courseList.getSelectionModel().getSelectedItem();
@@ -61,20 +69,20 @@ public class EditEnrolledCoursesController implements Initializable {
     }
 
     @FXML
-    public void addCourses(Event onClick) {
+    public void editCourses(Event onClick) {
         try {
             if(selectedCourseList.isEmpty()) {
                 AlertUtil.setErrorAlert("Please select at least one course");
                 return;
             }
-            enrollmentContext.setCourseDTO(
+
+            enrollmentContext.setCourseDTOList(
                     entityDTOConverter.toCourseDTOList(
                             courseBO.fetchCourseListByName(selectedCourseList)
                     )
             );
-            if (!enrollmentBO.enrollStudent()) {
-                AlertUtil.setErrorAlert("Failed to enroll student");
-                return;
+            if (!enrollmentBO.updateEnrolledStudent()) {
+                AlertUtil.setErrorAlert("Failed to update enrolled courses");
             } else {
                 enrollmentContext.clear();
                 WindowManagerUtil.closeForm(ancChooseCourseForm);
@@ -97,22 +105,6 @@ public class EditEnrolledCoursesController implements Initializable {
             return courseNames;
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private void openForms(String path) {
-        try {
-            Parent parent = FXMLLoader.load(getClass().getResource(path));
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setMaximized(false);
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.show();
-        } catch (Exception e) {
-            AlertUtil.setErrorAlert("Failed to form!");
-            e.printStackTrace();
-            return;
         }
     }
 }

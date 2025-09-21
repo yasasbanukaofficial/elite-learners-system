@@ -19,7 +19,7 @@ public class EnrollmentContext {
 
     private StudentDTO studentDTO;
     private PaymentDTO paymentDTO;
-    private List<CourseDTO> courseDTO;
+    private List<CourseDTO> courseDTOList;
 
     public static EnrollmentContext getInstance() {
         return enrollmentContext == null ? enrollmentContext = new EnrollmentContext() : enrollmentContext;
@@ -28,7 +28,7 @@ public class EnrollmentContext {
     public void clear() {
         studentDTO = null;
         paymentDTO = null;
-        courseDTO = null;
+        courseDTOList = null;
     }
 
 }

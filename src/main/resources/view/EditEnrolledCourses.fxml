@@ -99,7 +99,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="btnAddCourses" mnemonicParsing="false" onAction="#addCourses" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Save" textFill="WHITE">
+                        <Button fx:id="btnEditCourses" mnemonicParsing="false" onAction="#editCourses" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Save" textFill="WHITE">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>

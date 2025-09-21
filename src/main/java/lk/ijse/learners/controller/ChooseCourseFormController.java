@@ -1,6 +1,5 @@
 package lk.ijse.learners.controller;
 
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -68,7 +67,7 @@ public class ChooseCourseFormController implements Initializable {
                 AlertUtil.setErrorAlert("Please select at least one course");
                 return;
             }
-            enrollmentContext.setCourseDTO(
+            enrollmentContext.setCourseDTOList(
                     entityDTOConverter.toCourseDTOList(
                             courseBO.fetchCourseListByName(selectedCourseList)
                     )

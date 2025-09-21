@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
+import lk.ijse.learners.bo.context.EnrollmentContext;
 import lk.ijse.learners.bo.custom.CourseBO;
 import lk.ijse.learners.bo.custom.StudentBO;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
@@ -55,8 +56,9 @@ public class StudentMgmtPageController implements Initializable{
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
 
     private final EntityDTOConverter entityDTOConverter = new EntityDTOConverter();
+    private final EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
     private StudentDTO studentDTO;
-    private List<String> courseNames;
+    private List<String> courseNames = new ArrayList<>();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupTblColumn();
@@ -66,22 +68,19 @@ public class StudentMgmtPageController implements Initializable{
             if (newSel != null) setupForm(newSel);
         });
 
-        listCoursesEnrolled.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
-            if (newSel != null) {
-                boolean confirmed = AlertUtil.setConfirmationAlert(
-                        "Before continuing",
-                        "Are you sure you want to remove student from course?"
-                );
+        listCoursesEnrolled.setOnMouseClicked(this::handleCourseRemoveClick);
+    }
 
-                if (confirmed) {
-                    removeCourse(newSel);
-                } else {
-                    listCoursesEnrolled.getSelectionModel().select(oldSel);
-                }
+    private void handleCourseRemoveClick(MouseEvent event) {
+        String selectedCourse = listCoursesEnrolled.getSelectionModel().getSelectedItem();
+
+        if (selectedCourse != null) {
+            if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to remove student from " + selectedCourse + " course?")) {
+                removeCourse(selectedCourse);
+                listCoursesEnrolled.getItems().remove(selectedCourse);
+                listCoursesEnrolled.getSelectionModel().clearSelection();
             }
-        });
-
-
+        }
     }
 
     public void openStdForm(MouseEvent mouseEvent) throws IOException {
@@ -238,8 +237,6 @@ public class StudentMgmtPageController implements Initializable{
                 CourseDTO course = courseDTO.get();
                 course.getStudents().removeIf(std -> std.getStudentId().equals(studentDTO.getStudentId()));
                 courseBO.update(course);
-
-                listCoursesEnrolled.getItems().remove(courseName);
             }
         } catch (Exception e) {
             AlertUtil.setErrorAlert("Failed to update course when removing student");
@@ -294,5 +291,16 @@ public class StudentMgmtPageController implements Initializable{
             AlertUtil.setErrorAlert("Please solve these issues before proceeding \n\n" + errorMsg.toString());
         }
         return isValid;
+    }
+
+    public void editCourseList(MouseEvent mouseEvent) {
+        try {
+            enrollmentContext.setStudentDTO(studentDTO);
+            enrollmentContext.setCourseDTOList(entityDTOConverter.toCourseDTOList(courseBO.getAllEnrolledCoursesByStdId(studentDTO.getStudentId())));
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Failed to set course details in the context");
+            throw new RuntimeException(e);
+        }
+        WindowManagerUtil.openForm(ViewPath.EDIT_ENROLLED_COURSES.getPath(), false);
     }
 }
