@@ -58,7 +58,7 @@ public class StudentMgmtPageController implements Initializable{
     private final EntityDTOConverter entityDTOConverter = new EntityDTOConverter();
     private final EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
     private StudentDTO studentDTO;
-    private List<String> courseNames = new ArrayList<>();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupTblColumn();
@@ -67,20 +67,6 @@ public class StudentMgmtPageController implements Initializable{
         tblStudents.getSelectionModel().selectedItemProperty().addListener((observableValue, oldSel, newSel) -> {
             if (newSel != null) setupForm(newSel);
         });
-
-        listCoursesEnrolled.setOnMouseClicked(this::handleCourseRemoveClick);
-    }
-
-    private void handleCourseRemoveClick(MouseEvent event) {
-        String selectedCourse = listCoursesEnrolled.getSelectionModel().getSelectedItem();
-
-        if (selectedCourse != null) {
-            if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to remove student from " + selectedCourse + " course?")) {
-                removeCourse(selectedCourse);
-                listCoursesEnrolled.getItems().remove(selectedCourse);
-                listCoursesEnrolled.getSelectionModel().clearSelection();
-            }
-        }
     }
 
     public void openStdForm(MouseEvent mouseEvent) throws IOException {
@@ -150,7 +136,6 @@ public class StudentMgmtPageController implements Initializable{
                     List <String> enrolledCourseNames = new ArrayList<>();
                     enrolledCourses.forEach(course -> enrolledCourseNames.add(course.getName()));
                     listCoursesEnrolled.getItems().addAll(enrolledCourseNames);
-                    courseNames = enrolledCourseNames;
                 }
 
             } catch (Exception e) {
@@ -229,21 +214,6 @@ public class StudentMgmtPageController implements Initializable{
             e.printStackTrace();
         }
     }
-
-    private void removeCourse(String courseName) {
-        try {
-            Optional<CourseDTO> courseDTO = courseBO.findByName(courseName);
-            if (courseDTO.isPresent()) {
-                CourseDTO course = courseDTO.get();
-                course.getStudents().removeIf(std -> std.getStudentId().equals(studentDTO.getStudentId()));
-                courseBO.update(course);
-            }
-        } catch (Exception e) {
-            AlertUtil.setErrorAlert("Failed to update course when removing student");
-            e.printStackTrace();
-        }
-    }
-
 
     private boolean validateStudentDetails(String fName, String lName, String email, String contact, String address) {
         StringBuilder errorMsg = new StringBuilder();

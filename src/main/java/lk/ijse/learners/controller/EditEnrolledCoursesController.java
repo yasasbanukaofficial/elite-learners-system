@@ -26,6 +26,7 @@ import lk.ijse.learners.entity.Course;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class EditEnrolledCoursesController implements Initializable {
@@ -43,24 +44,52 @@ public class EditEnrolledCoursesController implements Initializable {
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
 
     private final List<String> selectedCourseList = new ArrayList<>();
+    private List<String> alreadyEnrolledCourseList = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        List<String> alreadyEnrolledCourseList = new ArrayList<>();
 
         enrollmentContext.getCourseDTOList().forEach(courseDTO -> {
             alreadyEnrolledCourseList.add(courseDTO.getName());
         });
         selectedCourses.getItems().addAll(alreadyEnrolledCourseList);
+        selectedCourses.setOnMouseClicked(this::handleCourseRemoveClick);
+
         courseList.getItems().addAll(fetchAllCourseNames());
         courseList.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
             String selected = courseList.getSelectionModel().getSelectedItem();
-            if (selected != null && !selectedCourseList.contains(selected)) {
+            if (selected != null && !alreadyEnrolledCourseList.contains(selected)) {
                 selectedCourseList.add(selected);
                 selectedCourses.getItems().add(selected);
                 selectedCourses.refresh();
             }
         });
+    }
+
+    private void handleCourseRemoveClick(MouseEvent event) {
+        String selectedCourse = selectedCourses.getSelectionModel().getSelectedItem();
+
+        if (selectedCourse != null) {
+            if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to remove student from " + selectedCourse + " course?")) {
+                removeCourse(selectedCourse);
+                selectedCourses.getItems().remove(selectedCourse);
+                selectedCourses.getSelectionModel().clearSelection();
+            }
+        }
+    }
+
+    private void removeCourse(String courseName) {
+        try {
+            Optional<CourseDTO> courseDTO = courseBO.findByName(courseName);
+            if (courseDTO.isPresent()) {
+                CourseDTO course = courseDTO.get();
+                course.getStudents().removeIf(std -> std.getStudentId().equals(enrollmentContext.getStudentDTO().getStudentId()));
+                courseBO.update(course);
+            }
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Failed to update course when removing student");
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -71,11 +100,10 @@ public class EditEnrolledCoursesController implements Initializable {
     @FXML
     public void editCourses(Event onClick) {
         try {
-            if(selectedCourseList.isEmpty()) {
+            if (selectedCourseList.isEmpty() && alreadyEnrolledCourseList.isEmpty()) {
                 AlertUtil.setErrorAlert("Please select at least one course");
                 return;
             }
-
             enrollmentContext.setCourseDTOList(
                     entityDTOConverter.toCourseDTOList(
                             courseBO.fetchCourseListByName(selectedCourseList)
