@@ -42,14 +42,16 @@ public class Student {
     @OneToMany(
             mappedBy = "student",
             fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private List<Payment> payments;
 
     @OneToMany(
             mappedBy = "student",
             fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private List<Lesson> lessons;
 }

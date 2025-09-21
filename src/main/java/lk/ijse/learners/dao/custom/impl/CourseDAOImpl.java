@@ -2,6 +2,7 @@ package lk.ijse.learners.dao.custom.impl;
 
 import lk.ijse.learners.config.FactoryConfiguration;
 import lk.ijse.learners.dao.custom.CourseDAO;
+import lk.ijse.learners.dto.CourseDTO;
 import lk.ijse.learners.entity.Course;
 import lk.ijse.learners.entity.Instructor;
 import org.hibernate.Session;
@@ -113,6 +114,19 @@ public class CourseDAOImpl implements CourseDAO {
             Query<Course> query = session.createQuery("select c from Course c join c.students s where s.id = :stdId", Course.class);
             query.setParameter("stdId", stdId);
             return query.list();
+        }
+    }
+
+    @Override
+    public Optional<Course> findByName(String name) {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Course> query = session.createQuery(
+                    "FROM Course c WHERE c.name = :name", Course.class
+            );
+            query.setParameter("name", name);
+            query.setMaxResults(1);
+            Course course = query.uniqueResult();
+            return Optional.ofNullable(course);
         }
     }
 }

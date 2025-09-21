@@ -20,6 +20,7 @@ import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.ViewPath;
+import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.CourseDTO;
 import lk.ijse.learners.dto.StudentDTO;
 import lk.ijse.learners.tm.StudentTM;
@@ -55,6 +56,7 @@ public class StudentMgmtPageController implements Initializable{
 
     private final EntityDTOConverter entityDTOConverter = new EntityDTOConverter();
     private StudentDTO studentDTO;
+    private List<String> courseNames;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupTblColumn();
@@ -63,6 +65,23 @@ public class StudentMgmtPageController implements Initializable{
         tblStudents.getSelectionModel().selectedItemProperty().addListener((observableValue, oldSel, newSel) -> {
             if (newSel != null) setupForm(newSel);
         });
+
+        listCoursesEnrolled.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+            if (newSel != null) {
+                boolean confirmed = AlertUtil.setConfirmationAlert(
+                        "Before continuing",
+                        "Are you sure you want to remove student from course?"
+                );
+
+                if (confirmed) {
+                    removeCourse(newSel);
+                } else {
+                    listCoursesEnrolled.getSelectionModel().select(oldSel);
+                }
+            }
+        });
+
+
     }
 
     public void openStdForm(MouseEvent mouseEvent) throws IOException {
@@ -113,23 +132,26 @@ public class StudentMgmtPageController implements Initializable{
                 if (student.isEmpty()) {
                     AlertUtil.setErrorAlert("Student is not present in the database");
                 } else {
-                studentDTO = student.get();
-                txtStdName.setText(studentDTO.getFirstName() + " " + studentDTO.getLastName());
-                txtAddress.setText(studentDTO.getAddress());
-                txtEmail.setText(studentDTO.getEmail());
+                    listCoursesEnrolled.getItems().clear();
 
-                LocalDate dob = studentDTO.getDob().toLocalDate();
-                stdDob.setValue(dob);
+                    studentDTO = student.get();
+                    txtStdName.setText(studentDTO.getFirstName() + " " + studentDTO.getLastName());
+                    txtAddress.setText(studentDTO.getAddress());
+                    txtEmail.setText(studentDTO.getEmail());
 
-                int age = Period.between(dob, LocalDate.now()).getYears();
-                txtAge.setText(String.valueOf(age));
+                    LocalDate dob = studentDTO.getDob().toLocalDate();
+                    stdDob.setValue(dob);
 
-                txtContact.setText(studentDTO.getContactNumber());
+                    int age = Period.between(dob, LocalDate.now()).getYears();
+                    txtAge.setText(String.valueOf(age));
 
-                List <CourseDTO> enrolledCourses = entityDTOConverter.toCourseDTOList(courseBO.getAllEnrolledCoursesByStdId(studentTM.getStudentId()));
-                List <String> enrolledCourseNames = new ArrayList<>();
-                enrolledCourses.forEach(course -> enrolledCourseNames.add(course.getName()));
-                listCoursesEnrolled.getItems().addAll(enrolledCourseNames);
+                    txtContact.setText(studentDTO.getContactNumber());
+
+                    List <CourseDTO> enrolledCourses = entityDTOConverter.toCourseDTOList(courseBO.getAllEnrolledCoursesByStdId(studentTM.getStudentId()));
+                    List <String> enrolledCourseNames = new ArrayList<>();
+                    enrolledCourses.forEach(course -> enrolledCourseNames.add(course.getName()));
+                    listCoursesEnrolled.getItems().addAll(enrolledCourseNames);
+                    courseNames = enrolledCourseNames;
                 }
 
             } catch (Exception e) {
@@ -208,6 +230,23 @@ public class StudentMgmtPageController implements Initializable{
             e.printStackTrace();
         }
     }
+
+    private void removeCourse(String courseName) {
+        try {
+            Optional<CourseDTO> courseDTO = courseBO.findByName(courseName);
+            if (courseDTO.isPresent()) {
+                CourseDTO course = courseDTO.get();
+                course.getStudents().removeIf(std -> std.getStudentId().equals(studentDTO.getStudentId()));
+                courseBO.update(course);
+
+                listCoursesEnrolled.getItems().remove(courseName);
+            }
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Failed to update course when removing student");
+            e.printStackTrace();
+        }
+    }
+
 
     private boolean validateStudentDetails(String fName, String lName, String email, String contact, String address) {
         StringBuilder errorMsg = new StringBuilder();

@@ -79,5 +79,17 @@ public class CourseBOImpl implements CourseBO {
         return courseDAO.getAllEnrolledCoursesByStdId(stdId);
     }
 
+    @Override
+    public Optional<CourseDTO> findByName(String newSel) {
+        return courseDAO.findByName(newSel).map(course -> {
+            try {
+                return entityDTOConverter.getCourseDTO(course);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Failed to convert Course to DTO, findByName", e);
+            }
+        });
+    }
+
 
 }

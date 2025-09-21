@@ -6,8 +6,10 @@ import lk.ijse.learners.bo.exception.InUseException;
 import lk.ijse.learners.bo.exception.NotFoundException;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.dao.DAOFactory;
+import lk.ijse.learners.dao.custom.CourseDAO;
 import lk.ijse.learners.dao.custom.StudentDAO;
 import lk.ijse.learners.dto.StudentDTO;
+import lk.ijse.learners.entity.Course;
 import lk.ijse.learners.entity.Lesson;
 import lk.ijse.learners.entity.Payment;
 import lk.ijse.learners.entity.Student;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 public class StudentBOImpl implements StudentBO {
     private final StudentDAO studentDAO = (StudentDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.STUDENT);
+    private final CourseDAO courseDAO = (CourseDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.COURSE);
     private final EntityDTOConverter entityDTOConverter = new EntityDTOConverter();
     @Override
     public List<StudentDTO> getAll() throws Exception {
@@ -65,10 +68,16 @@ public class StudentBOImpl implements StudentBO {
 
     @Override
     public boolean delete(String id) throws Exception {
-        Optional<Student> studentById = studentDAO.findById(id);
-        if (studentById.isEmpty()) {
-            throw new NotFoundException("Student doesn't exists");
-        }
+        List<Course> courses = courseDAO.getAllEnrolledCoursesByStdId(id);
+        courses.forEach(course -> {
+            try {
+                course.getStudents().removeIf(std -> std.getStudentId().equals(id));
+                courseDAO.update(course);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         return studentDAO.delete(id);
     }
 

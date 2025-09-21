@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class EnrollmentContext {
-    private static EnrollmentContext enrollmentContext = new EnrollmentContext();
+    private static EnrollmentContext enrollmentContext;
 
     private StudentDTO studentDTO;
     private PaymentDTO paymentDTO;

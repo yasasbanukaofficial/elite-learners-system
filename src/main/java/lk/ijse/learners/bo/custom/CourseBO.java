@@ -5,9 +5,11 @@ import lk.ijse.learners.dto.CourseDTO;
 import lk.ijse.learners.entity.Course;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CourseBO extends CrudBO<CourseDTO> {
     List<Course> fetchCourseListByName(List<String> courseName) throws Exception;
     List<Course> getAllEnrolledCoursesByStdId(String stdId) throws Exception;
+    Optional<CourseDTO> findByName(String newSel);
 }
 
