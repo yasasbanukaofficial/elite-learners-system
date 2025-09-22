@@ -1,14 +1,12 @@
 package lk.ijse.learners.controller;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -41,12 +39,6 @@ public class StudentMgmtPageController implements Initializable{
     public StackPane btnOpenStdForm;
     public StackPane btnSearch;
 
-    public TableView <StudentTM> tblStudents;
-    public TableColumn <StudentTM, String> colSid;
-    public TableColumn <StudentTM, String> colFname;
-    public TableColumn <StudentTM, String> colLname;
-    public TableColumn <StudentTM, String> colDob;
-    public TableColumn <StudentTM, String> colContact;
     public TextField txtStdName;
     public TextField txtAddress;
     public TextField txtEmail;
@@ -65,15 +57,12 @@ public class StudentMgmtPageController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setupTblColumn();
-        loadTbl();
-
         try {
             listStudents.getItems().addAll(studentBO.getAll());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
+        listStudents.setSelectionModel(null);
         listStudents.setCellFactory(lv -> new ListCell<StudentDTO>() {
             @Override
             protected void updateItem(StudentDTO student, boolean empty) {
@@ -82,7 +71,6 @@ public class StudentMgmtPageController implements Initializable{
                 if (empty || student == null) {
                     setGraphic(null);
                 } else {
-                    // Card container
                     VBox card = new VBox(8);
                     card.setStyle(
                             "-fx-background-color: white; " +
@@ -104,6 +92,17 @@ public class StudentMgmtPageController implements Initializable{
 
                     // Add all labels to card
                     card.getChildren().addAll(lblName, lblEmail, lblContact, lblAddress, lblDob);
+                    
+                    card.setOnMouseClicked(event -> {
+                        studentDTO = student;
+                        setupForm(new StudentDTO(
+                                student.getStudentId(),
+                                student.getFirstName(),
+                                student.getLastName(),
+                                student.getDob(),
+                                student.getContactNumber()
+                        ));
+                    });
 
                     setGraphic(card);
                 }
@@ -145,29 +144,43 @@ public class StudentMgmtPageController implements Initializable{
         });
 
 
-
-
-        tblStudents.getSelectionModel().selectedItemProperty().addListener((observableValue, oldSel, newSel) -> {
-            if (newSel != null) setupForm(newSel);
-        });
-
-        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.STUDENT).addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                Platform.runLater(() -> {
-                    loadTbl();
-                    RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.STUDENT, false);
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.STUDENT)
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        Platform.runLater(() -> {
+                            try {
+                                // Refresh the student list from the database
+                                List<StudentDTO> students = studentBO.getAll();
+                                listStudents.getItems().setAll(students);
+                            } catch (Exception e) {
+                                AlertUtil.setErrorAlert("Failed to refresh students list");
+                                e.printStackTrace();
+                            }
+                            RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.STUDENT, false);
+                        });
+                    }
                 });
-            }
-        });
 
-        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.COURSES_ENROLLED_LIST).addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                Platform.runLater(() -> {
-                    setupForm(tblStudents.getSelectionModel().getSelectedItem());
-                    RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES_ENROLLED_LIST, false);
+
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.COURSES_ENROLLED_LIST)
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        Platform.runLater(() -> {
+                            if (studentDTO != null) {
+                                try {
+                                    List<CourseDTO> enrolledCourses = entityDTOConverter.toCourseDTOList(
+                                            courseBO.getAllEnrolledCoursesByStdId(studentDTO.getStudentId())
+                                    );
+                                    listCoursesEnrolled.getItems().setAll(enrolledCourses);
+                                } catch (Exception e) {
+                                    AlertUtil.setErrorAlert("Failed to refresh enrolled courses");
+                                    e.printStackTrace();
+                                }
+                            }
+                            RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES_ENROLLED_LIST, false);
+                        });
+                    }
                 });
-            }
-        });
     }
 
     public void openStdForm(MouseEvent mouseEvent) throws IOException {
@@ -180,60 +193,29 @@ public class StudentMgmtPageController implements Initializable{
         stage.show();
     }
 
-    private void setupTblColumn() {
-        colSid.setCellValueFactory(new PropertyValueFactory<>("studentId"));
-        colFname.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        colLname.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        colDob.setCellValueFactory(new PropertyValueFactory<>("dob"));
-        colContact.setCellValueFactory(new PropertyValueFactory<>("contactNumber"));
-    }
-
-    private void loadTbl() {
-        try {
-            List<StudentDTO> allStudents = studentBO.getAll();
-            tblStudents.setItems(FXCollections.observableList(
-                    allStudents.stream().map(studentDTO -> new StudentTM(
-                            studentDTO.getStudentId(),
-                            studentDTO.getFirstName(),
-                            studentDTO.getLastName(),
-                            studentDTO.getDob(),
-                            studentDTO.getContactNumber()
-                    )).toList()
-            ));
-
-            if (!tblStudents.getItems().isEmpty()) {
-                tblStudents.getSelectionModel().selectFirst();
-                setupForm(tblStudents.getItems().getFirst());
-            }
-        } catch (Exception e) {
-            AlertUtil.setErrorAlert("Failed to load students");
-            e.printStackTrace();
-        }
-    }
-
-    private void setupForm(StudentTM studentTM) {
-        if (studentTM != null) {
+    private void setupForm(StudentDTO studentDTO) {
+        if (studentDTO != null) {
             try {
-                Optional<StudentDTO> student = studentBO.findById(studentTM.getStudentId());
+                Optional<StudentDTO> student = studentBO.findById(studentDTO.getStudentId());
                 if (student.isEmpty()) {
                     AlertUtil.setErrorAlert("Student is not present in the database");
                 } else {
                     listCoursesEnrolled.getItems().clear();
 
-                    studentDTO = student.get();
-                    txtStdName.setText(studentDTO.getFirstName() + " " + studentDTO.getLastName());
-                    txtAddress.setText(studentDTO.getAddress());
-                    txtEmail.setText(studentDTO.getEmail());
+                    this.studentDTO = student.get();
+                    txtStdName.setText(this.studentDTO.getFirstName() + " " + this.studentDTO.getLastName());
+                    txtAddress.setText(this.studentDTO.getAddress());
+                    txtEmail.setText(this.studentDTO.getEmail());
 
-                    LocalDate dob = studentDTO.getDob().toLocalDate();
+                    LocalDate dob = this.studentDTO.getDob().toLocalDate();
                     stdDob.setValue(dob);
 
                     int age = Period.between(dob, LocalDate.now()).getYears();
                     txtAge.setText(String.valueOf(age));
 
-                    txtContact.setText(studentDTO.getContactNumber());
+                    txtContact.setText(this.studentDTO.getContactNumber());
 
-                    List <CourseDTO> enrolledCourses = entityDTOConverter.toCourseDTOList(courseBO.getAllEnrolledCoursesByStdId(studentTM.getStudentId()));
+                    List <CourseDTO> enrolledCourses = entityDTOConverter.toCourseDTOList(courseBO.getAllEnrolledCoursesByStdId(studentDTO.getStudentId()));
                     List <String> enrolledCourseNames = new ArrayList<>();
                     enrolledCourses.forEach(course -> enrolledCourseNames.add(course.getName()));
                     listCoursesEnrolled.getItems().setAll(enrolledCourses);
@@ -252,7 +234,7 @@ public class StudentMgmtPageController implements Initializable{
             if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to delete student ?")) {
                 studentBO.delete(studentDTO.getStudentId());
             }
-            loadTbl();
+            listStudents.refresh();
         } catch (Exception e) {
             AlertUtil.setErrorAlert("Failed to delete student");
             throw new RuntimeException(e);
@@ -303,7 +285,7 @@ public class StudentMgmtPageController implements Initializable{
                 );
                 if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to update student details ?")) {
                     if (studentBO.update(updatedStdDTO)) {
-                        loadTbl();
+                        listStudents.refresh();
                     } else {
                         AlertUtil.setErrorAlert("Failed to update student");
                     }

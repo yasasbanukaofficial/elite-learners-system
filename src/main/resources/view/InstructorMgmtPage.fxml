@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
@@ -78,7 +79,34 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <VBox prefHeight="386.0" prefWidth="605.0" style="-fx-background-color: #F5F3F8; -fx-background-radius: 20px;" VBox.vgrow="ALWAYS">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <HBox prefHeight="44.0" prefWidth="592.0">
+                                 <children>
+                                    <Label text="Instructor Details">
+                                       <font>
+                                          <Font name="SansSerif Bold" size="16.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              <ListView fx:id="listInstructors" prefHeight="511.0" prefWidth="608.0" stylesheets="@../styles/list-view.css" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="5.0" top="20.0" />
+                                 </VBox.margin>
+                              </ListView>
+                           </children>
+                        </VBox>
+                     </children></VBox>
                   <VBox prefHeight="765.0" prefWidth="135.0" HBox.hgrow="ALWAYS">
                      <children>
                         <VBox prefHeight="341.0" prefWidth="870.0" style="-fx-background-color: #F3F4F8; -fx-background-radius: 20px;">

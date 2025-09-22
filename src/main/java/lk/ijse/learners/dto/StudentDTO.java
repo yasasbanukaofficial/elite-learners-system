@@ -20,4 +20,12 @@ public class StudentDTO {
     private String address;
     private List<PaymentDTO> payments;
     private List<LessonDTO> lessons;
+
+    public StudentDTO(String studentId, String firstName, String lastName, Date dob, String contactNumber) {
+        this.studentId = studentId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.contactNumber = contactNumber;
+    }
 }
