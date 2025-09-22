@@ -1,0 +1,58 @@
+.list-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 10 0 10 0;
+}
+
+.list-cell:hover {
+    -fx-background-color: transparent;
+}
+
+.list-cell:filled:selected, .list-cell:filled:selected:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: inherit;
+}
+
+
+.list-view .scroll-bar:vertical .increment-button,
+.list-view .scroll-bar:vertical .decrement-button,
+.list-view .scroll-bar:horizontal .increment-button,
+.list-view .scroll-bar:horizontal .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-shape: "";
+}
+
+.list-view .scroll-bar:vertical,
+.list-view .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.list-view .scroll-bar .track {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5;
+}
+
+.list-view .scroll-bar .thumb {
+    -fx-background-color: rgba(120,120,120,0.4);
+    -fx-background-insets: 2;
+    -fx-background-radius: 10;
+}
+
+.list-view .scroll-bar .thumb:hover {
+    -fx-background-color: rgba(80,80,80,0.6);
+}
+
+.list-view .scroll-bar .thumb:pressed {
+    -fx-background-color: rgba(60,60,60,0.8);
+}
+
+.list-view .corner {
+    -fx-background-color: transparent;
+}

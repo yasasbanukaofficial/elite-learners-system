@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
@@ -51,7 +52,7 @@ public class StudentMgmtPageController implements Initializable{
     public TextField txtEmail;
     public TextField txtAge;
     public TextField txtContact;
-    public ListView <String> listCoursesEnrolled;
+    public ListView <CourseDTO> listCoursesEnrolled;
     public DatePicker stdDob;
 
     StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
@@ -65,6 +66,42 @@ public class StudentMgmtPageController implements Initializable{
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupTblColumn();
         loadTbl();
+
+        listCoursesEnrolled.setCellFactory(lv -> new ListCell<CourseDTO>() {
+            @Override
+            protected void updateItem(CourseDTO course, boolean empty) {
+                super.updateItem(course, empty);
+
+                if (empty || course == null) {
+                    setGraphic(null);
+                } else {
+                    VBox card = new VBox(5);
+                    card.setStyle(
+                            "-fx-background-color: white; " +
+                                    "-fx-border-color: #ccc; " +
+                                    "-fx-border-radius: 8; " +
+                                    "-fx-background-radius: 8; " +
+                                    "-fx-padding: 10; "
+                    );
+
+                    Label lblName = new Label(course.getName());
+                    lblName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+                    Label lblDuration = new Label("Duration: " + course.getDuration());
+                    lblDuration.setStyle("-fx-text-fill: gray;");
+
+                    Label lblFees = new Label("Fees: " + course.getFees());
+                    lblFees.setStyle("-fx-text-fill: green;");
+
+                    card.getChildren().addAll(lblName, lblDuration, lblFees);
+
+                    setGraphic(card);
+                }
+            }
+        });
+
+
+
 
         tblStudents.getSelectionModel().selectedItemProperty().addListener((observableValue, oldSel, newSel) -> {
             if (newSel != null) setupForm(newSel);
@@ -155,7 +192,8 @@ public class StudentMgmtPageController implements Initializable{
                     List <CourseDTO> enrolledCourses = entityDTOConverter.toCourseDTOList(courseBO.getAllEnrolledCoursesByStdId(studentTM.getStudentId()));
                     List <String> enrolledCourseNames = new ArrayList<>();
                     enrolledCourses.forEach(course -> enrolledCourseNames.add(course.getName()));
-                    listCoursesEnrolled.getItems().addAll(enrolledCourseNames);
+                    listCoursesEnrolled.getItems().setAll(enrolledCourses);
+
                 }
 
             } catch (Exception e) {
