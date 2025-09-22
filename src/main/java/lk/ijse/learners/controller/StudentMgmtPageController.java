@@ -54,6 +54,7 @@ public class StudentMgmtPageController implements Initializable{
     public TextField txtContact;
     public ListView <CourseDTO> listCoursesEnrolled;
     public DatePicker stdDob;
+    public ListView<StudentDTO> listStudents;
 
     StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
@@ -66,6 +67,49 @@ public class StudentMgmtPageController implements Initializable{
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupTblColumn();
         loadTbl();
+
+        try {
+            listStudents.getItems().addAll(studentBO.getAll());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        listStudents.setCellFactory(lv -> new ListCell<StudentDTO>() {
+            @Override
+            protected void updateItem(StudentDTO student, boolean empty) {
+                super.updateItem(student, empty);
+
+                if (empty || student == null) {
+                    setGraphic(null);
+                } else {
+                    // Card container
+                    VBox card = new VBox(8);
+                    card.setStyle(
+                            "-fx-background-color: white; " +
+                                    "-fx-border-color: #ddd; " +
+                                    "-fx-border-radius: 10; " +
+                                    "-fx-background-radius: 10; " +
+                                    "-fx-padding: 12; " +
+                                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);"
+                    );
+
+                    // Student details
+                    Label lblName = new Label(student.getFirstName() + " " + student.getLastName());
+                    lblName.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+                    Label lblEmail = new Label("📧 " + student.getEmail());
+                    Label lblContact = new Label("📞 " + student.getContactNumber());
+                    Label lblAddress = new Label("🏠 " + student.getAddress());
+                    Label lblDob = new Label("🎂 " + student.getDob().toString());
+
+                    // Add all labels to card
+                    card.getChildren().addAll(lblName, lblEmail, lblContact, lblAddress, lblDob);
+
+                    setGraphic(card);
+                }
+            }
+        });
+
 
         listCoursesEnrolled.setCellFactory(lv -> new ListCell<CourseDTO>() {
             @Override
