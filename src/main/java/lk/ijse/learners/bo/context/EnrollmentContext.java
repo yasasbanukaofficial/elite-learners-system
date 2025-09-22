@@ -1,6 +1,7 @@
 package lk.ijse.learners.bo.context;
 
 import lk.ijse.learners.dto.CourseDTO;
+import lk.ijse.learners.dto.InstructorDTO;
 import lk.ijse.learners.dto.PaymentDTO;
 import lk.ijse.learners.dto.StudentDTO;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class EnrollmentContext {
 
     private StudentDTO studentDTO;
     private PaymentDTO paymentDTO;
+    private InstructorDTO instructorDTO;
     private List<CourseDTO> courseDTOList;
 
     public static EnrollmentContext getInstance() {
@@ -28,6 +30,7 @@ public class EnrollmentContext {
     public void clear() {
         studentDTO = null;
         paymentDTO = null;
+        instructorDTO = null;
         courseDTOList = null;
     }
 

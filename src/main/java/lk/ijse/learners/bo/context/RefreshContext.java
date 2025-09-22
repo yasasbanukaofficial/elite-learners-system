@@ -31,6 +31,6 @@ public class RefreshContext {
     }
 
     public enum TableName {
-        STUDENT, COURSES_ENROLLED_LIST;
+        STUDENT, INSTRUCTORS, COURSES_ENROLLED_LIST, COURSES_ASSIGNED_LIST;
     }
 }

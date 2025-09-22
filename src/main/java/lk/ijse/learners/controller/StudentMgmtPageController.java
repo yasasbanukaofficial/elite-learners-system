@@ -81,9 +81,7 @@ public class StudentMgmtPageController implements Initializable{
                         Platform.runLater(() -> {
                             if (studentDTO != null) {
                                 try {
-                                    List<CourseDTO> enrolledCourses = entityDTOConverter.toCourseDTOList(
-                                            courseBO.getAllEnrolledCoursesByStdId(studentDTO.getStudentId())
-                                    );
+                                    List<CourseDTO> enrolledCourses =courseBO.getAllEnrolledCoursesByStdId(studentDTO.getStudentId());
                                     listCoursesEnrolled.getItems().setAll(enrolledCourses);
                                 } catch (Exception e) {
                                     AlertUtil.setErrorAlert("Failed to refresh enrolled courses");
@@ -219,7 +217,7 @@ public class StudentMgmtPageController implements Initializable{
     public void editCourseList(MouseEvent mouseEvent) {
         try {
             enrollmentContext.setStudentDTO(studentDTO);
-            enrollmentContext.setCourseDTOList(entityDTOConverter.toCourseDTOList(courseBO.getAllEnrolledCoursesByStdId(studentDTO.getStudentId())));
+            enrollmentContext.setCourseDTOList(courseBO.getAllEnrolledCoursesByStdId(studentDTO.getStudentId()));
         } catch (Exception e) {
             AlertUtil.setErrorAlert("Failed to set course details in the context");
             throw new RuntimeException(e);
@@ -348,7 +346,7 @@ public class StudentMgmtPageController implements Initializable{
 
                     txtContact.setText(this.studentDTO.getContactNumber());
 
-                    List <CourseDTO> enrolledCourses = entityDTOConverter.toCourseDTOList(courseBO.getAllEnrolledCoursesByStdId(studentDTO.getStudentId()));
+                    List <CourseDTO> enrolledCourses = courseBO.getAllEnrolledCoursesByStdId(studentDTO.getStudentId());
                     List <String> enrolledCourseNames = new ArrayList<>();
                     enrolledCourses.forEach(course -> enrolledCourseNames.add(course.getName()));
                     listCoursesEnrolled.getItems().setAll(enrolledCourses);

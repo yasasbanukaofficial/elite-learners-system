@@ -113,7 +113,16 @@ public class CourseDAOImpl implements CourseDAO {
         try (Session session = factoryConfiguration.getSession()) {
             Query<Course> query = session.createQuery("select c from Course c join c.students s where s.id = :stdId", Course.class);
             query.setParameter("stdId", stdId);
-            return query.list();
+            return query.list().isEmpty() ? null : query.list();
+        }
+    }
+
+    @Override
+    public List<Course> getAllEnrolledCoursesByInsId(String stdId) throws Exception {
+        try(Session session = factoryConfiguration.getSession()){
+            Query<Course> query = session.createQuery("select c from Course c join c.instructors i where i.id = :insId", Course.class);
+            query.setParameter("insId", stdId);
+            return query.list().isEmpty() ? null : query.list();
         }
     }
 

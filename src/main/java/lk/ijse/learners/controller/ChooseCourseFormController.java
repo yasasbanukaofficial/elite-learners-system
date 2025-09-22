@@ -68,11 +68,7 @@ public class ChooseCourseFormController implements Initializable {
                 AlertUtil.setErrorAlert("Please select at least one course");
                 return;
             }
-            enrollmentContext.setCourseDTOList(
-                    entityDTOConverter.toCourseDTOList(
-                            courseBO.fetchCourseListByName(selectedCourseList)
-                    )
-            );
+            enrollmentContext.setCourseDTOList(courseBO.fetchCourseListByName(selectedCourseList));
             if (!enrollmentBO.enrollStudent()) {
                 AlertUtil.setErrorAlert("Failed to enroll student");
                 return;

@@ -19,4 +19,14 @@ public class InstructorDTO {
     private String speciality;
     private String availability;
     private List<LessonDTO> lessons;
+
+    public InstructorDTO(String instructorId, String name, Date dob, String email, String contact, String speciality, String availability) {
+        this.instructorId = instructorId;
+        this.name = name;
+        this.dob = dob;
+        this.email = email;
+        this.contact = contact;
+        this.speciality = speciality;
+        this.availability = availability;
+    }
 }

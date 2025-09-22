@@ -1,18 +1,12 @@
 package lk.ijse.learners.controller;
 
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.context.EnrollmentContext;
 import lk.ijse.learners.bo.context.RefreshContext;
@@ -22,7 +16,6 @@ import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.CourseDTO;
-import lk.ijse.learners.entity.Course;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class EditEnrolledCoursesController implements Initializable {
+public class EditAssignedCoursesController implements Initializable {
     public AnchorPane ancChooseCourseForm;
 
     public Button btnEditCourses;
@@ -71,7 +64,7 @@ public class EditEnrolledCoursesController implements Initializable {
         String selectedCourse = selectedCourses.getSelectionModel().getSelectedItem();
 
         if (selectedCourse != null) {
-            if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to remove student from " + selectedCourse + " course?")) {
+            if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to remove instructor from " + selectedCourse + " course?")) {
                 removeCourse(selectedCourse);
                 selectedCourses.getItems().remove(selectedCourse);
                 selectedCourses.getSelectionModel().clearSelection();
@@ -84,12 +77,12 @@ public class EditEnrolledCoursesController implements Initializable {
             Optional<CourseDTO> courseDTO = courseBO.findByName(courseName);
             if (courseDTO.isPresent()) {
                 CourseDTO course = courseDTO.get();
-                course.getStudents().removeIf(std -> std.getStudentId().equals(enrollmentContext.getStudentDTO().getStudentId()));
+                course.getInstructors().removeIf(ins -> ins.getInstructorId().equals(enrollmentContext.getInstructorDTO().getInstructorId()));
                 courseBO.update(course);
-                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES_ENROLLED_LIST, true);
+                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES_ASSIGNED_LIST, true);
             }
         } catch (Exception e) {
-            AlertUtil.setErrorAlert("Failed to update course when removing student");
+            AlertUtil.setErrorAlert("Failed to update course when removing instructor");
             e.printStackTrace();
         }
     }
@@ -107,10 +100,10 @@ public class EditEnrolledCoursesController implements Initializable {
                 return;
             }
             enrollmentContext.setCourseDTOList(courseBO.fetchCourseListByName(selectedCourseList));
-            if (!enrollmentBO.updateEnrolledStudent()) {
+            if (!enrollmentBO.updateEnrolledInstructors()) {
                 AlertUtil.setErrorAlert("Failed to update enrolled courses");
             } else {
-                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES_ENROLLED_LIST, true);
+                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES_ASSIGNED_LIST, true);
                 enrollmentContext.clear();
                 WindowManagerUtil.closeForm(ancChooseCourseForm);
             }

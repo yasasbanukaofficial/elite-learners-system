@@ -20,7 +20,8 @@ public enum ViewPath {
     ADD_QUERY_FORM("AddQueryForm.fxml"),
 
     CHOOSE_COURSE_FORM("ChooseCourseForm.fxml"),
-    EDIT_ENROLLED_COURSES("EditEnrolledCourses.fxml");
+    EDIT_ENROLLED_COURSES("EditEnrolledCourses.fxml"),
+    EDIT_ASSIGNED_COURSES("EditAssignedCourses.fxml");
 
     private final String fileName;
     ViewPath(String fileName) {

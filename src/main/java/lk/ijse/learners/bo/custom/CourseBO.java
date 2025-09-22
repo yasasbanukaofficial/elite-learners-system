@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CourseBO extends CrudBO<CourseDTO> {
-    List<Course> fetchCourseListByName(List<String> courseName) throws Exception;
-    List<Course> getAllEnrolledCoursesByStdId(String stdId) throws Exception;
+    List<CourseDTO> fetchCourseListByName(List<String> courseName) throws Exception;
+    List<CourseDTO> getAllEnrolledCoursesByStdId(String stdId) throws Exception;
+    List<CourseDTO> getAllEnrolledCoursesByInsId(String stdId) throws Exception;
     Optional<CourseDTO> findByName(String newSel);
 }
 

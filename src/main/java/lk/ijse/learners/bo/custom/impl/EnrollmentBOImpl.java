@@ -23,6 +23,7 @@ public class EnrollmentBOImpl implements EnrollmentBO {
     StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
     PaymentBO paymentBO = (PaymentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.PAYMENT);
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
+    InstructorBO instructorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
 
 
     @Override
@@ -97,6 +98,38 @@ public class EnrollmentBOImpl implements EnrollmentBO {
                 tx.rollback();
             }
             AlertUtil.setErrorAlert("Failed to update enrolled courses");
+            e.printStackTrace();
+            return false;
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public boolean updateEnrolledInstructors() {
+        Session session = FactoryConfiguration.getInstance().getCurrentSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            InstructorDTO instructorDTO = enrollmentContext.getInstructorDTO();
+            List<CourseDTO> courseDTOList = enrollmentContext.getCourseDTOList();
+
+            for (CourseDTO course : courseDTOList) {
+                if (!course.getInstructors().contains(instructorDTO)) {
+                    course.getInstructors().add(instructorDTO);
+                }
+                if (!courseBO.update(course)) {
+                    throw new RuntimeException("Failed to update course");
+                }
+            }
+
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            AlertUtil.setErrorAlert("Failed to update enrolled instructors");
             e.printStackTrace();
             return false;
         } finally {

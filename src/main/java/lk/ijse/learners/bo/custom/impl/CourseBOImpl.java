@@ -70,13 +70,18 @@ public class CourseBOImpl implements CourseBO {
     }
 
     @Override
-    public List<Course> fetchCourseListByName(List<String> courseName) throws Exception {
-        return courseDAO.fetchCourseListByName(courseName);
+    public List<CourseDTO> fetchCourseListByName(List<String> courseName) throws Exception {
+        return entityDTOConverter.toCourseDTOList(courseDAO.fetchCourseListByName(courseName));
     }
 
     @Override
-    public List<Course> getAllEnrolledCoursesByStdId(String stdId) throws Exception {
-        return courseDAO.getAllEnrolledCoursesByStdId(stdId);
+    public List<CourseDTO> getAllEnrolledCoursesByStdId(String stdId) throws Exception {
+        return entityDTOConverter.toCourseDTOList(courseDAO.getAllEnrolledCoursesByStdId(stdId));
+    }
+
+    @Override
+    public List<CourseDTO> getAllEnrolledCoursesByInsId(String stdId) throws Exception {
+        return entityDTOConverter.toCourseDTOList(courseDAO.getAllEnrolledCoursesByInsId(stdId));
     }
 
     @Override

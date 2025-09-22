@@ -3,6 +3,7 @@ package lk.ijse.learners.dao.custom.impl;
 import lk.ijse.learners.config.FactoryConfiguration;
 import lk.ijse.learners.dao.custom.InstructorDAO;
 import lk.ijse.learners.entity.Instructor;
+import lk.ijse.learners.entity.Lesson;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -109,6 +110,14 @@ public class InstructorDAOImpl implements InstructorDAO {
             Query<Instructor> query = session.createQuery("from Instructor i where i.name in (:instructorName)", Instructor.class);
             query.setParameterList("instructorName", instructorName);
             return query.list();
+        }
+    }
+
+    public List<Lesson> getAllLessonsByInstructorId(String instructorId) throws Exception {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Lesson> query = session.createQuery("select i.lessons from Instructor i where i.id = :instructorId", Lesson.class);
+            query.setParameter("instructorId", instructorId);
+            return query.list().isEmpty() ? null : query.list();
         }
     }
 }

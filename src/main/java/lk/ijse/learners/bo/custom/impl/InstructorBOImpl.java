@@ -5,6 +5,7 @@ import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.dao.DAOFactory;
 import lk.ijse.learners.dao.custom.InstructorDAO;
 import lk.ijse.learners.dto.InstructorDTO;
+import lk.ijse.learners.dto.LessonDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,11 @@ public class InstructorBOImpl implements InstructorBO {
     @Override
     public List<InstructorDTO> fetchInstructorListByName(List<String> instructorName) throws Exception {
         return entityDTOConverter.toInstructorDTOList(instructorDAO.fetchInstructorListByName(instructorName));
+    }
+
+    @Override
+    public List<LessonDTO> getAllLessonsByInstructorId(String instructorId) throws Exception {
+        return entityDTOConverter.toLessonDTOList(instructorDAO.getAllLessonsByInstructorId(instructorId));
     }
 }
 
