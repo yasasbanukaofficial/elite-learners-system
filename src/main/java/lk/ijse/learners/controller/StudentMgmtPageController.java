@@ -57,99 +57,12 @@ public class StudentMgmtPageController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            listStudents.getItems().addAll(studentBO.getAll());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        listStudents.setSelectionModel(null);
-        listStudents.setCellFactory(lv -> new ListCell<StudentDTO>() {
-            @Override
-            protected void updateItem(StudentDTO student, boolean empty) {
-                super.updateItem(student, empty);
-
-                if (empty || student == null) {
-                    setGraphic(null);
-                } else {
-                    VBox card = new VBox(8);
-                    card.setStyle(
-                            "-fx-background-color: white; " +
-                                    "-fx-border-color: #ddd; " +
-                                    "-fx-border-radius: 10; " +
-                                    "-fx-background-radius: 10; " +
-                                    "-fx-padding: 12; " +
-                                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);"
-                    );
-
-                    // Student details
-                    Label lblName = new Label(student.getFirstName() + " " + student.getLastName());
-                    lblName.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-                    Label lblEmail = new Label("📧 " + student.getEmail());
-                    Label lblContact = new Label("📞 " + student.getContactNumber());
-                    Label lblAddress = new Label("🏠 " + student.getAddress());
-                    Label lblDob = new Label("🎂 " + student.getDob().toString());
-
-                    // Add all labels to card
-                    card.getChildren().addAll(lblName, lblEmail, lblContact, lblAddress, lblDob);
-                    
-                    card.setOnMouseClicked(event -> {
-                        studentDTO = student;
-                        setupForm(new StudentDTO(
-                                student.getStudentId(),
-                                student.getFirstName(),
-                                student.getLastName(),
-                                student.getDob(),
-                                student.getContactNumber()
-                        ));
-                    });
-
-                    setGraphic(card);
-                }
-            }
-        });
-
-
-        listCoursesEnrolled.setCellFactory(lv -> new ListCell<CourseDTO>() {
-            @Override
-            protected void updateItem(CourseDTO course, boolean empty) {
-                super.updateItem(course, empty);
-
-                if (empty || course == null) {
-                    setGraphic(null);
-                } else {
-                    VBox card = new VBox(5);
-                    card.setStyle(
-                            "-fx-background-color: white; " +
-                                    "-fx-border-color: #ccc; " +
-                                    "-fx-border-radius: 8; " +
-                                    "-fx-background-radius: 8; " +
-                                    "-fx-padding: 10; "
-                    );
-
-                    Label lblName = new Label(course.getName());
-                    lblName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-
-                    Label lblDuration = new Label("Duration: " + course.getDuration());
-                    lblDuration.setStyle("-fx-text-fill: gray;");
-
-                    Label lblFees = new Label("Fees: " + course.getFees());
-                    lblFees.setStyle("-fx-text-fill: green;");
-
-                    card.getChildren().addAll(lblName, lblDuration, lblFees);
-
-                    setGraphic(card);
-                }
-            }
-        });
-
-
+        setupLists();
         RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.STUDENT)
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue) {
                         Platform.runLater(() -> {
                             try {
-                                // Refresh the student list from the database
                                 List<StudentDTO> students = studentBO.getAll();
                                 listStudents.getItems().setAll(students);
                             } catch (Exception e) {
@@ -183,52 +96,7 @@ public class StudentMgmtPageController implements Initializable{
                 });
     }
 
-    public void openStdForm(MouseEvent mouseEvent) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource(ViewPath.ADD_STUDENT_FORM.getPath()));
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setMaximized(false);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.show();
-    }
-
-    private void setupForm(StudentDTO studentDTO) {
-        if (studentDTO != null) {
-            try {
-                Optional<StudentDTO> student = studentBO.findById(studentDTO.getStudentId());
-                if (student.isEmpty()) {
-                    AlertUtil.setErrorAlert("Student is not present in the database");
-                } else {
-                    listCoursesEnrolled.getItems().clear();
-
-                    this.studentDTO = student.get();
-                    txtStdName.setText(this.studentDTO.getFirstName() + " " + this.studentDTO.getLastName());
-                    txtAddress.setText(this.studentDTO.getAddress());
-                    txtEmail.setText(this.studentDTO.getEmail());
-
-                    LocalDate dob = this.studentDTO.getDob().toLocalDate();
-                    stdDob.setValue(dob);
-
-                    int age = Period.between(dob, LocalDate.now()).getYears();
-                    txtAge.setText(String.valueOf(age));
-
-                    txtContact.setText(this.studentDTO.getContactNumber());
-
-                    List <CourseDTO> enrolledCourses = entityDTOConverter.toCourseDTOList(courseBO.getAllEnrolledCoursesByStdId(studentDTO.getStudentId()));
-                    List <String> enrolledCourseNames = new ArrayList<>();
-                    enrolledCourses.forEach(course -> enrolledCourseNames.add(course.getName()));
-                    listCoursesEnrolled.getItems().setAll(enrolledCourses);
-
-                }
-
-            } catch (Exception e) {
-                AlertUtil.setErrorAlert("Failed to load student details in the form");
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
+    // CRUD Operations
     public void deleteStudent(ActionEvent actionEvent) {
         try {
             if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to delete student ?")) {
@@ -285,7 +153,7 @@ public class StudentMgmtPageController implements Initializable{
                 );
                 if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to update student details ?")) {
                     if (studentBO.update(updatedStdDTO)) {
-                        listStudents.refresh();
+                        setupLists();
                     } else {
                         AlertUtil.setErrorAlert("Failed to update student");
                     }
@@ -299,6 +167,7 @@ public class StudentMgmtPageController implements Initializable{
         }
     }
 
+    // Utility methods
     private boolean validateStudentDetails(String fName, String lName, String email, String contact, String address) {
         StringBuilder errorMsg = new StringBuilder();
         boolean isValid = true;
@@ -357,4 +226,140 @@ public class StudentMgmtPageController implements Initializable{
         }
         WindowManagerUtil.openForm(ViewPath.EDIT_ENROLLED_COURSES.getPath(), false);
     }
+
+    // Setup Methods
+    public void openStdForm(MouseEvent mouseEvent) throws IOException {
+        Parent parent = FXMLLoader.load(getClass().getResource(ViewPath.ADD_STUDENT_FORM.getPath()));
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setMaximized(false);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.show();
+    }
+
+    public void setupLists() {
+        try {
+            listStudents.getItems().setAll(studentBO.getAll());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        listStudents.setSelectionModel(null);
+        listStudents.setCellFactory(lv -> new ListCell<StudentDTO>() {
+            @Override
+            protected void updateItem(StudentDTO student, boolean empty) {
+                super.updateItem(student, empty);
+
+                if (empty || student == null) {
+                    setGraphic(null);
+                } else {
+                    VBox card = new VBox(8);
+                    card.setStyle(
+                            "-fx-background-color: white; " +
+                                    "-fx-border-color: #ddd; " +
+                                    "-fx-border-radius: 10; " +
+                                    "-fx-background-radius: 10; " +
+                                    "-fx-padding: 12; " +
+                                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);"
+                    );
+
+                    // Student details
+                    Label lblName = new Label(student.getFirstName() + " " + student.getLastName());
+                    lblName.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+                    Label lblEmail = new Label("📧 " + student.getEmail());
+                    Label lblContact = new Label("📞 " + student.getContactNumber());
+                    Label lblAddress = new Label("🏠 " + student.getAddress());
+                    Label lblDob = new Label("🎂 " + student.getDob().toString());
+
+                    // Add all labels to card
+                    card.getChildren().addAll(lblName, lblEmail, lblContact, lblAddress, lblDob);
+
+                    card.setOnMouseClicked(event -> {
+                        studentDTO = student;
+                        setupForm(new StudentDTO(
+                                student.getStudentId(),
+                                student.getFirstName(),
+                                student.getLastName(),
+                                student.getDob(),
+                                student.getContactNumber()
+                        ));
+                    });
+
+                    setGraphic(card);
+                }
+            }
+        });
+
+
+        listCoursesEnrolled.setCellFactory(lv -> new ListCell<CourseDTO>() {
+            @Override
+            protected void updateItem(CourseDTO course, boolean empty) {
+                super.updateItem(course, empty);
+
+                if (empty || course == null) {
+                    setGraphic(null);
+                } else {
+                    VBox card = new VBox(5);
+                    card.setStyle(
+                            "-fx-background-color: white; " +
+                                    "-fx-border-color: #ccc; " +
+                                    "-fx-border-radius: 8; " +
+                                    "-fx-background-radius: 8; " +
+                                    "-fx-padding: 10; "
+                    );
+
+                    Label lblName = new Label(course.getName());
+                    lblName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+                    Label lblDuration = new Label("Duration: " + course.getDuration());
+                    lblDuration.setStyle("-fx-text-fill: gray;");
+
+                    Label lblFees = new Label("Fees: " + course.getFees());
+                    lblFees.setStyle("-fx-text-fill: green;");
+
+                    card.getChildren().addAll(lblName, lblDuration, lblFees);
+
+                    setGraphic(card);
+                }
+            }
+        });
+    }
+
+    private void setupForm(StudentDTO studentDTO) {
+        if (studentDTO != null) {
+            try {
+                Optional<StudentDTO> student = studentBO.findById(studentDTO.getStudentId());
+                if (student.isEmpty()) {
+                    AlertUtil.setErrorAlert("Student is not present in the database");
+                } else {
+                    listCoursesEnrolled.getItems().clear();
+
+                    this.studentDTO = student.get();
+                    txtStdName.setText(this.studentDTO.getFirstName() + " " + this.studentDTO.getLastName());
+                    txtAddress.setText(this.studentDTO.getAddress());
+                    txtEmail.setText(this.studentDTO.getEmail());
+
+                    LocalDate dob = this.studentDTO.getDob().toLocalDate();
+                    stdDob.setValue(dob);
+
+                    int age = Period.between(dob, LocalDate.now()).getYears();
+                    txtAge.setText(String.valueOf(age));
+
+                    txtContact.setText(this.studentDTO.getContactNumber());
+
+                    List <CourseDTO> enrolledCourses = entityDTOConverter.toCourseDTOList(courseBO.getAllEnrolledCoursesByStdId(studentDTO.getStudentId()));
+                    List <String> enrolledCourseNames = new ArrayList<>();
+                    enrolledCourses.forEach(course -> enrolledCourseNames.add(course.getName()));
+                    listCoursesEnrolled.getItems().setAll(enrolledCourses);
+
+                }
+
+            } catch (Exception e) {
+                AlertUtil.setErrorAlert("Failed to load student details in the form");
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 }
