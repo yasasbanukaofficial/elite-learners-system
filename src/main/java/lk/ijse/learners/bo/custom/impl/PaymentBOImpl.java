@@ -5,6 +5,7 @@ import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.dao.DAOFactory;
 import lk.ijse.learners.dao.custom.PaymentDAO;
 import lk.ijse.learners.dto.PaymentDTO;
+import lk.ijse.learners.dto.StudentDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +71,11 @@ public class PaymentBOImpl implements PaymentBO {
     @Override
     public boolean isIdExisting(String id) {
         return paymentDAO.isIdExisting(id);
+    }
+
+    @Override
+    public StudentDTO getStudentsByPaymentId(String payId) throws Exception {
+        return entityDTOConverter.getStudentDTO(paymentDAO.getStudentsByPaymentId(payId));
     }
 }
 

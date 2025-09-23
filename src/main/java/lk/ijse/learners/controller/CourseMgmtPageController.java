@@ -1,14 +1,12 @@
 package lk.ijse.learners.controller;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -29,14 +27,10 @@ import lk.ijse.learners.dto.CourseDTO;
 import lk.ijse.learners.dto.InstructorDTO;
 import lk.ijse.learners.dto.LessonDTO;
 import lk.ijse.learners.dto.StudentDTO;
-import lk.ijse.learners.entity.Course;
-import lk.ijse.learners.entity.Instructor;
 import lk.ijse.learners.tm.CourseTM;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -45,11 +39,6 @@ public class CourseMgmtPageController implements Initializable {
     public AnchorPane ancCourse;
     public StackPane btnOpenCourseForm;
 
-    public TableView <CourseTM> tblCourse;
-    public TableColumn <CourseTM, String> colId;
-    public TableColumn <CourseTM, String> colCName;
-    public TableColumn <CourseTM, String> colDuration;
-    public TableColumn <CourseTM, String> colFee;
     public TextField txtCourseName;
     public TextField txtDescription;
     public Label lblEnrollmentCount;
@@ -113,8 +102,8 @@ public class CourseMgmtPageController implements Initializable {
             if (newValue) {
                 Platform.runLater(() -> {
                     try {
-                        List<InstructorDTO> instuctorEnrolled = courseBO.getAllInstructorsByCourseId(courseDTO.getCourseId());
-                        listInsAssigned.getItems().setAll(instuctorEnrolled);
+                        List<InstructorDTO> instructorsEnrolled = courseBO.getAllInstructorsByCourseId(courseDTO.getCourseId());
+                        listInsAssigned.getItems().setAll(instructorsEnrolled);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

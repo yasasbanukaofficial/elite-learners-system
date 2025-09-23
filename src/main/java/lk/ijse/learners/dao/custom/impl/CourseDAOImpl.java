@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,7 +124,7 @@ public class CourseDAOImpl implements CourseDAO {
         try(Session session = factoryConfiguration.getSession()){
             Query<Course> query = session.createQuery("select c from Course c join c.instructors i where i.id = :insId", Course.class);
             query.setParameter("insId", stdId);
-            return query.list().isEmpty() ? null : query.list();
+            return query.list().isEmpty() ? new ArrayList<>() : query.list();
         }
     }
 

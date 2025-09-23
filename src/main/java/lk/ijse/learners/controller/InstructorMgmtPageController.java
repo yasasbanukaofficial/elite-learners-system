@@ -60,7 +60,7 @@ public class InstructorMgmtPageController implements Initializable {
     public Button btnEdit;
     public DatePicker insDobPicker;
 
-    InstructorBO instuctorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
+    InstructorBO instructorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
     private InstructorDTO instructorDTO;
     private final EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
@@ -92,7 +92,7 @@ public class InstructorMgmtPageController implements Initializable {
             if (newValue) {
                 Platform.runLater(() -> {
                     try {
-                        listInstructors.getItems().setAll(instuctorBO.getAll());
+                        listInstructors.getItems().setAll(instructorBO.getAll());
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -132,7 +132,7 @@ public class InstructorMgmtPageController implements Initializable {
     public void deleteInstructor(ActionEvent actionEvent) {
         try {
             if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to delete student ?")) {
-                instuctorBO.delete(instructorDTO.getInstructorId());
+                instructorBO.delete(instructorDTO.getInstructorId());
             }
             listInstructors.refresh();
         } catch (Exception e) {
@@ -171,11 +171,11 @@ public class InstructorMgmtPageController implements Initializable {
                         contact,
                         speciality,
                         availability,
-                        instuctorBO.getAllLessonsByInstructorId(instructorDTO.getInstructorId())
+                        instructorBO.getAllLessonsByInstructorId(instructorDTO.getInstructorId())
                 );
                 
                 if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to update instructor details ?")) {
-                    if (instuctorBO.update(updatedInstructorDTO)) {
+                    if (instructorBO.update(updatedInstructorDTO)) {
                         setupLists();
                         listInstructors.refresh();
                     } else {
@@ -240,7 +240,7 @@ public class InstructorMgmtPageController implements Initializable {
 
     public void setupLists() {
         try {
-            listInstructors.getItems().setAll(instuctorBO.getAll());
+            listInstructors.getItems().setAll(instructorBO.getAll());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -330,7 +330,7 @@ public class InstructorMgmtPageController implements Initializable {
     private void setupForm(InstructorDTO instructorDTO) {
         if (instructorDTO != null) {
             try {
-                Optional<InstructorDTO> instructor = instuctorBO.findById(instructorDTO.getInstructorId());
+                Optional<InstructorDTO> instructor = instructorBO.findById(instructorDTO.getInstructorId());
                 if (instructor.isEmpty()) {
                     AlertUtil.setErrorAlert("Instructor is not present in the database");
                 } else {
@@ -361,7 +361,7 @@ public class InstructorMgmtPageController implements Initializable {
                 }
 
             } catch (Exception e) {
-                AlertUtil.setErrorAlert("Failed to load student details in the form");
+                AlertUtil.setErrorAlert("Failed to load instructor details in the form");
                 throw new RuntimeException(e);
             }
         }

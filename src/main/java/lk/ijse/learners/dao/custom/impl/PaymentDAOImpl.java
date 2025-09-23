@@ -2,8 +2,8 @@ package lk.ijse.learners.dao.custom.impl;
 
 import lk.ijse.learners.config.FactoryConfiguration;
 import lk.ijse.learners.dao.custom.PaymentDAO;
-import lk.ijse.learners.entity.Course;
 import lk.ijse.learners.entity.Payment;
+import lk.ijse.learners.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -16,8 +16,10 @@ public class PaymentDAOImpl implements PaymentDAO {
     @Override
     public List<Payment> getAll() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
-            Query<Payment> query = session.createQuery("from Payment", Payment.class);
-            return query.list() == null ? null : query.list();
+            Query<Payment> query = session.createQuery(
+                    "SELECT p FROM Payment p JOIN FETCH p.student", Payment.class
+            );
+            return query.list().isEmpty() ? null : query.list();
         }
     }
 
@@ -102,6 +104,15 @@ public class PaymentDAOImpl implements PaymentDAO {
         try(Session session = factoryConfiguration.getSession()) {
             String resultId = session.createQuery("select p.id from Payment p order by p.id desc", String.class).setMaxResults(1).uniqueResult();
             return resultId != null && resultId.equals(id);
+        }
+    }
+
+    @Override
+    public Student getStudentsByPaymentId(String payId) {
+        try(Session session = factoryConfiguration.getSession()) {
+            Query<Student> query = session.createQuery("select p.student from Payment p where p.paymentId = :id", Student.class);
+            query.setParameter("id", payId);
+            return query.uniqueResult();
         }
     }
 }
