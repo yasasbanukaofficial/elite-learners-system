@@ -59,13 +59,7 @@ public class CourseMgmtPageController implements Initializable {
     private final EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
     private EntityDTOConverter entityDTOConverter = new EntityDTOConverter();
     public void openCourseForm(MouseEvent mouseEvent) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource(ViewPath.ADD_COURSE_FORM.getPath()));
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setMaximized(false);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.show();
+        WindowManagerUtil.openForm(ViewPath.ADD_COURSE_FORM.getPath(), false);
     }
 
     @Override

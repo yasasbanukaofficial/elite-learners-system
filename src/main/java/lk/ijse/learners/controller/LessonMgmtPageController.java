@@ -10,6 +10,8 @@ import javafx.scene.layout.VBox;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.custom.LessonBO;
 import lk.ijse.learners.controller.util.AlertUtil;
+import lk.ijse.learners.controller.util.ViewPath;
+import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.CourseDTO;
 import lk.ijse.learners.dto.InstructorDTO;
 import lk.ijse.learners.dto.LessonDTO;
@@ -196,6 +198,7 @@ public class LessonMgmtPageController implements Initializable {
     }
 
     public void openLessonForm(MouseEvent mouseEvent) {
+        WindowManagerUtil.openForm(ViewPath.ADD_LESSON_FORM.getPath(), false);
     }
 
     public void editStdList(MouseEvent mouseEvent) {

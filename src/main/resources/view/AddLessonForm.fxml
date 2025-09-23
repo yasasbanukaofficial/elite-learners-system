@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="ancAddCourseForm" prefHeight="720.0" prefWidth="820.0" style="-fx-background-color: white; -fx-border-color: lightGrey;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddLessonFormController">
+   <children>
+      <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="538.0" prefWidth="480.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-radius: 10px;" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox prefHeight="64.0" prefWidth="400.0">
+                     <children>
+                        <Label text="Add New Lesson">
+                           <font>
+                              <Font name="Candara Bold" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="2.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="lblLessonId" prefHeight="22.0" prefWidth="78.0" text="LES-001" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="Cambria" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="151.0" top="3.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+                  <VBox prefHeight="437.0" prefWidth="360.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <HBox prefHeight="78.0" prefWidth="360.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="71.0" prefWidth="400.0" spacing="5.0">
+                                 <children>
+                                    <Label text="Lesson Name" textFill="#4d4d4d">
+                                       <font>
+                                          <Font name="Calibri" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="txtCName" minHeight="-Infinity" prefHeight="40.0" prefWidth="400.0" promptText="Basic Driving" stylesheets="@../styles/text-field.css">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <VBox prefHeight="71.0" prefWidth="400.0" spacing="5.0">
+                           <children>
+                              <Label text="Start Time" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                 <children>
+                                    <DatePicker fx:id="dpStartTime" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="177.0" promptText="01/01/2001" stylesheets="@../styles/date-picker.css" HBox.hgrow="ALWAYS">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </DatePicker>
+                                    <Spinner fx:id="spinnerStartHr" prefHeight="25.0" prefWidth="57.0" HBox.hgrow="ALWAYS" />
+                                    <Spinner fx:id="spinnerStartMin" prefHeight="25.0" prefWidth="57.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="3.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <VBox prefHeight="71.0" prefWidth="400.0" spacing="5.0">
+                           <children>
+                              <Label text="End Time" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                 <children>
+                                    <DatePicker fx:id="dpEndTime" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="177.0" promptText="01/01/2001" stylesheets="@../styles/date-picker.css" HBox.hgrow="ALWAYS">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </DatePicker>
+                                    <Spinner fx:id="spinnerEndHr" prefHeight="25.0" prefWidth="57.0" HBox.hgrow="ALWAYS" />
+                                    <Spinner fx:id="spinnerEndMin" prefHeight="25.0" prefWidth="61.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="169.0" prefWidth="358.0" spacing="5.0">
+                           <children>
+                              <Label text="Instructor" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                              <VBox prefHeight="144.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <ListView fx:id="chosenInstructors" prefHeight="79.0" prefWidth="358.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" top="20.0" />
+                                       </VBox.margin>
+                                    </ListView>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="216.0" prefWidth="358.0" spacing="5.0">
+                           <children>
+                              <Label text="Courses Linked" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                              <VBox prefHeight="255.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <ListView fx:id="choosenCourses" prefHeight="79.0" prefWidth="358.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" top="20.0" />
+                                       </VBox.margin>
+                                    </ListView>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox fx:id="instructorSection" prefHeight="538.0" prefWidth="502.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 0px 0px 0px 1px;">
+               <children>
+                  <HBox prefHeight="64.0" prefWidth="400.0">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="183.0" text="Available Instructors">
+                           <font>
+                              <Font name="Candara Bold" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="165.0" top="2.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ImageView fx:id="btnCloseLesForm" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#closeLessonFormOnAction" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/closeicon.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+                  <VBox prefHeight="322.0" prefWidth="379.0">
+                     <children>
+                        <VBox prefHeight="35.0" prefWidth="379.0" spacing="5.0">
+                           <children>
+                              <Label text="Click to select an instructor" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <ListView fx:id="availableInstructors" prefHeight="250.0" prefWidth="379.0" style="-fx-background-color: white;" />
+                     </children>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                  </VBox>
+                  <HBox prefHeight="64.0" prefWidth="400.0">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="183.0" text="Course to link">
+                           <font>
+                              <Font name="Candara Bold" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="165.0" top="2.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+                  <VBox prefHeight="318.0" prefWidth="379.0">
+                     <children>
+                        <VBox prefHeight="35.0" prefWidth="379.0" spacing="5.0">
+                           <children>
+                              <Label text="Click to select an course" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <ListView fx:id="availableCourses" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <HBox prefHeight="50.0" prefWidth="419.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="btnCancel" mnemonicParsing="false" onMouseClicked="#closeLsnFormOnAction" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="#868686">
+                           <font>
+                              <Font name="Arial Bold" size="14.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnAddLesson" mnemonicParsing="false" onAction="#addLsn" prefHeight="39.0" prefWidth="105.0" style="-fx-background-color: black; -fx-background-radius: 10px;" text="Next" textFill="WHITE">
+                           <font>
+                              <Font name="Arial Bold" size="14.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="140.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
