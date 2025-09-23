@@ -123,4 +123,16 @@ public class StudentBOImpl implements StudentBO {
     public List<Lesson> getAllLessonsBySid(String sid) {
         return studentDAO.getAllLessonsBySid(sid);
     }
+
+    @Override
+    public Optional<StudentDTO> findByStudentName(String fName, String lName) {
+        return studentDAO.findByStudentName(fName, lName).map(student -> {
+            try {
+                return entityDTOConverter.getStudentDTO(student);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Failed to convert Student to DTO, findByStudentName", e);
+            }
+        });
+    }
 }

@@ -21,7 +21,9 @@ public class EnrollmentContext {
     private StudentDTO studentDTO;
     private PaymentDTO paymentDTO;
     private InstructorDTO instructorDTO;
+    private CourseDTO courseDTO;
     private List<CourseDTO> courseDTOList;
+    private List<StudentDTO> stdDTOList;
 
     public static EnrollmentContext getInstance() {
         return enrollmentContext == null ? enrollmentContext = new EnrollmentContext() : enrollmentContext;
@@ -31,7 +33,9 @@ public class EnrollmentContext {
         studentDTO = null;
         paymentDTO = null;
         instructorDTO = null;
+        courseDTO = null;
         courseDTOList = null;
+        stdDTOList = null;
     }
 
 }

@@ -1,14 +1,12 @@
 package lk.ijse.learners.bo.custom.impl;
 
 import lk.ijse.learners.bo.custom.CourseBO;
-import lk.ijse.learners.bo.exception.NotFoundException;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.dao.DAOFactory;
 import lk.ijse.learners.dao.custom.CourseDAO;
 import lk.ijse.learners.dto.CourseDTO;
 import lk.ijse.learners.dto.InstructorDTO;
 import lk.ijse.learners.dto.StudentDTO;
-import lk.ijse.learners.entity.Course;
 
 import java.util.List;
 import java.util.Optional;
@@ -94,6 +92,19 @@ public class CourseBOImpl implements CourseBO {
     @Override
     public List<InstructorDTO> getAllInstructorsByCourseId(String id) throws Exception {
         return entityDTOConverter.toInstructorDTOList(courseDAO.getAllInstructorsByCourseId(id));
+    }
+
+    @Override
+    public Optional<CourseDTO> findByStdName(String firstName, String lastName) {
+        return courseDAO.findByStdName(firstName, lastName).map(course -> {
+                    try {
+                        return entityDTOConverter.getCourseDTO(course);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException("Failed to convert Course to DTO, findByStdName", e);
+                    }
+                }
+        );
     }
 
     @Override

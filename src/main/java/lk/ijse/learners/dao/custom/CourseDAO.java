@@ -15,5 +15,6 @@ public interface CourseDAO extends CrudDAO<Course> {
     List<Course> getAllEnrolledCoursesByInsId(String stdId) throws Exception;
     List<Student> getAllStudentsByCourseId (String courseId) throws Exception;
     List<Instructor> getAllInstructorsByCourseId(String id) throws Exception;
+    Optional<Course> findByStdName(String firstName, String lastName);
     Optional<Course> findByName(String newSel);
 }

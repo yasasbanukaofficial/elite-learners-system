@@ -137,4 +137,32 @@ public class EnrollmentBOImpl implements EnrollmentBO {
         }
     }
 
+    @Override
+    public boolean updateEnrolledStd() {
+        Session session = FactoryConfiguration.getInstance().getCurrentSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            StudentDTO studentDTO = enrollmentContext.getStudentDTO();
+            CourseDTO course = enrollmentContext.getCourseDTO();
+
+            if (!course.getStudents().contains(studentDTO)) {
+                course.getStudents().add(studentDTO);
+            }
+            if (!courseBO.update(course)) {
+                throw new RuntimeException("Failed to update course");
+            }
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            AlertUtil.setErrorAlert("Failed to update enrolled students");
+            e.printStackTrace();
+            return false;
+        } finally {
+            session.close();
+        }
+    }
 }

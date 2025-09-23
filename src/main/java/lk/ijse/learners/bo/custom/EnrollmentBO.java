@@ -6,4 +6,5 @@ public interface EnrollmentBO extends SuperBO {
     boolean enrollStudent();
     boolean updateEnrolledStudent();
     boolean updateEnrolledInstructors();
+    boolean updateEnrolledStd();
 }

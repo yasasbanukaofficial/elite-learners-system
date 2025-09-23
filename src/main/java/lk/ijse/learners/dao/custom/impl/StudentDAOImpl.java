@@ -147,5 +147,20 @@ public class StudentDAOImpl implements StudentDAO {
         }
     }
 
+    public Optional<Student> findByStudentName(String fName, String lName) {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Student> query = session.createQuery(
+                    "SELECT s FROM Student s WHERE s.firstName = :fName AND s.lastName = :lName",
+                    Student.class
+            );
+            query.setParameter("fName", fName);
+            query.setParameter("lName", lName);
+            query.setMaxResults(1);
+
+            return query.uniqueResultOptional();
+        }
+    }
+
+
 
 }

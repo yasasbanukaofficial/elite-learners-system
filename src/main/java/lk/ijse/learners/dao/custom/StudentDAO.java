@@ -6,10 +6,12 @@ import lk.ijse.learners.entity.Payment;
 import lk.ijse.learners.entity.Student;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentDAO extends CrudDAO<Student> {
     boolean existsByField(String field, String fieldValue) throws Exception;
     List<Payment> getAllPayments();
     List<Payment> getAllPaymentsBySid(String sid);
     List<Lesson> getAllLessonsBySid(String sid);
+    Optional<Student> findByStudentName(String fName, String lName);
 }

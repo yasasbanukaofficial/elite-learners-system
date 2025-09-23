@@ -55,7 +55,7 @@ public class InstructorMgmtPageController implements Initializable {
     public TextField txtSpeciality;
     public CheckBox cbAvailable;
     public CheckBox cbNotAvailable;
-    public ListView listCoursesAssigned;
+    public ListView <CourseDTO> listCoursesAssigned;
     public Button btnDeleteIns;
     public Button btnEdit;
     public DatePicker insDobPicker;

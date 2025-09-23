@@ -157,4 +157,21 @@ public class CourseDAOImpl implements CourseDAO {
             return Optional.ofNullable(course);
         }
     }
+
+    @Override
+    public Optional<Course> findByStdName(String firstName, String lastName) {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Course> query = session.createQuery(
+                    "SELECT c FROM Course c JOIN c.students s WHERE s.firstName = :firstName and s.lastName = :lastName",
+                    Course.class
+            );
+            query.setParameter("firstName", firstName);
+            query.setParameter("lastName", lastName);
+            query.setMaxResults(1);
+
+            Course result = query.uniqueResult();
+            return Optional.ofNullable(result);
+        }
+    }
+
 }

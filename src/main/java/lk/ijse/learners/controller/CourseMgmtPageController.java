@@ -1,5 +1,6 @@
 package lk.ijse.learners.controller;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -16,12 +17,14 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.context.EnrollmentContext;
+import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.bo.custom.CourseBO;
 import lk.ijse.learners.bo.custom.InstructorBO;
 import lk.ijse.learners.bo.custom.StudentBO;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.ViewPath;
+import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.CourseDTO;
 import lk.ijse.learners.dto.InstructorDTO;
 import lk.ijse.learners.dto.LessonDTO;
@@ -79,9 +82,42 @@ public class CourseMgmtPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
        setupLists();
+
+       RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.COURSES).addListener((observable, oldValue, newValue) -> {
+           if (newValue) {
+               Platform.runLater(() -> {
+                   try {
+                       listCourses.getItems().setAll(courseBO.getAll());
+                   } catch (Exception e) {
+                       throw new RuntimeException(e);
+                   }
+                   RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES, false);
+               });
+           }
+       });
+       RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.STUDENT_ENROLLED_LIST).addListener((observable, oldValue, newValue) -> {
+           if (newValue) {
+               Platform.runLater(() -> {
+                   try {
+                       listStdEnrolled.getItems().setAll(studentBO.getAll());
+                   } catch (Exception e) {
+                       throw new RuntimeException(e);
+                   }
+                   RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.STUDENT_ENROLLED_LIST, false);
+               });
+           }
+       });
     }
 
     public void editStdList(MouseEvent mouseEvent) {
+        try {
+            enrollmentContext.setCourseDTO(courseDTO);
+            enrollmentContext.setStdDTOList(courseBO.getAllStudentsByCourseId(courseDTO.getCourseId()));
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Failed to set course details in the context");
+            throw new RuntimeException(e);
+        }
+        WindowManagerUtil.openForm(ViewPath.EDIT_ENROLLED_STUDENTS.getPath(), false);
     }
 
     public void editInsList(MouseEvent mouseEvent) {
