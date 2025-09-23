@@ -61,11 +61,16 @@ public class EditEnrolledStudentsController implements Initializable {
     private void refreshSelectedStudents() {
         alreadyEnrolledStdList.clear();
         selectedStudents.getItems().clear();
+
         enrollmentContext.getCourseDTO().getStudents().forEach(studentDTO -> {
-            alreadyEnrolledStdList.add(studentDTO.getFirstName() + " " + studentDTO.getLastName());
+            if (studentDTO != null) {
+                alreadyEnrolledStdList.add(studentDTO.getFirstName() + " " + studentDTO.getLastName());
+            }
         });
+
         selectedStudents.getItems().addAll(alreadyEnrolledStdList);
     }
+
 
     private void handleStdRemoveClick(MouseEvent event) {
         String selectStd = selectedStudents.getSelectionModel().getSelectedItem();

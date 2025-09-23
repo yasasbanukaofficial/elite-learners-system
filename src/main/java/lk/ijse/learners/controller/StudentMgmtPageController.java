@@ -100,7 +100,7 @@ public class StudentMgmtPageController implements Initializable{
             if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to delete student ?")) {
                 studentBO.delete(studentDTO.getStudentId());
             }
-            listStudents.refresh();
+            setupLists();
         } catch (Exception e) {
             AlertUtil.setErrorAlert("Failed to delete student");
             throw new RuntimeException(e);

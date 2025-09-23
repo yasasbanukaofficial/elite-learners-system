@@ -29,10 +29,12 @@ public class EntityDTOConverter {
     public List<StudentDTO> toStudentDTOList(List<Student> studentList) throws Exception {
         List<StudentDTO> studentDTOList = new ArrayList<>();
         studentList.forEach(student -> {
-            try {
-                studentDTOList.add(getStudentDTO(student));
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (student != null) {
+                try {
+                    studentDTOList.add(getStudentDTO(student));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         return studentDTOList;
