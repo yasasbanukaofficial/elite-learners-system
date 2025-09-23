@@ -5,6 +5,7 @@ import lk.ijse.learners.dao.custom.CourseDAO;
 import lk.ijse.learners.dto.CourseDTO;
 import lk.ijse.learners.entity.Course;
 import lk.ijse.learners.entity.Instructor;
+import lk.ijse.learners.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -122,6 +123,24 @@ public class CourseDAOImpl implements CourseDAO {
         try(Session session = factoryConfiguration.getSession()){
             Query<Course> query = session.createQuery("select c from Course c join c.instructors i where i.id = :insId", Course.class);
             query.setParameter("insId", stdId);
+            return query.list().isEmpty() ? null : query.list();
+        }
+    }
+
+    @Override
+    public List<Student> getAllStudentsByCourseId (String courseId) throws Exception {
+        try(Session session = factoryConfiguration.getSession()){
+            Query<Student> query = session.createQuery("select c.students from Course c where c.id = :courseId", Student.class);
+            query.setParameter("courseId", courseId);
+            return query.list().isEmpty() ? null : query.list();
+        }
+    }
+
+    @Override
+    public List<Instructor> getAllInstructorsByCourseId (String courseId) throws Exception {
+        try(Session session = factoryConfiguration.getSession()){
+            Query<Instructor> query = session.createQuery("select c.instructors from Course c where c.id = :courseId", Instructor.class);
+            query.setParameter("courseId", courseId);
             return query.list().isEmpty() ? null : query.list();
         }
     }

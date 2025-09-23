@@ -6,6 +6,8 @@ import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.dao.DAOFactory;
 import lk.ijse.learners.dao.custom.CourseDAO;
 import lk.ijse.learners.dto.CourseDTO;
+import lk.ijse.learners.dto.InstructorDTO;
+import lk.ijse.learners.dto.StudentDTO;
 import lk.ijse.learners.entity.Course;
 
 import java.util.List;
@@ -82,6 +84,16 @@ public class CourseBOImpl implements CourseBO {
     @Override
     public List<CourseDTO> getAllEnrolledCoursesByInsId(String stdId) throws Exception {
         return entityDTOConverter.toCourseDTOList(courseDAO.getAllEnrolledCoursesByInsId(stdId));
+    }
+
+    @Override
+    public List<StudentDTO> getAllStudentsByCourseId(String courseId) throws Exception {
+        return entityDTOConverter.toStudentDTOList(courseDAO.getAllStudentsByCourseId(courseId));
+    }
+
+    @Override
+    public List<InstructorDTO> getAllInstructorsByCourseId(String id) throws Exception {
+        return entityDTOConverter.toInstructorDTOList(courseDAO.getAllInstructorsByCourseId(id));
     }
 
     @Override

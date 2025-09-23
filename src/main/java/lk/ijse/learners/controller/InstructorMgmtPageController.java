@@ -332,7 +332,7 @@ public class InstructorMgmtPageController implements Initializable {
             try {
                 Optional<InstructorDTO> instructor = instuctorBO.findById(instructorDTO.getInstructorId());
                 if (instructor.isEmpty()) {
-                    AlertUtil.setErrorAlert("Student is not present in the database");
+                    AlertUtil.setErrorAlert("Instructor is not present in the database");
                 } else {
                     listCoursesAssigned.getItems().clear();
 

@@ -18,4 +18,12 @@ public class CourseDTO {
     private List<InstructorDTO> instructors;
     private List<LessonDTO> lessons;
     private List<StudentDTO> students;
+
+    public CourseDTO(String courseId, String name, String description, String duration, String fees) {
+        this.courseId = courseId;
+        this.name = name;
+        this.description = description;
+        this.duration = duration;
+        this.fees = fees;
+    }
 }
