@@ -8,9 +8,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import lk.ijse.learners.bo.BOFactory;
-import lk.ijse.learners.bo.custom.CourseBO;
-import lk.ijse.learners.bo.custom.InstructorBO;
-import lk.ijse.learners.bo.custom.LessonBO;
+import lk.ijse.learners.bo.custom.*;
+import lk.ijse.learners.bo.custom.impl.SchedulingBOImpl;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.CourseDTO;
@@ -26,6 +25,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.SpinnerValueFactory;
+import lk.ijse.learners.dto.StudentDTO;
 
 import java.util.ArrayList;
 
@@ -49,12 +49,17 @@ public class AddLessonFormController implements Initializable {
     private final LessonBO lessonBO = (LessonBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.LESSON);
     private final CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
     private final InstructorBO instructorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
+    private final StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
+    SchedulingBO schedulingBO = new SchedulingBOImpl();
     public Spinner spinnerStartHr;
     public Spinner spinnerStartMin;
     public Spinner spinnerEndHr;
     public Spinner spinnerEndMin;
+    public ListView <String> choosenStudents;
+    public ListView <String> listStudents;
     private List<String> selectedInstructors = new ArrayList<>();
     private List<String> selectedCourses = new ArrayList<>();
+    private List<String> selectedStudents = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -93,6 +98,14 @@ public class AddLessonFormController implements Initializable {
             }
             availableCourses.getItems().addAll(courses);
 
+            List<String> students = studentBO.getAll().stream().map(studentDTO -> studentDTO.getFirstName() + " " + studentDTO.getLastName()).toList();
+            if (students.isEmpty()) {
+                Platform.runLater(() -> AlertUtil.setErrorAlert("Please add some students first!!"));
+                btnAddLesson.setDisable(true);
+                return;
+            }
+            listStudents.getItems().addAll(students);
+
             setupListeners();
         } catch (Exception e) {
             btnAddLesson.setDisable(true);
@@ -119,9 +132,24 @@ public class AddLessonFormController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 String selected = availableCourses.getSelectionModel().getSelectedItem();
-                if (selected != null && !selectedCourses.contains(selected)) {
+                if (selected != null) {
+                    selectedCourses.clear();
+                    choosenCourses.getItems().clear();
                     selectedCourses.add(selected);
                     choosenCourses.getItems().add(selected);
+                }
+            }
+        });
+
+        listStudents.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                String selected = listStudents.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    selectedStudents.clear();
+                    choosenStudents.getItems().clear();
+                    selectedStudents.add(selected);
+                    choosenStudents.getItems().add(selected);
                 }
             }
         });
@@ -196,24 +224,31 @@ public class AddLessonFormController implements Initializable {
 
         String courseId = courseDTO.get().getCourseId();
 
-        String studentId = "STD-002";
+        String[] nameParts = selectedStudents.getFirst().split(" ");
+        Optional<StudentDTO> studentDTO = studentBO.findByStudentName(nameParts[0], nameParts[1]);
+        if (studentDTO.isEmpty()) {
+            AlertUtil.setErrorAlert("Student does not exist");
+            return;
+        }
+
+        String studentId = studentDTO.get().getStudentId();
 
         if (validateLessonDetails(name, startTime, endTime)) {
             try {
-                LessonDTO lesson = new LessonDTO(
+                if (schedulingBO.scheduleLesson(new LessonDTO(
                         lessonId,
                         instructorId,
-                        courseId, 
+                        courseId,
                         studentId,
                         name,
                         startTime,
                         endTime,
                         "scheduled"
-                );
-
-                if (lessonBO.save(lesson)) {
+                ))) {
                     AlertUtil.setInfoAlert("Successfully added lesson!");
                     WindowManagerUtil.closeForm(ancAddCourseForm);
+                } else {
+                    AlertUtil.setErrorAlert("Failed to add lesson!");
                 }
             } catch (Exception e) {
                 AlertUtil.setErrorAlert("Failed to add lesson");

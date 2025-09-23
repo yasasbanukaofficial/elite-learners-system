@@ -21,7 +21,7 @@
          <children>
             <VBox prefHeight="538.0" prefWidth="480.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-radius: 10px;" HBox.hgrow="ALWAYS">
                <children>
-                  <HBox prefHeight="64.0" prefWidth="400.0">
+                  <HBox prefHeight="54.0" prefWidth="398.0">
                      <children>
                         <Label text="Add New Lesson">
                            <font>
@@ -107,14 +107,14 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox prefHeight="169.0" prefWidth="358.0" spacing="5.0">
+                        <VBox prefHeight="141.0" prefWidth="358.0" spacing="5.0">
                            <children>
                               <Label text="Instructor" textFill="#4d4d4d">
                                  <font>
                                     <Font name="Calibri" size="14.0" />
                                  </font>
                               </Label>
-                              <VBox prefHeight="144.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
+                              <VBox prefHeight="130.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <ListView fx:id="chosenInstructors" prefHeight="79.0" prefWidth="358.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
                                        <VBox.margin>
@@ -125,16 +125,34 @@
                               </VBox>
                            </children>
                         </VBox>
-                        <VBox prefHeight="216.0" prefWidth="358.0" spacing="5.0">
+                        <VBox prefHeight="168.0" prefWidth="358.0" spacing="5.0">
                            <children>
                               <Label text="Courses Linked" textFill="#4d4d4d">
                                  <font>
                                     <Font name="Calibri" size="14.0" />
                                  </font>
                               </Label>
-                              <VBox prefHeight="255.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
+                              <VBox prefHeight="128.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <ListView fx:id="choosenCourses" prefHeight="79.0" prefWidth="358.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" top="20.0" />
+                                       </VBox.margin>
+                                    </ListView>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="168.0" prefWidth="358.0" spacing="5.0">
+                           <children>
+                              <Label text="Students Linked" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                              <VBox prefHeight="255.0" prefWidth="358.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <ListView fx:id="choosenStudents" prefHeight="123.0" prefWidth="358.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
                                        <VBox.margin>
                                           <Insets bottom="20.0" top="20.0" />
                                        </VBox.margin>
@@ -175,7 +193,7 @@
                         <Insets left="20.0" right="20.0" top="20.0" />
                      </padding>
                   </HBox>
-                  <VBox prefHeight="322.0" prefWidth="379.0">
+                  <VBox prefHeight="188.0" prefWidth="379.0">
                      <children>
                         <VBox prefHeight="35.0" prefWidth="379.0" spacing="5.0">
                            <children>
@@ -198,7 +216,7 @@
                         <Insets bottom="10.0" />
                      </padding>
                   </VBox>
-                  <HBox prefHeight="64.0" prefWidth="400.0">
+                  <HBox prefHeight="49.0" prefWidth="419.0">
                      <children>
                         <Label prefHeight="22.0" prefWidth="183.0" text="Course to link">
                            <font>
@@ -228,6 +246,44 @@
                            </VBox.margin>
                         </VBox>
                         <ListView fx:id="availableCourses" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <HBox prefHeight="36.0" prefWidth="419.0">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="183.0" text="Student to link">
+                           <font>
+                              <Font name="Candara Bold" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="165.0" top="2.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+                  <VBox prefHeight="318.0" prefWidth="379.0">
+                     <children>
+                        <VBox prefHeight="35.0" prefWidth="379.0" spacing="5.0">
+                           <children>
+                              <Label text="Click to select a student" textFill="#4d4d4d">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <ListView fx:id="listStudents" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS" />
                      </children>
                      <padding>
                         <Insets bottom="10.0" />
