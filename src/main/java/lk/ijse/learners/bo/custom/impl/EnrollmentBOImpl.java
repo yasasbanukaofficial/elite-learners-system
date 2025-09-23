@@ -111,16 +111,9 @@ public class EnrollmentBOImpl implements EnrollmentBO {
         Transaction tx = session.beginTransaction();
 
         try {
-            InstructorDTO instructorDTO = enrollmentContext.getInstructorDTO();
-            List<CourseDTO> courseDTOList = enrollmentContext.getCourseDTOList();
-
-            for (CourseDTO course : courseDTOList) {
-                if (!course.getInstructors().contains(instructorDTO)) {
-                    course.getInstructors().add(instructorDTO);
-                }
-                if (!courseBO.update(course)) {
-                    throw new RuntimeException("Failed to update course");
-                }
+            CourseDTO courseDTO = enrollmentContext.getCourseDTO();
+            if (!courseBO.update(courseDTO)) {
+                throw new RuntimeException("Failed to update course");
             }
 
             tx.commit();
@@ -129,7 +122,7 @@ public class EnrollmentBOImpl implements EnrollmentBO {
             if (tx != null) {
                 tx.rollback();
             }
-            AlertUtil.setErrorAlert("Failed to update enrolled instructors");
+            AlertUtil.setErrorAlert("Failed to update assigned instructors");
             e.printStackTrace();
             return false;
         } finally {

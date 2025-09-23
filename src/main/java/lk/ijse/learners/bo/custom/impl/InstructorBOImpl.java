@@ -83,5 +83,16 @@ public class InstructorBOImpl implements InstructorBO {
     public List<LessonDTO> getAllLessonsByInstructorId(String instructorId) throws Exception {
         return entityDTOConverter.toLessonDTOList(instructorDAO.getAllLessonsByInstructorId(instructorId));
     }
-}
 
+    @Override
+    public Optional<InstructorDTO> findByName(String name) throws Exception {
+        return instructorDAO.findByName(name).map(instructor -> {
+            try {
+                return entityDTOConverter.getInstructorDTO(instructor);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Failed to convert Instructor to DTO, findByName", e);
+            }
+        });
+    }
+}

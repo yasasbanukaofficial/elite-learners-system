@@ -22,6 +22,7 @@ public enum ViewPath {
     CHOOSE_COURSE_FORM("ChooseCourseForm.fxml"),
     EDIT_ENROLLED_COURSES("EditEnrolledCourses.fxml"),
     EDIT_ASSIGNED_COURSES("EditAssignedCourses.fxml"),
+    EDIT_ASSIGNED_INSTRUCTORS("EditAssignedInstructors.fxml"),
     EDIT_ENROLLED_STUDENTS("EditEnrolledStudents.fxml");
 
     private final String fileName;

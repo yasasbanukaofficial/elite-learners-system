@@ -99,7 +99,8 @@ public class CourseMgmtPageController implements Initializable {
            if (newValue) {
                Platform.runLater(() -> {
                    try {
-                       listStdEnrolled.getItems().setAll(studentBO.getAll());
+                       List<StudentDTO> stdEnrolled = courseBO.getAllStudentsByCourseId(courseDTO.getCourseId());
+                       listStdEnrolled.getItems().setAll(stdEnrolled);
                    } catch (Exception e) {
                        throw new RuntimeException(e);
                    }
@@ -107,6 +108,22 @@ public class CourseMgmtPageController implements Initializable {
                });
            }
        });
+
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.INSTRUCTOR_ENROLLED_LIST).addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                Platform.runLater(() -> {
+                    try {
+                        List<InstructorDTO> instuctorEnrolled = courseBO.getAllInstructorsByCourseId(courseDTO.getCourseId());
+                        listInsAssigned.getItems().setAll(instuctorEnrolled);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.INSTRUCTOR_ENROLLED_LIST, false);
+                });
+            }
+        });
+
+
     }
 
     public void editStdList(MouseEvent mouseEvent) {
@@ -121,6 +138,13 @@ public class CourseMgmtPageController implements Initializable {
     }
 
     public void editInsList(MouseEvent mouseEvent) {
+        try {
+            enrollmentContext.setCourseDTO(courseDTO);
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Failed to set course details in the context");
+            throw new RuntimeException(e);
+        }
+        WindowManagerUtil.openForm(ViewPath.EDIT_ASSIGNED_INSTRUCTORS.getPath(), false);
     }
 
     public void deleteCourses(ActionEvent actionEvent) {
@@ -140,7 +164,6 @@ public class CourseMgmtPageController implements Initializable {
         }
 
         listCourses.setSelectionModel(null);
-
         listCourses.setCellFactory(lv -> new ListCell<CourseDTO>() {
             @Override
             protected void updateItem(CourseDTO course, boolean empty) {

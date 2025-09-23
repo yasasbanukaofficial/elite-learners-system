@@ -1,10 +1,12 @@
 package lk.ijse.learners.controller;
 
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import lk.ijse.learners.bo.BOFactory;
@@ -33,7 +35,7 @@ public class EditEnrolledStudentsController implements Initializable {
     public Button btnEditStudents;
 
     private final EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
-    EntityDTOConverter entityDTOConverter = new EntityDTOConverter();
+    public ImageView btnCloseForm;
     EnrollmentBO enrollmentBO = (EnrollmentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.ENROLLMENT);
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
     StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
@@ -85,7 +87,8 @@ public class EditEnrolledStudentsController implements Initializable {
         try {
             CourseDTO course = enrollmentContext.getCourseDTO();
             Optional<StudentDTO> studentOpt = course.getStudents().stream()
-                    .filter(std -> std.getFirstName().equals(fName) && std.getLastName().equals(lName))
+                    .filter(std -> std.getFirstName().trim().equalsIgnoreCase(fName.trim())
+                            && std.getLastName().trim().equalsIgnoreCase(lName.trim()))
                     .findFirst();
             if (studentOpt.isPresent()) {
                 String studentId = studentOpt.get().getStudentId();
@@ -107,22 +110,26 @@ public class EditEnrolledStudentsController implements Initializable {
     }
 
     @FXML
-    public void editStd(Event onClick) {
+    public void editStd(ActionEvent actionEvent) {
         try {
             if (selectedStdList.isEmpty() && alreadyEnrolledStdList.isEmpty()) {
                 AlertUtil.setErrorAlert("Please select at least one student");
                 return;
             }
+
             List<StudentDTO> newStudents = new ArrayList<>(enrollmentContext.getCourseDTO().getStudents());
             for (String name : selectedStdList) {
-                String[] parts = name.split(" ", 2);
+                String[] parts = name.trim().split("\\s+", 2); // <-- safe split
                 if (parts.length == 2) {
-                    studentBO.findByStudentName(parts[0], parts[1]).ifPresent(newStudents::add);
+                    studentBO.findByStudentName(parts[0], parts[1])
+                            .ifPresent(newStudents::add);
                 }
             }
+
             CourseDTO course = enrollmentContext.getCourseDTO();
             course.setStudents(newStudents);
             courseBO.update(course);
+
             if (!enrollmentBO.updateEnrolledStd()) {
                 AlertUtil.setErrorAlert("Failed to update enrolled students");
             } else {
@@ -134,6 +141,8 @@ public class EditEnrolledStudentsController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+
 
     @FXML
     public void closeStudentForm(MouseEvent mouseEvent) {
