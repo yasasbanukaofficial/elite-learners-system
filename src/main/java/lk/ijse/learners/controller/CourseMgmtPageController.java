@@ -148,9 +148,45 @@ public class CourseMgmtPageController implements Initializable {
     }
 
     public void deleteCourses(ActionEvent actionEvent) {
+        try {
+            if (AlertUtil.setConfirmationAlert("Before Continue", "Are you sure you want to delete course ?")) {
+                courseBO.delete(courseDTO.getCourseId());
+            }
+            setupLists();
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Failed to delete course");
+            throw new RuntimeException(e);
+        }
     }
 
     public void editCourses(ActionEvent actionEvent) {
+        if (courseDTO == null) {
+            AlertUtil.setErrorAlert("Please select a course to edit");
+            return;
+        }
+
+        if (txtCourseName.getText().isEmpty() || txtDescription.getText().isEmpty()
+                || txtDuration.getText().isEmpty() || txtFees.getText().isEmpty()) {
+            AlertUtil.setErrorAlert("Please fill all fields");
+            return;
+        }
+
+        try {
+            courseDTO.setName(txtCourseName.getText());
+            courseDTO.setDescription(txtDescription.getText());
+            courseDTO.setDuration(txtDuration.getText());
+            courseDTO.setFees(txtFees.getText());
+
+            if (courseBO.update(courseDTO)) {
+                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES, true);
+                AlertUtil.setInfoAlert("Course updated successfully");
+            } else {
+                AlertUtil.setErrorAlert("Failed to update course");
+            }
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Error occurred while updating course");
+            throw new RuntimeException(e);
+        }
     }
 
     public void editLesList(MouseEvent mouseEvent) {
