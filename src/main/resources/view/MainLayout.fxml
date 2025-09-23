@@ -44,7 +44,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </StackPane>
-                        <StackPane fx:id="btnLessonMgmt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
+                        <StackPane fx:id="btnLessonMgmt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#visitLessonsPgOnAction" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
                            <children>
                               <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

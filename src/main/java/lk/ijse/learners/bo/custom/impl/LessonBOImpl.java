@@ -4,7 +4,10 @@ import lk.ijse.learners.bo.custom.LessonBO;
 import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.dao.DAOFactory;
 import lk.ijse.learners.dao.custom.LessonDAO;
+import lk.ijse.learners.dto.CourseDTO;
+import lk.ijse.learners.dto.InstructorDTO;
 import lk.ijse.learners.dto.LessonDTO;
+import lk.ijse.learners.dto.StudentDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +67,23 @@ public class LessonBOImpl implements LessonBO {
             int lastIdNum = Integer.parseInt(lastIdNumString);
             return String.format(prefix, lastIdNum + 1);
         }
-        return String.format(prefix, "001");
+        return String.format(prefix, 1);
     }
+
+    @Override
+    public StudentDTO getAllStudentsByLessonId(String lessonId) throws Exception {
+        return entityDTOConverter.getStudentDTO(lessonDAO.getAllStudentsByLessonId(lessonId));
+    }
+
+    @Override
+    public InstructorDTO getAllInstructorsByLessonId (String lessonId) throws Exception {
+        return entityDTOConverter.getInstructorDTO(lessonDAO.getAllInstructorsByLessonId(lessonId));
+    }
+
+    @Override
+    public CourseDTO getAllCoursesByLessonId (String lessonId) throws Exception {
+        return entityDTOConverter.getCourseDTO(lessonDAO.getAllCoursesByLessonId(lessonId));
+    }
+
 }
 

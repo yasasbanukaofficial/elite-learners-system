@@ -2,7 +2,10 @@ package lk.ijse.learners.dao.custom.impl;
 
 import lk.ijse.learners.config.FactoryConfiguration;
 import lk.ijse.learners.dao.custom.LessonDAO;
+import lk.ijse.learners.entity.Course;
+import lk.ijse.learners.entity.Instructor;
 import lk.ijse.learners.entity.Lesson;
+import lk.ijse.learners.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -24,7 +27,7 @@ public class LessonDAOImpl implements LessonDAO {
     public String getLastId() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
             Query<String> query = session.createQuery("select l.id from Lesson l order by l.id desc", String.class).setMaxResults(1);
-            return query.list() == null ? null : query.list().getFirst();
+            return query.list().isEmpty() ? null : query.list().getFirst();
         }
     }
 
@@ -93,4 +96,42 @@ public class LessonDAOImpl implements LessonDAO {
             return Optional.ofNullable(lesson);
         }
     }
+
+
+    @Override
+    public Student getAllStudentsByLessonId(String lessonId) throws Exception {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Student> query = session.createQuery(
+                    "select s from Student s join s.lessons l where l.id = :lessonId",
+                    Student.class
+            );
+            query.setParameter("lessonId", lessonId);
+            return query.getSingleResult();
+        }
+    }
+
+    @Override
+    public Instructor getAllInstructorsByLessonId(String lessonId) throws Exception {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Instructor> query = session.createQuery(
+                    "select i from Instructor i join i.lessons l where l.id = :lessonId",
+                    Instructor.class
+            );
+            query.setParameter("lessonId", lessonId);
+            return query.getSingleResult();
+        }
+    }
+
+    @Override
+    public Course getAllCoursesByLessonId(String lessonId) throws Exception {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Course> query = session.createQuery(
+                    "select c from Course c join c.lessons l where l.id = :lessonId",
+                    Course.class
+            );
+            query.setParameter("lessonId", lessonId);
+            return query.getSingleResult();
+        }
+    }
+
 }

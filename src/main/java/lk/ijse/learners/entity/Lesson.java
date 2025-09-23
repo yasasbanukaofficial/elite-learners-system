@@ -20,15 +20,15 @@ public class Lesson {
     @Column(name = "lesson_id",  nullable = false)
     private String lessonId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "inst_id", referencedColumnName = "inst_id")
     private Instructor instructor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     private Course course;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stud_id", referencedColumnName = "stud_id")
     private Student student;
 
