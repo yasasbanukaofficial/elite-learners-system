@@ -2,7 +2,8 @@ package lk.ijse.learners.controller.util;
 
 public enum ViewPath {
     LOGIN("LoginPage.fxml"),
-    MAIN("MainLayout.fxml"),
+    ADMIN_MAIN("AdminMainLayout.fxml"),
+    USER_MAIN("UserMainLayout.fxml"),
     STUDENT("StudentMgmtPage.fxml"),
     INSTRUCTOR("InstructorMgmtPage.fxml"),
     USER("UserMgmtPage.fxml"),

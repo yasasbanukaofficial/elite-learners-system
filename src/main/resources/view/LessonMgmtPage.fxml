@@ -137,7 +137,7 @@
                                     <Insets left="30.0" right="41.0" top="4.0" />
                                  </VBox.margin>
                                  <children>
-                                    <Label text="Time Duration">
+                                    <Label text="Starting time">
                                        <font>
                                           <Font name="SansSerif Bold" size="16.0" />
                                        </font>
@@ -145,12 +145,32 @@
                                           <Insets left="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <TextField fx:id="txtDuration" promptText="Sat 9th at 10pm" style="-fx-background-color: transparent;">
+                                    <TextField fx:id="txtStartDuration" promptText="Sat 9th at 10pm" style="-fx-background-color: transparent;">
                                        <font>
                                           <Font name="Candara" size="20.0" />
                                        </font>
                                     </TextField>
                                  </children>
+                              </VBox>
+                              <VBox prefHeight="71.0" prefWidth="564.0">
+                                 <children>
+                                    <Label text="Ending time">
+                                       <font>
+                                          <Font name="SansSerif Bold" size="16.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="10.0" top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <TextField fx:id="txtEndDuration" promptText="Sat 9th at 10pm" style="-fx-background-color: transparent;">
+                                       <font>
+                                          <Font name="Candara" size="20.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="30.0" right="40.0" />
+                                 </VBox.margin>
                               </VBox>
                               <VBox prefHeight="177.0" prefWidth="575.0" style="-fx-background-color: #F5F3F8; -fx-background-radius: 20px;" VBox.vgrow="ALWAYS">
                                  <children>

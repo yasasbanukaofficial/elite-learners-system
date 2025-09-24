@@ -2,17 +2,15 @@ package lk.ijse.learners.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import lk.ijse.learners.controller.util.ViewPath;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainLayoutController implements Initializable {
+public class UserMainLayoutController implements Initializable {
     public AnchorPane ancMain;
     public AnchorPane ancPages;
 
@@ -42,42 +40,6 @@ public class MainLayoutController implements Initializable {
         try {
             ancPages.getChildren().clear();
             AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.STUDENT.getPath()));
-            anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
-            anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
-            ancPages.getChildren().add(anchorPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void visitUserMgmtPgOnAction(MouseEvent mouseEvent) {
-        try {
-            ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.USER.getPath()));
-            anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
-            anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
-            ancPages.getChildren().add(anchorPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void visitInstructorsPgOnAction(MouseEvent mouseEvent) {
-        try {
-            ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.INSTRUCTOR.getPath()));
-            anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
-            anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
-            ancPages.getChildren().add(anchorPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void visitCoursesPgOnAction(MouseEvent mouseEvent) {
-        try {
-            ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.COURSE.getPath()));
             anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
             anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
             ancPages.getChildren().add(anchorPane);

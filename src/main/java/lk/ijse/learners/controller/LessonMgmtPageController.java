@@ -24,6 +24,10 @@ import lk.ijse.learners.dto.LessonDTO;
 import lk.ijse.learners.dto.StudentDTO;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +39,8 @@ public class LessonMgmtPageController implements Initializable {
     public StackPane btnOpenLessonForm;
     public TextField txtLsnName;
     public TextField txtStatus;
-    public TextField txtDuration;
+    public TextField txtStartDuration;
+    public TextField txtEndDuration;
     public ListView <StudentDTO> listStdEnrolled;
     public ListView <InstructorDTO> listInsAssigned;
     public Button btnDeleteLesson;
@@ -128,10 +133,16 @@ public class LessonMgmtPageController implements Initializable {
                     Label lblName = new Label(lesson.getName());
                     lblName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-                    Label lblDuration = new Label("Duration: " + lesson.getStart_time().toString() + " - " + lesson.getEnd_time().toString());
+                    Label lblStart = new Label("Start Date: "
+                            + formatDateHuman(lesson.getStart_time()) + ", Time: " + formatTime(lesson.getStart_time()));
+
+                    Label lblEnd = new Label("End Date: "
+                            + formatDateHuman(lesson.getEnd_time()) + ", Time: " + formatTime(lesson.getEnd_time()));
+
+
                     Label lblStatus = new Label("Status: " + lesson.getStatus());
 
-                    card.getChildren().addAll(lblName, lblDuration, lblStatus);
+                    card.getChildren().addAll(lblName, lblStart, lblEnd, lblStatus);
                     card.setOnMouseClicked(event -> setupForm(lesson));
 
                     setGraphic(card);
@@ -238,7 +249,8 @@ public class LessonMgmtPageController implements Initializable {
 
                 txtLsnName.setText(this.lessonDTO.getName());
                 txtStatus.setText(this.lessonDTO.getStatus());
-                txtDuration.setText(this.lessonDTO.getStart_time().toString() + " - " + this.lessonDTO.getEnd_time().toString());
+                txtStartDuration.setText(formatDateHuman(this.lessonDTO.getStart_time()) + ", Time: " + formatTime(this.lessonDTO.getStart_time()));
+                txtEndDuration.setText(formatDateHuman(this.lessonDTO.getEnd_time()) + ", Time: " + formatTime(this.lessonDTO.getEnd_time()));
 
                 StudentDTO enrolledStudents = lessonBO.getAllStudentsByLessonId(this.lessonDTO.getLessonId());
                 listStdEnrolled.getItems().setAll(enrolledStudents);
@@ -330,6 +342,36 @@ public class LessonMgmtPageController implements Initializable {
     }
 
     public void deleteLesson(ActionEvent actionEvent) {
+        if (lessonDTO == null) {
+            AlertUtil.setErrorAlert("Please select a lesson to delete");
+            return;
+        }
+
+        try {
+            if (AlertUtil.setConfirmationAlert("Delete Lesson", "Are you sure you want to delete this lesson?")) {
+                if (lessonBO.delete(lessonDTO.getLessonId())) {
+                    RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.LESSONS, true);
+                    AlertUtil.setInfoAlert("Lesson deleted successfully");
+                    clearForm();
+                } else {
+                    AlertUtil.setErrorAlert("Failed to delete lesson");
+                }
+            }
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Error occurred while deleting lesson");
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void clearForm() {
+        txtLsnName.clear();
+        txtStatus.clear();
+        txtStartDuration.clear();
+        txtEndDuration.clear();
+        listStdEnrolled.getItems().clear();
+        listInsAssigned.getItems().clear();
+        listCoursesAssigned.getItems().clear();
+        lessonDTO = null;
     }
 
     public void editSchedule(ActionEvent actionEvent) {
@@ -339,7 +381,7 @@ public class LessonMgmtPageController implements Initializable {
         }
 
         if (txtLsnName.getText().isEmpty() || txtStatus.getText().isEmpty()
-                || txtDuration.getText().isEmpty()) {
+                || txtStartDuration.getText().isEmpty() || txtEndDuration.getText().isEmpty()) {
             AlertUtil.setErrorAlert("Please fill all fields");
             return;
         }
@@ -347,9 +389,20 @@ public class LessonMgmtPageController implements Initializable {
         try {
             lessonDTO.setName(txtLsnName.getText());
             lessonDTO.setStatus(txtStatus.getText());
-            String[] times = txtDuration.getText().split(" - ");
-            lessonDTO.setStart_time(Timestamp.valueOf(times[0].trim()));
-            lessonDTO.setEnd_time(Timestamp.valueOf(times[1].trim()));
+
+            LocalDate startDate = lessonDTO.getStart_time().toLocalDateTime().toLocalDate();
+            LocalDate endDate = lessonDTO.getEnd_time().toLocalDateTime().toLocalDate();
+
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+
+            LocalTime startTime = LocalTime.parse(
+                    txtStartDuration.getText().split(", Time: ")[1].trim(), timeFormatter);
+
+            LocalTime endTime = LocalTime.parse(
+                    txtEndDuration.getText().split(", Time: ")[1].trim(), timeFormatter);
+
+            lessonDTO.setStart_time(Timestamp.valueOf(LocalDateTime.of(startDate, startTime)));
+            lessonDTO.setEnd_time(Timestamp.valueOf(LocalDateTime.of(endDate, endTime)));
 
             if (schedulingBO.updateScheduleLesson(lessonDTO)) {
                 RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.LESSONS, true);
@@ -359,11 +412,45 @@ public class LessonMgmtPageController implements Initializable {
                 AlertUtil.setErrorAlert("Failed to update lesson schedule");
             }
         } catch (Exception e) {
-            AlertUtil.setErrorAlert("Error occurred while updating lesson schedule");
+            AlertUtil.setErrorAlert("Error occurred while updating lesson schedule: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
-
     }
 
 
+    private String formatDate(Timestamp timestamp) {
+        if (timestamp == null) return "";
+        return timestamp.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    private String getDayWithSuffix(int day) {
+        if (day >= 11 && day <= 13) {
+            return day + "th";
+        }
+        switch (day % 10) {
+            case 1:  return day + "st";
+            case 2:  return day + "nd";
+            case 3:  return day + "rd";
+            default: return day + "th";
+        }
+    }
+
+    private String formatDateMachine(Timestamp timestamp) {
+        if (timestamp == null) return "";
+        return timestamp.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    private String formatDateHuman(Timestamp timestamp) {
+        if (timestamp == null) return "";
+        var dt = timestamp.toLocalDateTime();
+        String month = dt.getMonth().getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.ENGLISH);
+        String dayWithSuffix = getDayWithSuffix(dt.getDayOfMonth());
+        return month + " " + dayWithSuffix + " " + dt.getYear();
+    }
+
+    private String formatTime(Timestamp timestamp) {
+        if (timestamp == null) return "";
+        return timestamp.toLocalDateTime().format(DateTimeFormatter.ofPattern("hh:mm a"));
+    }
 }
