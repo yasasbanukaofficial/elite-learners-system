@@ -27,7 +27,7 @@ public class UserDAOImpl implements UserDAO {
     public String getLastId() throws Exception {
         try (Session session = factoryConfiguration.getSession()) {
             Query<String> query = session.createQuery("select u.id from User u order by u.id desc", String.class).setMaxResults(1);
-            return query.list() == null ? null : query.list().getFirst();
+            return query.list().isEmpty() ? null : query.list().getFirst();
         }
     }
 
@@ -101,13 +101,19 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean existsByField(String field, String fieldValue) throws Exception {
-        CriteriaBuilder criteriaBuilder = factoryConfiguration.getSession().getCriteriaBuilder();
-        CriteriaQuery<User> userCriteriaQuery = criteriaBuilder.createQuery(User.class);
-        Root<User> root = userCriteriaQuery.from(User.class);
-        userCriteriaQuery.select(root).where(criteriaBuilder.equal(root.get(field), fieldValue));
-        Query<User> query = factoryConfiguration.getSession().createQuery(userCriteriaQuery);
-        return !query.getResultList().isEmpty();
+        try (Session session = factoryConfiguration.getSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+            Root<User> root = cq.from(User.class);
+
+            cq.select(cb.count(root))
+                    .where(cb.equal(root.get(field), fieldValue));
+
+            Long count = session.createQuery(cq).getSingleResult();
+            return count > 0;
+        }
     }
+
 
 
 }

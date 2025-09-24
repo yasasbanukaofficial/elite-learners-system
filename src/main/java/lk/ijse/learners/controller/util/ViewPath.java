@@ -16,6 +16,7 @@ public enum ViewPath {
     ADD_INSTRUCTOR_FORM("AddInstructorForm.fxml"),
     ADD_LESSON_FORM("AddLessonForm.fxml"),
     ADD_QUERY_FORM("AddQueryForm.fxml"),
+    ADD_USER_FORM("AddUserForm.fxml"),
 
     CHOOSE_COURSE_FORM("ChooseCourseForm.fxml"),
     EDIT_ENROLLED_COURSES("EditEnrolledCourses.fxml"),
