@@ -87,4 +87,14 @@ public class UserBOImpl implements UserBO {
         }
         return String.format(prefix, 1);
     }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return userDAO.existsByUsername(username);
+    }
+
+    @Override
+    public Optional<User> findByName(String username) {
+        return userDAO.findByName(username);
+    }
 }

@@ -17,6 +17,7 @@ import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.UserDTO;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -102,7 +103,6 @@ public class UserMgmtPageController implements Initializable {
                             txtEmail.setText(user.getEmail());
                             txtContact.setText(user.getContactNumber());
                             txtRole.setText(user.getRole());
-                            userPassword.setText(user.getPassword());
                             txtAge.setText(user.getAge());
                         });
 
@@ -163,13 +163,14 @@ public class UserMgmtPageController implements Initializable {
         String contact = txtContact.getText().trim();
         String role = txtRole.getText().trim();
         String password = userPassword.getText().trim();
+        String hashedPw = BCrypt.hashpw(password, BCrypt.gensalt(10));
         String age = txtAge.getText().trim();
 
         boolean unchanged = fullName.equals(userDTO.getName()) &&
                 email.equals(userDTO.getEmail()) &&
                 contact.equals(userDTO.getContactNumber()) &&
                 role.equals(userDTO.getRole()) &&
-                password.equals(userDTO.getPassword()) &&
+                BCrypt.checkpw(password, userDTO.getPassword()) &&
                 age.equals(userDTO.getAge());
 
         if (unchanged) {
@@ -184,7 +185,7 @@ public class UserMgmtPageController implements Initializable {
                         fullName,
                         age,
                         email,
-                        password,
+                        hashedPw,
                         contact,
                         role
                 );
@@ -192,6 +193,8 @@ public class UserMgmtPageController implements Initializable {
                 if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to update user details ?")) {
                     if (userBO.update(updatedUserDTO)) {
                         RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.USERS, true);
+                        textField.clear();
+                        userPassword.clear();
                     } else {
                         AlertUtil.setErrorAlert("Failed to update user");
                     }

@@ -13,6 +13,7 @@ import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.UserDTO;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -70,6 +71,8 @@ public class AddUserFormController implements Initializable {
         String password = passwordField.isVisible() ? passwordField.getText() : textField.getText();
         String confirmPassword = confirmpasswordfield.isVisible() ? confirmpasswordfield.getText() : confirmTxtField.getText();
 
+        String hashedPw = BCrypt.hashpw(password, BCrypt.gensalt(10));
+
         if (validateUserDetails(name, age, email, contact, password, confirmPassword)) {
             try {
                 if (!userBO.save(new UserDTO(
@@ -77,7 +80,7 @@ public class AddUserFormController implements Initializable {
                         name,
                         age,
                         email,
-                        password,
+                        hashedPw,
                         contact,
                         "USER"
                 ))) {
@@ -94,38 +97,80 @@ public class AddUserFormController implements Initializable {
     }
 
     private boolean validateUserDetails(String name, String age, String email, String contact, String password, String confirmPassword) {
-        if (!Auth.areRequiredFieldsFilled(name, age, email, contact, password, confirmPassword)) {
-            AlertUtil.setErrorAlert("All fields must be filled!");
-            return false;
+        StringBuilder errorMsg = new StringBuilder();
+        boolean isValid = true;
+
+        String emailPattern = "^[A-Za-z0-9+_.-]+@(.+)$";
+        String contactPattern = "^\\d{10}$";
+
+        String errorStyle = "-fx-border-color: #ce0101; -fx-background-color: transparent; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-background-radius: 10px";
+
+        if (!Auth.areRequiredFieldsFilled(name)) {
+            errorMsg.append("* Name must not be empty\n");
+            txtUserName.setStyle(errorStyle);
+            isValid = false;
         }
 
-        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            AlertUtil.setErrorAlert("Invalid email format!");
-            return false;
-        }
-
-        if (!contact.matches("^\\d{10}$")) {
-            AlertUtil.setErrorAlert("Contact number should be 10 digits!");
-            return false;
-        }
-
-        try {
-            int ageValue = Integer.parseInt(age);
-            if (ageValue < 18 || ageValue > 65) {
-                AlertUtil.setErrorAlert("Age must be between 18 and 65!");
-                return false;
+        if (!Auth.areRequiredFieldsFilled(age)) {
+            errorMsg.append("* Age must not be empty\n");
+            txtAge.setStyle(errorStyle);
+            isValid = false;
+        } else {
+            try {
+                int ageValue = Integer.parseInt(age);
+                if (ageValue < 18 || ageValue > 65) {
+                    errorMsg.append("* Age must be between 18 and 65\n");
+                    txtAge.setStyle(errorStyle);
+                    isValid = false;
+                }
+            } catch (NumberFormatException e) {
+                errorMsg.append("* Invalid age format\n");
+                txtAge.setStyle(errorStyle);
+                isValid = false;
             }
-        } catch (NumberFormatException e) {
-            AlertUtil.setErrorAlert("Invalid age format!");
-            return false;
         }
 
-        if (!password.equals(confirmPassword)) {
-            AlertUtil.setErrorAlert("Passwords do not match!");
-            return false;
+        if (!Auth.areRequiredFieldsFilled(email)) {
+            errorMsg.append("* Email must not be empty\n");
+            txtEmail.setStyle(errorStyle);
+            isValid = false;
+        } else if (!email.matches(emailPattern)) {
+            errorMsg.append("* Invalid email format\n");
+            txtEmail.setStyle(errorStyle);
+            isValid = false;
         }
 
-        return true;
+        if (!Auth.areRequiredFieldsFilled(contact)) {
+            errorMsg.append("* Contact number must not be empty\n");
+            txtContactNumber.setStyle(errorStyle);
+            isValid = false;
+        } else if (!contact.matches(contactPattern)) {
+            errorMsg.append("* Contact number should be 10 digits\n");
+            txtContactNumber.setStyle(errorStyle);
+            isValid = false;
+        }
+
+        if (!Auth.areRequiredFieldsFilled(password, confirmPassword)) {
+            errorMsg.append("* Password fields must not be empty\n");
+            passwordField.setStyle(errorStyle);
+            confirmpasswordfield.setStyle(errorStyle);
+            textField.setStyle(errorStyle);
+            confirmTxtField.setStyle(errorStyle);
+            isValid = false;
+        } else if (!password.equals(confirmPassword)) {
+            errorMsg.append("* Passwords do not match\n");
+            passwordField.setStyle(errorStyle);
+            confirmpasswordfield.setStyle(errorStyle);
+            textField.setStyle(errorStyle);
+            confirmTxtField.setStyle(errorStyle);
+            isValid = false;
+        }
+    
+        if (!isValid) {
+            AlertUtil.setErrorAlert("Please solve these issues before proceeding \n\n" + errorMsg.toString());
+        }
+    
+        return isValid;
     }
 
     private String loadNextId() {

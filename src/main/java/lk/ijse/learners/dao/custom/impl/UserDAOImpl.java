@@ -114,6 +114,31 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    @Override
+    public boolean existsByUsername(String username) {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<Long> query = session.createQuery(
+                    "SELECT COUNT(u) FROM User u WHERE LOWER(u.name) = LOWER(:username)",
+                    Long.class
+            );
+            query.setParameter("username", username);
+            return query.uniqueResult() > 0;
+        }
+    }
+
+    @Override
+    public Optional<User> findByName(String username) {
+        try (Session session = factoryConfiguration.getSession()) {
+            Query<User> query = session.createQuery(
+                    "SELECT u FROM User u WHERE LOWER(u.name) = LOWER(:username)",
+                    User.class
+            );
+            query.setParameter("username", username);
+            query.setMaxResults(1);
+
+            return query.uniqueResultOptional();
+        }
+    }
 
 
 }

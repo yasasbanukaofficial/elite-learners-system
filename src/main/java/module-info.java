@@ -9,6 +9,7 @@ module lk.ijse.learners {
     requires javafx.graphics;
     requires java.sql;
     requires java.desktop;
+    requires spring.security.crypto;
 //    requires lk.ijse.learners;
 
 
