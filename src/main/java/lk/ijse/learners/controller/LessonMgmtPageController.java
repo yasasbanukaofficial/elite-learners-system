@@ -13,6 +13,7 @@ import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.bo.custom.InstructorBO;
 import lk.ijse.learners.bo.custom.LessonBO;
 import lk.ijse.learners.bo.custom.SchedulingBO;
+import lk.ijse.learners.bo.custom.StudentBO;
 import lk.ijse.learners.bo.custom.impl.SchedulingBOImpl;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.ViewPath;
@@ -45,6 +46,7 @@ public class LessonMgmtPageController implements Initializable {
     LessonBO lessonBO = (LessonBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.LESSON);
     SchedulingBO schedulingBO = (SchedulingBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.SCHEDULE);
     InstructorBO instructorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
+    StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
     EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
     private LessonDTO lessonDTO;
     
@@ -259,7 +261,26 @@ public class LessonMgmtPageController implements Initializable {
     }
 
     public void editStdList(MouseEvent mouseEvent) {
-        
+        try {
+            if (lessonDTO == null) {
+                AlertUtil.setErrorAlert("Please select a lesson first");
+                return;
+            }
+
+            Optional<StudentDTO> student = studentBO.findById(lessonDTO.getStudentId());
+            if (student.isEmpty()) {
+                AlertUtil.setErrorAlert("No students found for this lesson");
+                return;
+            }
+
+            enrollmentContext.setLessonDTO(lessonDTO);
+            enrollmentContext.setStudentDTO(student.get());
+
+            WindowManagerUtil.openForm(ViewPath.EDIT_ASSIGNED_STUDENTS_TO_LSN.getPath(), false);
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Error loading student details");
+            throw new RuntimeException(e);
+        }
     }
 
     public void editInsList(MouseEvent mouseEvent) {
@@ -285,7 +306,8 @@ public class LessonMgmtPageController implements Initializable {
         }
     }
 
-
+    public void editCourseList(MouseEvent mouseEvent) {
+    }
 
     public void deleteLesson(ActionEvent actionEvent) {
     }
@@ -323,6 +345,5 @@ public class LessonMgmtPageController implements Initializable {
 
     }
 
-    public void editCourseList(MouseEvent mouseEvent) {
-    }
+
 }
