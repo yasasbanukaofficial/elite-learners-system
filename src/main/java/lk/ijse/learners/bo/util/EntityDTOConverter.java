@@ -11,6 +11,54 @@ import java.util.List;
 public class EntityDTOConverter {
     private final StudentDAO studentDAO = (StudentDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.STUDENT);
 
+    public UserDTO getUserDTO(User user) throws Exception {
+        return new UserDTO(
+                user.getUserId(),
+                user.getName(),
+                user.getAge(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getContactNumber(),
+                user.getRole()
+        );
+    }
+
+    public List<UserDTO> toUserDTOList(List<User> userList) throws Exception {
+        List<UserDTO> userDTOList = new ArrayList<>();
+        userList.forEach(user -> {
+            try {
+                userDTOList.add(getUserDTO(user));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return userDTOList;
+    }
+
+    public User getUserEntity(UserDTO userDTO) throws Exception {
+        return new User(
+                userDTO.getUserId(),
+                userDTO.getName(),
+                userDTO.getAge(),
+                userDTO.getEmail(),
+                userDTO.getPassword(),
+                userDTO.getContactNumber(),
+                userDTO.getRole()
+        );
+    }
+
+    public List<User> toUserEntityList(List<UserDTO> userDTOList) throws Exception {
+        List<User> userEntityList = new ArrayList<>();
+        userDTOList.forEach(userDTO -> {
+            try {
+                userEntityList.add(getUserEntity(userDTO));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return userEntityList;
+    }
+
 
     public StudentDTO getStudentDTO(Student student) throws Exception {
         return new StudentDTO(
@@ -274,5 +322,7 @@ public class EntityDTOConverter {
         });
         return courseEntityList;
     }
+    
+    
 
 }

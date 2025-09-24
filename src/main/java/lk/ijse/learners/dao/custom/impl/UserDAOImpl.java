@@ -1,5 +1,8 @@
 package lk.ijse.learners.dao.custom.impl;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import lk.ijse.learners.config.FactoryConfiguration;
 import lk.ijse.learners.dao.custom.UserDAO;
 import lk.ijse.learners.entity.User;
@@ -95,4 +98,16 @@ public class UserDAOImpl implements UserDAO {
             return Optional.ofNullable(user);
         }
     }
+
+    @Override
+    public boolean existsByField(String field, String fieldValue) throws Exception {
+        CriteriaBuilder criteriaBuilder = factoryConfiguration.getSession().getCriteriaBuilder();
+        CriteriaQuery<User> userCriteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = userCriteriaQuery.from(User.class);
+        userCriteriaQuery.select(root).where(criteriaBuilder.equal(root.get(field), fieldValue));
+        Query<User> query = factoryConfiguration.getSession().createQuery(userCriteriaQuery);
+        return !query.getResultList().isEmpty();
+    }
+
+
 }
