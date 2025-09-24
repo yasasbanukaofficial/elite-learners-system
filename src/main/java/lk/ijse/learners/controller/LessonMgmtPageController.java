@@ -307,6 +307,26 @@ public class LessonMgmtPageController implements Initializable {
     }
 
     public void editCourseList(MouseEvent mouseEvent) {
+        try {
+            if (lessonDTO == null) {
+                AlertUtil.setErrorAlert("Please select a lesson first");
+                return;
+            }
+
+            CourseDTO assignedCourse = lessonBO.getAllCoursesByLessonId(lessonDTO.getLessonId());
+            if (assignedCourse == null) {
+                AlertUtil.setErrorAlert("No course found for this lesson");
+                return;
+            }
+
+            enrollmentContext.setLessonDTO(lessonDTO);
+            enrollmentContext.setCourseDTO(assignedCourse);
+
+            WindowManagerUtil.openForm(ViewPath.EDIT_ENROLLED_COURSES_TO_LSN.getPath(), false);
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Error loading course details");
+            throw new RuntimeException(e);
+        }
     }
 
     public void deleteLesson(ActionEvent actionEvent) {

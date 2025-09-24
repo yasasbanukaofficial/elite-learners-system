@@ -23,6 +23,7 @@ public enum ViewPath {
     EDIT_ASSIGNED_INSTRUCTORS("EditAssignedInstructors.fxml"),
     EDIT_ASSIGNED_INSTRUCTORS_TO_LSN("EditAssignedInstructorsToLessons.fxml"),
     EDIT_ASSIGNED_STUDENTS_TO_LSN("EditEnrolledStudentsToLessons.fxml"),
+    EDIT_ENROLLED_COURSES_TO_LSN("EditEnrolledCoursesToLessons.fxml"),
     EDIT_ENROLLED_STUDENTS("EditEnrolledStudents.fxml");
 
     private final String fileName;
