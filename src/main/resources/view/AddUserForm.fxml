@@ -123,7 +123,7 @@
                                     <HBox.margin>
                                        <Insets bottom="5.0" />
                                     </HBox.margin></PasswordField>
-                                   <TextField fx:id="textField" managed="false" promptText="Password" stylesheets="@../styles/text-field.css" visible="false">
+                                   <TextField fx:id="textField" managed="false" promptText="Password" stylesheets="@../styles/text-field.css" visible="false" HBox.hgrow="ALWAYS">
                                     <font>
                                        <Font size="16.0" />
                                     </font></TextField>
@@ -148,7 +148,7 @@
                                           <Font size="16.0" />
                                        </font>
                                     </PasswordField>
-                                    <TextField fx:id="confirmTxtField" managed="false" promptText="Password" stylesheets="@../styles/text-field.css" visible="false">
+                                    <TextField fx:id="confirmTxtField" managed="false" promptText="Password" stylesheets="@../styles/text-field.css" visible="false" HBox.hgrow="ALWAYS">
                                        <font>
                                           <Font size="16.0" />
                                        </font>

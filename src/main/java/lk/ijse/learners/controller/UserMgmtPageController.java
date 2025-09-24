@@ -15,19 +15,18 @@ import lk.ijse.learners.controller.util.ViewPath;
 import lk.ijse.learners.bo.custom.UserBO;
 import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.controller.util.AlertUtil;
-import lk.ijse.learners.controller.util.ViewPath;
 import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.UserDTO;
 
 import java.net.URL;
-import java.sql.Date;
 import java.util.ResourceBundle;
 
 public class UserMgmtPageController implements Initializable {
 
     private final UserBO userBO = (UserBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.USER);
     public StackPane btnOpenUserForm;
-    private UserDTO userDTO;
+    public TextField textField;
+    public CheckBox showPassword;
 
     public AnchorPane ancUser;
     public TextField txtUserName;
@@ -35,11 +34,35 @@ public class UserMgmtPageController implements Initializable {
     public TextField txtEmail;
     public TextField txtAge;
     public TextField txtContact;
-    public Label btnShowPassword;
     public PasswordField userPassword;
     public Button btnDeleteUser;
     public Button btnEdit;
     public ListView <UserDTO> listUsers;
+
+    private UserDTO userDTO;
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setupLists();
+        textField.managedProperty().bind(showPassword.selectedProperty());
+        textField.visibleProperty().bind(showPassword.selectedProperty());
+        userPassword.managedProperty().bind(showPassword.selectedProperty().not());
+        userPassword.visibleProperty().bind(showPassword.selectedProperty().not());
+        textField.textProperty().bindBidirectional(userPassword.textProperty());
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.USERS).addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                Platform.runLater(() -> {
+                    try {
+                        listUsers.getItems().setAll(userBO.getAll());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.USERS, false);
+                });
+            }
+        });
+    }
 
     private void setupLists() {
         try {
@@ -94,8 +117,6 @@ public class UserMgmtPageController implements Initializable {
 
     }
 
-
-
     private boolean validateUserDetails(String fullName, String email, String contact, String role, String password) {
         if (fullName.isEmpty() || email.isEmpty() || contact.isEmpty() || role.isEmpty() || password.isEmpty() || txtAge.getText().trim().isEmpty()) {
             AlertUtil.setErrorAlert("Please fill all fields");
@@ -122,22 +143,7 @@ public class UserMgmtPageController implements Initializable {
         return true;
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setupLists();
-        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.USERS).addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                Platform.runLater(() -> {
-                    try {
-                        listUsers.getItems().setAll(userBO.getAll());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                    RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.USERS, false);
-                });
-            }
-        });
-    }
+
 
     public void deleteUser(ActionEvent event) {
         try {
