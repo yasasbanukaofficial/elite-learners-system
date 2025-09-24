@@ -42,4 +42,31 @@ public class SchedulingBOImpl implements SchedulingBO {
         }
         return false;
     }
+
+    public boolean updateScheduleLesson(LessonDTO lessonDTO) {
+        Session session = FactoryConfiguration.getInstance().getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        try {
+            Optional<InstructorDTO> optionalInstructorDTO = instructorBO.findById(lessonDTO.getInstructorId());
+            InstructorDTO instructorDTO = optionalInstructorDTO.get();
+
+            LocalDateTime currentTime = LocalDateTime.now();
+            LocalDateTime lessonEndTime = lessonDTO.getEnd_time().toLocalDateTime();
+
+            instructorDTO.setAvailability(currentTime.isAfter(lessonEndTime) ? "available" : "not available");
+            if (!instructorBO.update(instructorDTO)) {
+                tx.rollback();
+                return false;
+            }
+
+            if (lessonBO.update(lessonDTO)) {
+                tx.commit();
+                return true;
+            }
+            tx.rollback();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
 }

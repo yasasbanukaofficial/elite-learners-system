@@ -45,18 +45,19 @@ public class AddLessonFormController implements Initializable {
     public ListView <String> availableCourses;
     public Button btnCancel;
     public Button btnAddLesson;
-
-    private final LessonBO lessonBO = (LessonBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.LESSON);
-    private final CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
-    private final InstructorBO instructorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
-    private final StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
-    SchedulingBO schedulingBO = new SchedulingBOImpl();
     public Spinner spinnerStartHr;
     public Spinner spinnerStartMin;
     public Spinner spinnerEndHr;
     public Spinner spinnerEndMin;
     public ListView <String> choosenStudents;
     public ListView <String> listStudents;
+
+    private final LessonBO lessonBO = (LessonBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.LESSON);
+    private final CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
+    private final InstructorBO instructorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
+    private final StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
+    private final SchedulingBO schedulingBO = (SchedulingBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.SCHEDULE);
+
     private List<String> selectedInstructors = new ArrayList<>();
     private List<String> selectedCourses = new ArrayList<>();
     private List<String> selectedStudents = new ArrayList<>();

@@ -8,7 +8,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lk.ijse.learners.bo.BOFactory;
+import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.bo.custom.LessonBO;
+import lk.ijse.learners.bo.custom.SchedulingBO;
+import lk.ijse.learners.bo.custom.impl.SchedulingBOImpl;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.ViewPath;
 import lk.ijse.learners.controller.util.WindowManagerUtil;
@@ -17,6 +20,7 @@ import lk.ijse.learners.dto.InstructorDTO;
 import lk.ijse.learners.dto.LessonDTO;
 import lk.ijse.learners.dto.StudentDTO;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +28,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class LessonMgmtPageController implements Initializable {
-    private LessonDTO lessonDTO;
     public AnchorPane ancLesson;
     public StackPane btnOpenLessonForm;
     public TextField txtLsnName;
@@ -38,9 +41,59 @@ public class LessonMgmtPageController implements Initializable {
     public ListView <CourseDTO> listCoursesAssigned;
 
     LessonBO lessonBO = (LessonBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.LESSON);
+    SchedulingBO schedulingBO = (SchedulingBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.SCHEDULE);
+    private LessonDTO lessonDTO;
+    
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupLists();
+
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.LESSONS)
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        setupLists();
+                        RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.LESSONS, false);
+                    }
+                });
+
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.STUDENT_ENROLLED_LIST)
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue && lessonDTO != null) {
+                        try {
+                            StudentDTO enrolledStudents = lessonBO.getAllStudentsByLessonId(lessonDTO.getLessonId());
+                            listStdEnrolled.getItems().setAll(enrolledStudents);
+                            RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.STUDENT_ENROLLED_LIST, false);
+                        } catch (Exception e) {
+                            AlertUtil.setErrorAlert("Failed to refresh student list");
+                        }
+                    }
+                });
+
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.COURSES_ASSIGNED_LIST)
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue && lessonDTO != null) {
+                        try {
+                            CourseDTO assignedCourse = lessonBO.getAllCoursesByLessonId(lessonDTO.getLessonId());
+                            listCoursesAssigned.getItems().setAll(assignedCourse);
+                            RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES_ASSIGNED_LIST, false);
+                        } catch (Exception e) {
+                            AlertUtil.setErrorAlert("Failed to refresh course list");
+                        }
+                    }
+                });
+
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.INSTRUCTOR_ENROLLED_LIST)
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue && lessonDTO != null) {
+                        try {
+                            InstructorDTO assignedInstructor = lessonBO.getAllInstructorsByLessonId(lessonDTO.getLessonId());
+                            listInsAssigned.getItems().setAll(assignedInstructor);
+                            RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.INSTRUCTOR_ENROLLED_LIST, false);
+                        } catch (Exception e) {
+                            AlertUtil.setErrorAlert("Failed to refresh instructor list");
+                        }
+                    }
+                });
     }
 
     public void setupLists() {
@@ -202,6 +255,7 @@ public class LessonMgmtPageController implements Initializable {
     }
 
     public void editStdList(MouseEvent mouseEvent) {
+        
     }
 
     public void editInsList(MouseEvent mouseEvent) {
@@ -211,6 +265,36 @@ public class LessonMgmtPageController implements Initializable {
     }
 
     public void editSchedule(ActionEvent actionEvent) {
+        if (lessonDTO == null) {
+            AlertUtil.setErrorAlert("Please select a lesson to edit");
+            return;
+        }
+
+        if (txtLsnName.getText().isEmpty() || txtStatus.getText().isEmpty()
+                || txtDuration.getText().isEmpty()) {
+            AlertUtil.setErrorAlert("Please fill all fields");
+            return;
+        }
+
+        try {
+            lessonDTO.setName(txtLsnName.getText());
+            lessonDTO.setStatus(txtStatus.getText());
+            String[] times = txtDuration.getText().split(" - ");
+            lessonDTO.setStart_time(Timestamp.valueOf(times[0].trim()));
+            lessonDTO.setEnd_time(Timestamp.valueOf(times[1].trim()));
+
+            if (schedulingBO.updateScheduleLesson(lessonDTO)) {
+                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.LESSONS, true);
+                AlertUtil.setInfoAlert("Lesson schedule updated successfully");
+                setupLists();
+            } else {
+                AlertUtil.setErrorAlert("Failed to update lesson schedule");
+            }
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Error occurred while updating lesson schedule");
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void editCourseList(MouseEvent mouseEvent) {
