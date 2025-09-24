@@ -8,7 +8,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lk.ijse.learners.bo.BOFactory;
+import lk.ijse.learners.bo.context.EnrollmentContext;
 import lk.ijse.learners.bo.context.RefreshContext;
+import lk.ijse.learners.bo.custom.InstructorBO;
 import lk.ijse.learners.bo.custom.LessonBO;
 import lk.ijse.learners.bo.custom.SchedulingBO;
 import lk.ijse.learners.bo.custom.impl.SchedulingBOImpl;
@@ -42,6 +44,8 @@ public class LessonMgmtPageController implements Initializable {
 
     LessonBO lessonBO = (LessonBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.LESSON);
     SchedulingBO schedulingBO = (SchedulingBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.SCHEDULE);
+    InstructorBO instructorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
+    EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
     private LessonDTO lessonDTO;
     
     @Override
@@ -259,7 +263,29 @@ public class LessonMgmtPageController implements Initializable {
     }
 
     public void editInsList(MouseEvent mouseEvent) {
+        try {
+            if (lessonDTO == null) {
+                AlertUtil.setErrorAlert("Please select a lesson first");
+                return;
+            }
+
+            Optional<InstructorDTO> instructor = instructorBO.findById(lessonDTO.getInstructorId());
+            if (instructor.isEmpty()) {
+                AlertUtil.setErrorAlert("No instructor found for this lesson");
+                return;
+            }
+
+            enrollmentContext.setLessonDTO(lessonDTO);
+            enrollmentContext.setInstructorDTO(instructor.get());
+
+            WindowManagerUtil.openForm(ViewPath.EDIT_ASSIGNED_INSTRUCTORS_TO_LSN.getPath(), false);
+        } catch (Exception e) {
+            AlertUtil.setErrorAlert("Error loading instructor details");
+            throw new RuntimeException(e);
+        }
     }
+
+
 
     public void deleteLesson(ActionEvent actionEvent) {
     }

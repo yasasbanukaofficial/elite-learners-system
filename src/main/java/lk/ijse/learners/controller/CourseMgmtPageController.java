@@ -2,17 +2,12 @@ package lk.ijse.learners.controller;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.context.EnrollmentContext;
 import lk.ijse.learners.bo.context.RefreshContext;
@@ -27,7 +22,6 @@ import lk.ijse.learners.dto.CourseDTO;
 import lk.ijse.learners.dto.InstructorDTO;
 import lk.ijse.learners.dto.LessonDTO;
 import lk.ijse.learners.dto.StudentDTO;
-import lk.ijse.learners.tm.CourseTM;
 
 import java.io.IOException;
 import java.net.URL;
@@ -52,7 +46,7 @@ public class CourseMgmtPageController implements Initializable {
     public ListView <LessonDTO> listLesAssigned;
 
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
-    InstructorBO instuctorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
+    InstructorBO instructorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
     StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
     private InstructorDTO instructorDTO;
     private CourseDTO courseDTO;

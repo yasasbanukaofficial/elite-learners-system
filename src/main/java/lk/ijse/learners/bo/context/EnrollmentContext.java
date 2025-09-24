@@ -1,9 +1,6 @@
 package lk.ijse.learners.bo.context;
 
-import lk.ijse.learners.dto.CourseDTO;
-import lk.ijse.learners.dto.InstructorDTO;
-import lk.ijse.learners.dto.PaymentDTO;
-import lk.ijse.learners.dto.StudentDTO;
+import lk.ijse.learners.dto.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +18,7 @@ public class EnrollmentContext {
     private StudentDTO studentDTO;
     private PaymentDTO paymentDTO;
     private InstructorDTO instructorDTO;
+    private LessonDTO lessonDTO;
     private CourseDTO courseDTO;
     private List<CourseDTO> courseDTOList;
     private List<StudentDTO> stdDTOList;
@@ -34,6 +32,7 @@ public class EnrollmentContext {
         paymentDTO = null;
         instructorDTO = null;
         courseDTO = null;
+        lessonDTO = null;
         courseDTOList = null;
         stdDTOList = null;
     }

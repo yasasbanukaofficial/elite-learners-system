@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface SchedulingBO extends SuperBO {
     boolean scheduleLesson(LessonDTO lessonDTO);
     boolean updateScheduleLesson(LessonDTO lessonDTO);
+    boolean removeInstructorFromLesson(LessonDTO lessonDTO);
+    boolean cancelLesson(String lessonId);
 }

@@ -69,4 +69,40 @@ public class SchedulingBOImpl implements SchedulingBO {
         }
         return false;
     }
+
+    @Override
+    public boolean removeInstructorFromLesson(LessonDTO lessonDTO) {
+        Session session = FactoryConfiguration.getInstance().getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        try {
+            if (lessonDTO.getInstructorId() != null) {
+                Optional<InstructorDTO> optionalInstructorDTO = instructorBO.findById(lessonDTO.getInstructorId());
+                if (optionalInstructorDTO.isPresent()) {
+                    InstructorDTO instructorDTO = optionalInstructorDTO.get();
+                    instructorDTO.setAvailability("available");
+                    if (!instructorBO.update(instructorDTO)) {
+                        tx.rollback();
+                        return false;
+                    }
+                }
+            }
+
+            lessonDTO.setInstructorId(null);
+            if (lessonBO.update(lessonDTO)) {
+                tx.commit();
+                return true;
+            }
+            tx.rollback();
+        } catch (Exception e) {
+            tx.rollback();
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean cancelLesson(String lessonId) {
+        return false;
+    }
+
 }
