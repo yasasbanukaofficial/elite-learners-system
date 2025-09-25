@@ -39,8 +39,6 @@ public class LessonMgmtPageController implements Initializable {
     public StackPane btnOpenLessonForm;
     public TextField txtLsnName;
     public TextField txtStatus;
-    public TextField txtStartDuration;
-    public TextField txtEndDuration;
     public ListView <StudentDTO> listStdEnrolled;
     public ListView <InstructorDTO> listInsAssigned;
     public Button btnDeleteLesson;
@@ -368,7 +366,7 @@ public class LessonMgmtPageController implements Initializable {
 
         try {
             if (AlertUtil.setConfirmationAlert("Delete Lesson", "Are you sure you want to delete this lesson?")) {
-                if (lessonBO.delete(lessonDTO.getLessonId())) {
+                if (schedulingBO.deleteLesson(lessonDTO.getLessonId())) {
                     RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.LESSONS, true);
                     AlertUtil.setInfoAlert("Lesson deleted successfully");
                     clearForm();
@@ -385,8 +383,12 @@ public class LessonMgmtPageController implements Initializable {
     private void clearForm() {
         txtLsnName.clear();
         txtStatus.clear();
-        txtStartDuration.clear();
-        txtEndDuration.clear();
+        dpStartTime.setValue(null);
+        dpEndTime.setValue(null);
+        spinnerStartHr.getValueFactory().setValue(0);
+        spinnerStartMin.getValueFactory().setValue(0);
+        spinnerEndHr.getValueFactory().setValue(0);
+        spinnerEndMin.getValueFactory().setValue(0);
         listStdEnrolled.getItems().clear();
         listInsAssigned.getItems().clear();
         listCoursesAssigned.getItems().clear();
@@ -417,6 +419,12 @@ public class LessonMgmtPageController implements Initializable {
             LocalTime endTime = LocalTime.of(spinnerEndHr.getValue(), spinnerEndMin.getValue());
             LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
 
+            // ✅ Validation: End must be after Start
+            if (!endDateTime.isAfter(startDateTime)) {
+                AlertUtil.setErrorAlert("End time must be after start time");
+                return;
+            }
+
             lessonDTO.setStart_time(Timestamp.valueOf(startDateTime));
             lessonDTO.setEnd_time(Timestamp.valueOf(endDateTime));
 
@@ -433,6 +441,7 @@ public class LessonMgmtPageController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
 
 
 

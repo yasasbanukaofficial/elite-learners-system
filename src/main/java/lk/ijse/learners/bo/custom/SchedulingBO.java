@@ -12,6 +12,6 @@ public interface SchedulingBO extends SuperBO {
     boolean scheduleLesson(LessonDTO lessonDTO);
     boolean updateScheduleLesson(LessonDTO lessonDTO);
     boolean removeInstructorFromLesson(LessonDTO lessonDTO);
-    boolean cancelLesson(String lessonId);
+    boolean deleteLesson(String lessonId);
     boolean editEnrolledStudent(LessonDTO lessonDTO, String newStudentId);
 }

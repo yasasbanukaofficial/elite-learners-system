@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import lk.ijse.learners.bo.BOFactory;
+import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.bo.custom.*;
 import lk.ijse.learners.bo.custom.impl.SchedulingBOImpl;
 import lk.ijse.learners.controller.util.AlertUtil;
@@ -85,7 +86,7 @@ public class AddLessonFormController implements Initializable {
         try {
             List<String> instructors = instructorBO.getAllAvailableInstructors();
             if (instructors.isEmpty()) {
-                Platform.runLater(() -> AlertUtil.setErrorAlert("Please add some instructors first!!"));
+                Platform.runLater(() -> AlertUtil.setErrorAlert("Instructors are not available. Please add some instructors first!!"));
                 btnAddLesson.setDisable(true);
                 return;
             }
@@ -247,6 +248,7 @@ public class AddLessonFormController implements Initializable {
                         "scheduled"
                 ))) {
                     AlertUtil.setInfoAlert("Successfully added lesson!");
+                    RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.LESSONS, true);
                     WindowManagerUtil.closeForm(ancAddCourseForm);
                 } else {
                     AlertUtil.setErrorAlert("Failed to add lesson!");
