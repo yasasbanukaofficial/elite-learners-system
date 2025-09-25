@@ -47,6 +47,12 @@ public class LessonMgmtPageController implements Initializable {
     public Button btnReschedule;
     public ListView <LessonDTO> listLessons;
     public ListView <CourseDTO> listCoursesAssigned;
+    public DatePicker dpStartTime;
+    public Spinner<Integer> spinnerStartHr;
+    public Spinner<Integer> spinnerStartMin;
+    public DatePicker dpEndTime;
+    public Spinner<Integer> spinnerEndHr;
+    public Spinner<Integer> spinnerEndMin;
 
     LessonBO lessonBO = (LessonBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.LESSON);
     SchedulingBO schedulingBO = (SchedulingBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.SCHEDULE);
@@ -57,6 +63,10 @@ public class LessonMgmtPageController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        spinnerStartHr.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 9));
+        spinnerStartMin.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+        spinnerEndHr.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 10));
+        spinnerEndMin.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
         setupLists();
 
         RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.LESSONS)
@@ -249,8 +259,16 @@ public class LessonMgmtPageController implements Initializable {
 
                 txtLsnName.setText(this.lessonDTO.getName());
                 txtStatus.setText(this.lessonDTO.getStatus());
-                txtStartDuration.setText(formatDateHuman(this.lessonDTO.getStart_time()) + ", Time: " + formatTime(this.lessonDTO.getStart_time()));
-                txtEndDuration.setText(formatDateHuman(this.lessonDTO.getEnd_time()) + ", Time: " + formatTime(this.lessonDTO.getEnd_time()));
+
+                LocalDateTime startDateTime = this.lessonDTO.getStart_time().toLocalDateTime();
+                dpStartTime.setValue(startDateTime.toLocalDate());
+                spinnerStartHr.getValueFactory().setValue(startDateTime.getHour());
+                spinnerStartMin.getValueFactory().setValue(startDateTime.getMinute());
+
+                LocalDateTime endDateTime = this.lessonDTO.getEnd_time().toLocalDateTime();
+                dpEndTime.setValue(endDateTime.toLocalDate());
+                spinnerEndHr.getValueFactory().setValue(endDateTime.getHour());
+                spinnerEndMin.getValueFactory().setValue(endDateTime.getMinute());
 
                 StudentDTO enrolledStudents = lessonBO.getAllStudentsByLessonId(this.lessonDTO.getLessonId());
                 listStdEnrolled.getItems().setAll(enrolledStudents);
@@ -267,6 +285,7 @@ public class LessonMgmtPageController implements Initializable {
             }
         }
     }
+
 
     public void openLessonForm(MouseEvent mouseEvent) {
         WindowManagerUtil.openForm(ViewPath.ADD_LESSON_FORM.getPath(), false);
@@ -381,7 +400,7 @@ public class LessonMgmtPageController implements Initializable {
         }
 
         if (txtLsnName.getText().isEmpty() || txtStatus.getText().isEmpty()
-                || txtStartDuration.getText().isEmpty() || txtEndDuration.getText().isEmpty()) {
+                || dpStartTime.getValue() == null || dpEndTime.getValue() == null) {
             AlertUtil.setErrorAlert("Please fill all fields");
             return;
         }
@@ -390,19 +409,16 @@ public class LessonMgmtPageController implements Initializable {
             lessonDTO.setName(txtLsnName.getText());
             lessonDTO.setStatus(txtStatus.getText());
 
-            LocalDate startDate = lessonDTO.getStart_time().toLocalDateTime().toLocalDate();
-            LocalDate endDate = lessonDTO.getEnd_time().toLocalDateTime().toLocalDate();
+            LocalDate startDate = dpStartTime.getValue();
+            LocalTime startTime = LocalTime.of(spinnerStartHr.getValue(), spinnerStartMin.getValue());
+            LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
 
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+            LocalDate endDate = dpEndTime.getValue();
+            LocalTime endTime = LocalTime.of(spinnerEndHr.getValue(), spinnerEndMin.getValue());
+            LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
 
-            LocalTime startTime = LocalTime.parse(
-                    txtStartDuration.getText().split(", Time: ")[1].trim(), timeFormatter);
-
-            LocalTime endTime = LocalTime.parse(
-                    txtEndDuration.getText().split(", Time: ")[1].trim(), timeFormatter);
-
-            lessonDTO.setStart_time(Timestamp.valueOf(LocalDateTime.of(startDate, startTime)));
-            lessonDTO.setEnd_time(Timestamp.valueOf(LocalDateTime.of(endDate, endTime)));
+            lessonDTO.setStart_time(Timestamp.valueOf(startDateTime));
+            lessonDTO.setEnd_time(Timestamp.valueOf(endDateTime));
 
             if (schedulingBO.updateScheduleLesson(lessonDTO)) {
                 RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.LESSONS, true);
@@ -417,6 +433,7 @@ public class LessonMgmtPageController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
 
 
     private String formatDate(Timestamp timestamp) {

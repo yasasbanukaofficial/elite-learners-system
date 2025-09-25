@@ -3,8 +3,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -145,11 +147,31 @@
                                           <Insets left="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <TextField fx:id="txtStartDuration" promptText="Sat 9th at 10pm" style="-fx-background-color: transparent;">
-                                       <font>
-                                          <Font name="Candara" size="20.0" />
-                                       </font>
-                                    </TextField>
+                                    <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                       <children>
+                                          <DatePicker fx:id="dpStartTime" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="177.0" promptText="01/01/2001" stylesheets="@../styles/date-picker.css" HBox.hgrow="ALWAYS">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <HBox.margin>
+                                                <Insets top="5.0" />
+                                             </HBox.margin>
+                                          </DatePicker>
+                                          <Spinner fx:id="spinnerStartHr" prefHeight="25.0" prefWidth="57.0" HBox.hgrow="ALWAYS">
+                                             <HBox.margin>
+                                                <Insets top="6.0" />
+                                             </HBox.margin>
+                                          </Spinner>
+                                          <Spinner fx:id="spinnerStartMin" prefHeight="25.0" prefWidth="57.0">
+                                             <HBox.margin>
+                                                <Insets top="6.0" />
+                                             </HBox.margin>
+                                          </Spinner>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
                                  </children>
                               </VBox>
                               <VBox prefHeight="71.0" prefWidth="564.0">
@@ -162,11 +184,28 @@
                                           <Insets left="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <TextField fx:id="txtEndDuration" promptText="Sat 9th at 10pm" style="-fx-background-color: transparent;">
-                                       <font>
-                                          <Font name="Candara" size="20.0" />
-                                       </font>
-                                    </TextField>
+                                    <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                       <children>
+                                          <DatePicker fx:id="dpEndTime" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="177.0" promptText="01/01/2001" stylesheets="@../styles/date-picker.css" HBox.hgrow="ALWAYS">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </DatePicker>
+                                          <Spinner fx:id="spinnerEndHr" prefHeight="25.0" prefWidth="57.0" HBox.hgrow="ALWAYS">
+                                             <HBox.margin>
+                                                <Insets top="4.0" />
+                                             </HBox.margin>
+                                          </Spinner>
+                                          <Spinner fx:id="spinnerEndMin" prefHeight="25.0" prefWidth="61.0">
+                                             <HBox.margin>
+                                                <Insets top="4.0" />
+                                             </HBox.margin>
+                                          </Spinner>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" top="5.0" />
+                                       </VBox.margin>
+                                    </HBox>
                                  </children>
                                  <VBox.margin>
                                     <Insets left="30.0" right="40.0" />
