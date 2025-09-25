@@ -112,7 +112,7 @@
                   <VBox prefHeight="258.0" prefWidth="102.0" VBox.vgrow="ALWAYS" />
                   <VBox prefHeight="200.0" prefWidth="100.0" spacing="25.0">
                      <children>
-                        <StackPane fx:id="btnSettingsPage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
+                        <StackPane fx:id="btnSettingsPage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#visitSettingsOnAction" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: white; -fx-background-radius: 900px;">
                            <children>
                               <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

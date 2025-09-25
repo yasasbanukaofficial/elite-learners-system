@@ -10,6 +10,7 @@ public enum ViewPath {
     COURSE("CourseMgmtPage.fxml"),
     PAYMENT("PaymentMgmtPage.fxml"),
     LESSON("LessonMgmtPage.fxml"),
+    SETTINGS("SettingsPage.fxml"),
 
     ADD_STUDENT_FORM("AddStudentForm.fxml"),
     ADD_PAYMENT_FORM("AddPaymentForm.fxml"),

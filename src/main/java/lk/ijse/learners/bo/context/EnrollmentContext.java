@@ -20,6 +20,7 @@ public class EnrollmentContext {
     private InstructorDTO instructorDTO;
     private LessonDTO lessonDTO;
     private CourseDTO courseDTO;
+    private UserDTO userDTO;
     private List<CourseDTO> courseDTOList;
     private List<StudentDTO> stdDTOList;
 

@@ -9,9 +9,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.learners.bo.BOFactory;
+import lk.ijse.learners.bo.context.EnrollmentContext;
 import lk.ijse.learners.bo.custom.UserBO;
+import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.ViewPath;
+import lk.ijse.learners.dto.UserDTO;
 import lk.ijse.learners.entity.User;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -30,6 +33,8 @@ public class LoginPageController implements Initializable {
     public CheckBox showPassword;
 
     private UserBO userBO = (UserBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.USER);
+    private EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
+    private EntityDTOConverter entityDTOConverter = new EntityDTOConverter();
     private String ROLE;
 
     @Override
@@ -44,7 +49,7 @@ public class LoginPageController implements Initializable {
     @FXML
     public void loginOnAction(ActionEvent actionEvent) throws IOException {
         if (validateLoginDetails(usernameField.getText(), passwordField.getText())) {
-            if (ROLE.equals("admin")) {
+            if (ROLE.equalsIgnoreCase("admin")) {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ViewPath.ADMIN_MAIN.getPath()));
                 Stage stage = new Stage();
                 stage.setScene(new Scene(fxmlLoader.load()));
@@ -85,17 +90,31 @@ public class LoginPageController implements Initializable {
             errorMsg.append("Username does not exist, Please try again");
             usernameField.setStyle(errorStyle);
             isValid = false;
-        } else if (!BCrypt.checkpw(password, userBO.findByName(username.trim()).get().getPassword())) {
-            errorMsg.append("Invalid password, Please try again");
-            passwordField.setStyle(errorStyle);
-            textField.setStyle(errorStyle);
-            isValid = false;
+        } else {
+            try {
+                if (!BCrypt.checkpw(password, userBO.findByName(username.trim()).get().getPassword())) {
+                    errorMsg.append("Invalid password, Please try again");
+                    passwordField.setStyle(errorStyle);
+                    textField.setStyle(errorStyle);
+                    isValid = false;
+                }
+            } catch (Exception e) {
+                AlertUtil.setErrorAlert("Password doesnt match the username");
+                throw new RuntimeException(e);
+            }
+
         }
 
         if (!isValid) {
             AlertUtil.setErrorAlert("Please solve these issues before proceeding \n\n" + errorMsg.toString());
         } else {
             ROLE = userBO.findByName(username.trim()).get().getRole();
+            try {
+                UserDTO userDTO = entityDTOConverter.getUserDTO(userBO.findByName(username.trim()).get());
+                enrollmentContext.setUserDTO(userDTO);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     
         return isValid;

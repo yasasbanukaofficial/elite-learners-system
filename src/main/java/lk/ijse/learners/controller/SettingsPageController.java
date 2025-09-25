@@ -9,12 +9,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lk.ijse.learners.bo.BOFactory;
+import lk.ijse.learners.bo.context.EnrollmentContext;
+import lk.ijse.learners.bo.context.RefreshContext;
+import lk.ijse.learners.bo.custom.UserBO;
 import lk.ijse.learners.bo.exception.DuplicateException;
 import lk.ijse.learners.bo.exception.InUseException;
-import lk.ijse.learners.controller.util.ViewPath;
-import lk.ijse.learners.bo.custom.UserBO;
-import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.controller.util.AlertUtil;
+import lk.ijse.learners.controller.util.ViewPath;
 import lk.ijse.learners.controller.util.WindowManagerUtil;
 import lk.ijse.learners.dto.UserDTO;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -22,9 +23,8 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class UserMgmtPageController implements Initializable {
+public class SettingsPageController implements Initializable {
 
-    private final UserBO userBO = (UserBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.USER);
     public StackPane btnOpenUserForm;
     public TextField textField;
     public CheckBox showPassword;
@@ -41,6 +41,8 @@ public class UserMgmtPageController implements Initializable {
     public ListView <UserDTO> listUsers;
 
     private UserDTO userDTO;
+    private UserDTO loggedInUser = EnrollmentContext.getInstance().getUserDTO();
+    private final UserBO userBO = (UserBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.USER);
 
 
     @Override
@@ -55,7 +57,7 @@ public class UserMgmtPageController implements Initializable {
             if (newValue) {
                 Platform.runLater(() -> {
                     try {
-                        listUsers.getItems().setAll(userBO.getAll());
+                        listUsers.getItems().setAll(loggedInUser);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -67,7 +69,7 @@ public class UserMgmtPageController implements Initializable {
 
     private void setupLists() {
         try {
-            listUsers.getItems().setAll(userBO.getAll());
+            listUsers.getItems().setAll(loggedInUser);
             listUsers.setSelectionModel(null);
             listUsers.setCellFactory(lv -> new ListCell<UserDTO>() {
                 @Override
@@ -143,20 +145,6 @@ public class UserMgmtPageController implements Initializable {
         return true;
     }
 
-
-
-    public void deleteUser(ActionEvent event) {
-        try {
-            if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to delete user ?")) {
-                userBO.delete(userDTO.getUserId());
-            }
-            RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.USERS, true);
-        } catch (Exception e) {
-            AlertUtil.setErrorAlert("Failed to delete user");
-            throw new RuntimeException(e);
-        }
-    }
-
     public void editUser(ActionEvent event) {
         String fullName = txtUserName.getText().trim();
         String email = txtEmail.getText().trim();
@@ -165,14 +153,6 @@ public class UserMgmtPageController implements Initializable {
         String password = userPassword.getText().trim();
         String hashedPw = BCrypt.hashpw(password, BCrypt.gensalt(10));
         String age = txtAge.getText().trim();
-
-        boolean checkPassword = false;
-        try {
-             checkPassword = BCrypt.checkpw(password, userDTO.getPassword());
-        } catch (Exception e) {
-            AlertUtil.setErrorAlert("Failed to check password");
-            e.printStackTrace();
-        }
 
         boolean unchanged = fullName.equals(userDTO.getName()) &&
                 email.equals(userDTO.getEmail()) &&
