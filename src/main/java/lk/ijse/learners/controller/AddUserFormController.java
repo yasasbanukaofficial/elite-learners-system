@@ -29,18 +29,21 @@ public class AddUserFormController implements Initializable {
     public Button btnCancel;
     public Button btnAddUser;
     public PasswordField passwordField;
-    public TextField textField;   
-    public CheckBox showPassword; 
+    public TextField textField;
+    public CheckBox showPassword;
 
     private final UserBO userBO = (UserBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.USER);
     public PasswordField confirmpasswordfield;
     public TextField confirmTxtField;
     public CheckBox showConfirmPassword;
+    public CheckBox cbAdmin;
+    public CheckBox cbUser;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         lblUserId.setText(loadNextId());
 
+        // Show/hide password fields
         textField.managedProperty().bind(showPassword.selectedProperty());
         textField.visibleProperty().bind(showPassword.selectedProperty());
         confirmTxtField.managedProperty().bind(showConfirmPassword.selectedProperty());
@@ -53,6 +56,14 @@ public class AddUserFormController implements Initializable {
 
         textField.textProperty().bindBidirectional(passwordField.textProperty());
         confirmTxtField.textProperty().bindBidirectional(confirmpasswordfield.textProperty());
+
+        // Ensure only one role checkbox is selected
+        cbAdmin.setOnAction(e -> {
+            if (cbAdmin.isSelected()) cbUser.setSelected(false);
+        });
+        cbUser.setOnAction(e -> {
+            if (cbUser.isSelected()) cbAdmin.setSelected(false);
+        });
     }
 
     public void closeInsForm(MouseEvent mouseEvent) {
@@ -71,21 +82,30 @@ public class AddUserFormController implements Initializable {
         String password = passwordField.isVisible() ? passwordField.getText() : textField.getText();
         String confirmPassword = confirmpasswordfield.isVisible() ? confirmpasswordfield.getText() : confirmTxtField.getText();
 
+        if (!cbAdmin.isSelected() && !cbUser.isSelected()) {
+            AlertUtil.setErrorAlert("Please select a role (Admin or User)!");
+            return;
+        }
+
+        String role = cbAdmin.isSelected() ? "ADMIN" : "USER";
         String hashedPw = BCrypt.hashpw(password, BCrypt.gensalt(10));
 
         if (validateUserDetails(name, age, email, contact, password, confirmPassword)) {
             try {
-                if (!userBO.save(new UserDTO(
+                boolean success = userBO.save(new UserDTO(
                         lblUserId.getText(),
                         name,
                         age,
                         email,
                         hashedPw,
                         contact,
-                        "USER"
-                ))) {
+                        role
+                ));
+                if (!success) {
                     AlertUtil.setErrorAlert("Failed to add user!");
+                    return;
                 }
+
                 AlertUtil.setInfoAlert("Successfully added user!");
                 WindowManagerUtil.closeForm(ancAddUserForm);
                 RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.USERS, true);
@@ -165,11 +185,11 @@ public class AddUserFormController implements Initializable {
             confirmTxtField.setStyle(errorStyle);
             isValid = false;
         }
-    
+
         if (!isValid) {
             AlertUtil.setErrorAlert("Please solve these issues before proceeding \n\n" + errorMsg.toString());
         }
-    
+
         return isValid;
     }
 

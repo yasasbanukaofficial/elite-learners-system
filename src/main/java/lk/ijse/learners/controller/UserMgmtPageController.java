@@ -122,6 +122,7 @@ public class UserMgmtPageController implements Initializable {
             AlertUtil.setErrorAlert("Please fill all fields");
             return false;
         }
+
         try {
             int age = Integer.parseInt(txtAge.getText().trim());
             if (age < 0 || age > 120) {
@@ -132,16 +133,26 @@ public class UserMgmtPageController implements Initializable {
             AlertUtil.setErrorAlert("Please enter a valid numeric age");
             return false;
         }
+
         if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             AlertUtil.setErrorAlert("Invalid email format");
             return false;
         }
+
         if (!contact.matches("^\\d{10}$")) {
             AlertUtil.setErrorAlert("Invalid contact number");
             return false;
         }
+
+        String roleLower = role.toLowerCase();
+        if (!roleLower.equals("admin") && !roleLower.equals("user")) {
+            AlertUtil.setErrorAlert("Role must be either 'Admin' or 'User'");
+            return false;
+        }
+
         return true;
     }
+
 
 
 
@@ -163,12 +174,18 @@ public class UserMgmtPageController implements Initializable {
         String contact = txtContact.getText().trim();
         String role = txtRole.getText().trim();
         String password = userPassword.getText().trim();
-        String hashedPw = BCrypt.hashpw(password, BCrypt.gensalt(10));
         String age = txtAge.getText().trim();
+
+        String hashedPw;
+        if (password.isEmpty()) {
+            hashedPw = userDTO.getPassword();
+        } else {
+            hashedPw = BCrypt.hashpw(password, BCrypt.gensalt(10));
+        }
 
         boolean checkPassword = false;
         try {
-             checkPassword = BCrypt.checkpw(password, userDTO.getPassword());
+            checkPassword = password.isEmpty() || BCrypt.checkpw(password, userDTO.getPassword());
         } catch (Exception e) {
             AlertUtil.setErrorAlert("Failed to check password");
             e.printStackTrace();
@@ -177,8 +194,8 @@ public class UserMgmtPageController implements Initializable {
         boolean unchanged = fullName.equals(userDTO.getName()) &&
                 email.equals(userDTO.getEmail()) &&
                 contact.equals(userDTO.getContactNumber()) &&
-                role.equals(userDTO.getRole()) &&
-                BCrypt.checkpw(password, userDTO.getPassword()) &&
+                role.equalsIgnoreCase(userDTO.getRole()) &&
+                checkPassword &&
                 age.equals(userDTO.getAge());
 
         if (unchanged) {
@@ -188,6 +205,8 @@ public class UserMgmtPageController implements Initializable {
 
         try {
             if (validateUserDetails(fullName, email, contact, role, password)) {
+                String normalizedRole = role.equalsIgnoreCase("admin") ? "ADMIN" : "USER";
+
                 UserDTO updatedUserDTO = new UserDTO(
                         userDTO.getUserId(),
                         fullName,
@@ -195,14 +214,15 @@ public class UserMgmtPageController implements Initializable {
                         email,
                         hashedPw,
                         contact,
-                        role
+                        normalizedRole
                 );
 
-                if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to update user details ?")) {
+                if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to update user details?")) {
                     if (userBO.update(updatedUserDTO)) {
                         RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.USERS, true);
                         textField.clear();
                         userPassword.clear();
+                        setupLists();
                     } else {
                         AlertUtil.setErrorAlert("Failed to update user");
                     }
@@ -217,6 +237,7 @@ public class UserMgmtPageController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
     public void openUserForm(MouseEvent mouseEvent) {
         WindowManagerUtil.openForm(ViewPath.ADD_USER_FORM.getPath(), false);

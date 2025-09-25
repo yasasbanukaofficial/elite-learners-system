@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancAddUserForm" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: white; -fx-border-color: lightGrey;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddUserFormController">
+<AnchorPane fx:id="ancAddUserForm" prefHeight="650.0" prefWidth="400.0" style="-fx-background-color: white; -fx-border-color: lightGrey;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddUserFormController">
    <children>
       <VBox layoutX="443.0" layoutY="102.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-radius: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -191,6 +191,20 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </VBox>
+                  <HBox prefHeight="19.0" prefWidth="378.0" spacing="60.0">
+                     <children>
+                        <CheckBox fx:id="cbAdmin" mnemonicParsing="false" text="Admin">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </CheckBox>
+                        <CheckBox fx:id="cbUser" mnemonicParsing="false" text="User">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </CheckBox>
+                     </children>
+                  </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
                         <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#closeInsFormOnAction" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: lightGrey; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="LIGHTGRAY">

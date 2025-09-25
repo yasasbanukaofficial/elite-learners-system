@@ -150,7 +150,7 @@
                                  <children>
                                     <VBox prefHeight="156.0" prefWidth="191.0" style="-fx-border-color: lightGrey; -fx-border-radius: 30px;">
                                        <children>
-                                          <TextField fx:id="txtAge" editable="false" prefHeight="80.0" prefWidth="149.0" promptText="100" style="-fx-background-color: transparent;">
+                                          <TextField fx:id="txtAge" prefHeight="80.0" prefWidth="149.0" promptText="100" style="-fx-background-color: transparent;">
                                              <font>
                                                 <Font name="SansSerif Bold" size="70.0" />
                                              </font>
