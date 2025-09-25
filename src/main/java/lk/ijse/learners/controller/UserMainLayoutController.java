@@ -2,12 +2,19 @@ package lk.ijse.learners.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import lk.ijse.learners.controller.util.ViewPath;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class UserMainLayoutController implements Initializable {
@@ -17,70 +24,70 @@ public class UserMainLayoutController implements Initializable {
     public StackPane btnStudentMgmt;
     public StackPane btnLessonMgmt;
     public StackPane btnPaymentMgmt;
-    public StackPane btnCoursesMgmt;
-    public StackPane btnUserMgmt;
-    public StackPane btnInstructorMgmt;
     public StackPane btnSettingsPage;
     public StackPane btnLogout;
 
+    private final Map<ViewPath, AnchorPane> pageCache = new HashMap<>();
+
+    private AnchorPane getPage(ViewPath path) {
+        return pageCache.computeIfAbsent(path, p -> {
+            try {
+                AnchorPane pane = FXMLLoader.load(getClass().getResource(p.getPath()));
+                pane.prefWidthProperty().bind(ancPages.widthProperty());
+                pane.prefHeightProperty().bind(ancPages.heightProperty());
+                return pane;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        });
+    }
+
+    private void showPage(ViewPath path) {
+        ancPages.getChildren().setAll(getPage(path));
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.STUDENT.getPath()));
-            anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
-            anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
-            ancPages.getChildren().add(anchorPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        showPage(ViewPath.STUDENT);
     }
 
     public void visitStudentPgOnAction(MouseEvent mouseEvent) {
-        try {
-            ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.STUDENT.getPath()));
-            anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
-            anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
-            ancPages.getChildren().add(anchorPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        showPage(ViewPath.STUDENT);
     }
 
     public void visitPaymentPgOnAction(MouseEvent mouseEvent) {
-        try {
-            ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.PAYMENT.getPath()));
-            anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
-            anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
-            ancPages.getChildren().add(anchorPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        showPage(ViewPath.PAYMENT);
     }
 
     public void visitLessonsPgOnAction(MouseEvent mouseEvent) {
+        showPage(ViewPath.LESSON);
+    }
+
+    public void visitSettingsOnAction(MouseEvent mouseEvent) {
+        showPage(ViewPath.SETTINGS);
+    }
+
+    public void logout(MouseEvent mouseEvent) {
         try {
-            ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.LESSON.getPath()));
-            anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
-            anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
-            ancPages.getChildren().add(anchorPane);
+            Stage stage = (Stage) ancMain.getScene().getWindow();
+
+            Parent root = FXMLLoader.load(getClass().getResource(ViewPath.LOGIN.getPath()));
+            Scene loginScene = new Scene(root, 1000, 690);
+
+            stage.setScene(loginScene);
+
+            stage.setResizable(false);
+            stage.setWidth(1000);
+            stage.setHeight(690);
+
+            stage.centerOnScreen();
+            stage.show();
+            stage.toFront();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void visitSettingsOnAction(MouseEvent mouseEvent) {
-        try {
-            ancPages.getChildren().clear();
-            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource(ViewPath.SETTINGS.getPath()));
-            anchorPane.prefWidthProperty().bind(ancPages.widthProperty());
-            anchorPane.prefHeightProperty().bind(ancPages.heightProperty());
-            ancPages.getChildren().add(anchorPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 }

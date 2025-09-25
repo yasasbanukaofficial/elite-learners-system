@@ -120,7 +120,8 @@ public class PaymentMgmtPageController implements Initializable {
         try {
             listPayment.getItems().setAll(paymentBO.getAll());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            AlertUtil.setErrorAlert("Nothing to showcase since there are no payments made");
+            listPayment.getItems().clear();
         }
         listPayment.setSelectionModel(null);
         listPayment.setCellFactory(lv -> new ListCell<PaymentDTO>() {
