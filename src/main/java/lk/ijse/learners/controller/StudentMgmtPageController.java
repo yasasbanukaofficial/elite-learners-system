@@ -238,7 +238,19 @@ public class StudentMgmtPageController implements Initializable{
 
     public void setupLists() {
         try {
-            listStudents.getItems().setAll(studentBO.getAll());
+            List<StudentDTO> allStudents = studentBO.getAll();
+            listStudents.getItems().setAll(allStudents);
+            if (!allStudents.isEmpty()) {
+                studentDTO = allStudents.get(0);
+                setupForm(studentDTO);
+            } else {
+                txtStdName.setText("");
+                txtAddress.setText("");
+                txtEmail.setText("");
+                txtAge.setText("");
+                txtContact.setText("");
+                stdDob.setValue(null);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

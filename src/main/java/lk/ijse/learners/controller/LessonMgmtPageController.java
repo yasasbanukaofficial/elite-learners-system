@@ -117,7 +117,12 @@ public class LessonMgmtPageController implements Initializable {
 
     public void setupLists() {
         try {
-            listLessons.getItems().setAll(lessonBO.getAll());
+            List<LessonDTO> lessonList = lessonBO.getAll();
+            listLessons.getItems().setAll(lessonList);
+            if (!lessonList.isEmpty()) {
+                listLessons.getSelectionModel().select(0);
+                setupForm(lessonList.get(0));
+            }
         } catch (Exception e) {
             throw new RuntimeException("Failed to load lesson list", e);
         }

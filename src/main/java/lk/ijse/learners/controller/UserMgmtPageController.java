@@ -20,6 +20,7 @@ import lk.ijse.learners.dto.UserDTO;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class UserMgmtPageController implements Initializable {
@@ -67,8 +68,18 @@ public class UserMgmtPageController implements Initializable {
 
     private void setupLists() {
         try {
-            listUsers.getItems().setAll(userBO.getAll());
             listUsers.setSelectionModel(null);
+            List<UserDTO> allUsers = userBO.getAll();
+            listUsers.getItems().setAll(allUsers);
+            if (!allUsers.isEmpty()) {
+                userDTO = allUsers.get(0);
+                txtUserName.setText(userDTO.getName());
+                txtEmail.setText(userDTO.getEmail());
+                txtContact.setText(userDTO.getContactNumber());
+                txtRole.setText(userDTO.getRole());
+                txtAge.setText(userDTO.getAge());
+                userPassword.clear();
+            }
             listUsers.setCellFactory(lv -> new ListCell<UserDTO>() {
                 @Override
                 protected void updateItem(UserDTO user, boolean empty) {
@@ -153,9 +164,6 @@ public class UserMgmtPageController implements Initializable {
         return true;
     }
 
-
-
-
     public void deleteUser(ActionEvent event) {
         try {
             if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to delete user ?")) {
@@ -237,7 +245,6 @@ public class UserMgmtPageController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
     public void openUserForm(MouseEvent mouseEvent) {
         WindowManagerUtil.openForm(ViewPath.ADD_USER_FORM.getPath(), false);

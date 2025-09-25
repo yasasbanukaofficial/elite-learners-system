@@ -242,7 +242,12 @@ public class InstructorMgmtPageController implements Initializable {
 
     public void setupLists() {
         try {
-            listInstructors.getItems().setAll(instructorBO.getAll());
+            List<InstructorDTO> instructorDTOS = instructorBO.getAll();
+            listInstructors.getItems().setAll(instructorDTOS);
+            if (!instructorDTOS.isEmpty()) {
+                instructorDTO = instructorDTOS.get(0);
+                setupForm(instructorDTO);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

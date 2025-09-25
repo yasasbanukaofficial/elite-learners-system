@@ -15,6 +15,7 @@ import lk.ijse.learners.dto.StudentDTO;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -118,7 +119,12 @@ public class PaymentMgmtPageController implements Initializable {
 
     private void setupList() {
         try {
-            listPayment.getItems().setAll(paymentBO.getAll());
+            List<PaymentDTO> paymentDTOList = paymentBO.getAll();
+            listPayment.getItems().setAll(paymentDTOList);
+            if(!paymentDTOList.isEmpty()) {
+                listPayment.getSelectionModel().select(0);
+                setupForm(paymentDTOList.get(0));
+            }
         } catch (Exception e) {
             AlertUtil.setErrorAlert("Nothing to showcase since there are no payments made");
             listPayment.getItems().clear();

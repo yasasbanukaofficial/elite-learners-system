@@ -171,7 +171,12 @@ public class CourseMgmtPageController implements Initializable {
 
     public void setupLists() {
         try {
-            listCourses.getItems().setAll(courseBO.getAll());
+            List<CourseDTO> courseList = courseBO.getAll();
+            listCourses.getItems().setAll(courseList);
+            if (!courseList.isEmpty()) {
+                listCourses.getSelectionModel().select(0);
+                setupForm(courseList.get(0));
+            }
         } catch (Exception e) {
             throw new RuntimeException("Failed to load course list", e);
         }
