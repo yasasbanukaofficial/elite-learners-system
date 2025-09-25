@@ -6,6 +6,7 @@ import lk.ijse.learners.dto.*;
 import lk.ijse.learners.entity.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EntityDTOConverter {
@@ -24,6 +25,7 @@ public class EntityDTOConverter {
     }
 
     public List<UserDTO> toUserDTOList(List<User> userList) throws Exception {
+        if (userList == null || userList.isEmpty()) return Collections.emptyList();
         List<UserDTO> userDTOList = new ArrayList<>();
         userList.forEach(user -> {
             try {
@@ -48,6 +50,7 @@ public class EntityDTOConverter {
     }
 
     public List<User> toUserEntityList(List<UserDTO> userDTOList) throws Exception {
+        if (userDTOList == null || userDTOList.isEmpty()) return Collections.emptyList();
         List<User> userEntityList = new ArrayList<>();
         userDTOList.forEach(userDTO -> {
             try {
@@ -75,6 +78,7 @@ public class EntityDTOConverter {
     }
 
     public List<StudentDTO> toStudentDTOList(List<Student> studentList) throws Exception {
+        if (studentList == null || studentList.isEmpty()) return Collections.emptyList();
         List<StudentDTO> studentDTOList = new ArrayList<>();
         studentList.forEach(student -> {
             if (student != null) {
@@ -103,6 +107,7 @@ public class EntityDTOConverter {
     }
 
     public List<Student> toStudentEntityList(List<StudentDTO> studentList) throws Exception {
+        if (studentList == null || studentList.isEmpty()) return Collections.emptyList();
         List<Student> studentEntityList = new ArrayList<>();
         studentList.forEach(student -> {
             try {
@@ -117,16 +122,17 @@ public class EntityDTOConverter {
 
     public PaymentDTO getPaymentDTO(Payment payment) throws Exception {
         return new PaymentDTO(
-            payment.getPaymentId(),
-            payment.getStudent().getStudentId(),
-            payment.getPaymentDate(),
-            payment.getType(),
-            payment.getAmount(),
-            payment.getStatus()
+                payment.getPaymentId(),
+                payment.getStudent().getStudentId(),
+                payment.getPaymentDate(),
+                payment.getType(),
+                payment.getAmount(),
+                payment.getStatus()
         );
     }
 
     public List<PaymentDTO> toPaymentDTOList(List<Payment> paymentList) throws Exception {
+        if (paymentList == null || paymentList.isEmpty()) return Collections.emptyList();
         List<PaymentDTO> paymentDTOList = new ArrayList<>();
         paymentList.forEach(payment -> {
             try {
@@ -150,6 +156,7 @@ public class EntityDTOConverter {
     }
 
     public List<Payment> toPaymentEntityList(List<PaymentDTO> paymentDTOList) throws Exception {
+        if (paymentDTOList == null || paymentDTOList.isEmpty()) return Collections.emptyList();
         List<Payment> paymentEntityList = new ArrayList<>();
         paymentDTOList.forEach(paymentDTO -> {
             try {
@@ -176,6 +183,7 @@ public class EntityDTOConverter {
     }
 
     public List<LessonDTO> toLessonDTOList(List<Lesson> lessonList) throws Exception {
+        if (lessonList == null || lessonList.isEmpty()) return Collections.emptyList();
         List<LessonDTO> lessonDTOList = new ArrayList<>();
         lessonList.forEach(lesson -> {
             try {
@@ -210,6 +218,7 @@ public class EntityDTOConverter {
     }
 
     public List<Lesson> toLessonEntityList(List<LessonDTO> lessonDTOList) throws Exception {
+        if (lessonDTOList == null || lessonDTOList.isEmpty()) return Collections.emptyList();
         List<Lesson> lessonEntityList = new ArrayList<>();
         lessonDTOList.forEach(lessonDTO -> {
             try {
@@ -236,6 +245,7 @@ public class EntityDTOConverter {
     }
 
     public List<InstructorDTO> toInstructorDTOList(List<Instructor> instructorList) throws Exception {
+        if (instructorList == null || instructorList.isEmpty()) return Collections.emptyList();
         List<InstructorDTO> instructorDTOList = new ArrayList<>();
         instructorList.forEach(instructor -> {
             try {
@@ -261,6 +271,7 @@ public class EntityDTOConverter {
     }
 
     public List<Instructor> toInstructorEntityList(List<InstructorDTO> instructorDTOList) throws Exception {
+        if (instructorDTOList == null || instructorDTOList.isEmpty()) return Collections.emptyList();
         List<Instructor> instructorEntityList = new ArrayList<>();
         instructorDTOList.forEach(instructorDTO -> {
             try {
@@ -300,6 +311,7 @@ public class EntityDTOConverter {
     }
 
     public List<CourseDTO> toCourseDTOList(List<Course> courseList) throws Exception {
+        if (courseList == null || courseList.isEmpty()) return Collections.emptyList();
         List<CourseDTO> courseDTOList = new ArrayList<>();
         courseList.forEach(course -> {
             try {
@@ -312,6 +324,7 @@ public class EntityDTOConverter {
     }
 
     public List<Course> toCourseEntityList(List<CourseDTO> courseDTOList) throws Exception {
+        if (courseDTOList == null || courseDTOList.isEmpty()) return Collections.emptyList();
         List<Course> courseEntityList = new ArrayList<>();
         courseDTOList.forEach(courseDTO -> {
             try {
@@ -322,7 +335,4 @@ public class EntityDTOConverter {
         });
         return courseEntityList;
     }
-    
-    
-
 }

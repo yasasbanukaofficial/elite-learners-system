@@ -80,14 +80,16 @@ public class InstructorMgmtPageController implements Initializable {
         setupLists();
         cbAvailable.setOnAction(e -> {
             if (cbAvailable.isSelected()) {
-                cbAvailable.setSelected(false);
-            }
-        });
-        cbNotAvailable.setOnAction(e -> {
-            if (cbNotAvailable.isSelected()) {
                 cbNotAvailable.setSelected(false);
             }
         });
+
+        cbNotAvailable.setOnAction(e -> {
+            if (cbNotAvailable.isSelected()) {
+                cbAvailable.setSelected(false);
+            }
+        });
+
         RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.INSTRUCTORS).addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 Platform.runLater(() -> {

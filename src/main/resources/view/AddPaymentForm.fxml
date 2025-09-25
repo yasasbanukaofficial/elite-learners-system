@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancAddPayment" prefHeight="380.0" prefWidth="420.0" style="-fx-background-color: white; -fx-border-color: lightGrey;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddPaymentFormController">
+<AnchorPane fx:id="ancAddPayment" prefHeight="430.0" prefWidth="420.0" style="-fx-background-color: white; -fx-border-color: lightGrey;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.learners.controller.AddPaymentFormController">
    <children>
       <VBox layoutX="453.0" layoutY="112.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: transaprent; -fx-background-radius: 10px; -fx-border-radius: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -132,6 +132,23 @@
                         <Insets top="3.0" />
                      </VBox.margin>
                   </VBox>
+                  <HBox prefHeight="19.0" prefWidth="378.0" spacing="60.0">
+                     <children>
+                        <CheckBox fx:id="cbPaid" mnemonicParsing="false" text="Paid">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </CheckBox>
+                        <CheckBox fx:id="cbNotPaid" mnemonicParsing="false" text="Not Paid">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </CheckBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="7.0" />
+                     </VBox.margin>
+                  </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
                         <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#closePaymentForm" prefHeight="39.0" prefWidth="105.0" style="-fx-border-color: #a19d9d; -fx-background-color: transparent; -fx-border-radius: 10px;" text="Cancel" textFill="#a19d9d">
