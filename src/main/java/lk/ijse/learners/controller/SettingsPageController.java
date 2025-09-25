@@ -151,14 +151,24 @@ public class SettingsPageController implements Initializable {
         String contact = txtContact.getText().trim();
         String role = txtRole.getText().trim();
         String password = userPassword.getText().trim();
-        String hashedPw = BCrypt.hashpw(password, BCrypt.gensalt(10));
         String age = txtAge.getText().trim();
+
+        // Determine password to use: keep existing if empty
+        String hashedPw;
+        if (password.isEmpty()) {
+            hashedPw = userDTO.getPassword(); // keep old password
+        } else {
+            hashedPw = BCrypt.hashpw(password, BCrypt.gensalt(10));
+        }
+
+        // Check if password unchanged (or empty)
+        boolean checkPassword = password.isEmpty() || BCrypt.checkpw(password, userDTO.getPassword());
 
         boolean unchanged = fullName.equals(userDTO.getName()) &&
                 email.equals(userDTO.getEmail()) &&
                 contact.equals(userDTO.getContactNumber()) &&
-                role.equals(userDTO.getRole()) &&
-                BCrypt.checkpw(password, userDTO.getPassword()) &&
+                role.equalsIgnoreCase(userDTO.getRole()) &&
+                checkPassword &&
                 age.equals(userDTO.getAge());
 
         if (unchanged) {
@@ -168,6 +178,8 @@ public class SettingsPageController implements Initializable {
 
         try {
             if (validateUserDetails(fullName, email, contact, role, password)) {
+                String normalizedRole = role.equalsIgnoreCase("admin") ? "ADMIN" : "USER";
+
                 UserDTO updatedUserDTO = new UserDTO(
                         userDTO.getUserId(),
                         fullName,
@@ -175,10 +187,10 @@ public class SettingsPageController implements Initializable {
                         email,
                         hashedPw,
                         contact,
-                        role
+                        normalizedRole
                 );
 
-                if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to update user details ?")) {
+                if (AlertUtil.setConfirmationAlert("Before continuing", "Are you sure you want to update user details?")) {
                     if (userBO.update(updatedUserDTO)) {
                         RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.USERS, true);
                         textField.clear();
@@ -197,6 +209,7 @@ public class SettingsPageController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
     public void openUserForm(MouseEvent mouseEvent) {
         WindowManagerUtil.openForm(ViewPath.ADD_USER_FORM.getPath(), false);
