@@ -49,7 +49,7 @@ public class UserMainLayoutController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        showPage(ViewPath.STUDENT);
+        showPage(ViewPath.DASHBOARD);
     }
 
     public void visitStudentPgOnAction(MouseEvent mouseEvent) {
@@ -90,4 +90,7 @@ public class UserMainLayoutController implements Initializable {
     }
 
 
+    public void visitDashboard(MouseEvent mouseEvent) {
+        showPage(ViewPath.DASHBOARD);
+    }
 }

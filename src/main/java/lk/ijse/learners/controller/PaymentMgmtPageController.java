@@ -5,7 +5,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import lk.ijse.learners.bo.BOFactory;
+import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.bo.custom.PaymentBO;
 import lk.ijse.learners.bo.custom.StudentBO;
 import lk.ijse.learners.controller.util.AlertUtil;
@@ -34,6 +36,23 @@ public class PaymentMgmtPageController implements Initializable {
     private PaymentDTO paymentDTO;
     private final PaymentBO paymentBO = (PaymentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.PAYMENT);
     private final StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setupList();
+
+        cbPaid.setOnAction(e -> {
+            if (cbPaid.isSelected()) {
+                cbNotPaid.setSelected(false);
+            }
+        });
+        cbNotPaid.setOnAction(e -> {
+            if (cbNotPaid.isSelected()) {
+                cbPaid.setSelected(false);
+            }
+        });
+
+    }
 
     public void editPayment(ActionEvent actionEvent) {
         String payType = txtPayType.getText().trim();
@@ -67,6 +86,7 @@ public class PaymentMgmtPageController implements Initializable {
                     if (paymentBO.update(updatedPaymentDTO)) {
                         setupList();
                         listPayment.refresh();
+                        RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.DASHBOARD, true);
                     } else {
                         AlertUtil.setErrorAlert("Failed to update payment");
                     }
@@ -100,23 +120,6 @@ public class PaymentMgmtPageController implements Initializable {
         return true;
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setupList();
-
-        cbPaid.setOnAction(e -> {
-            if (cbPaid.isSelected()) {
-                cbNotPaid.setSelected(false);
-            }
-        });
-        cbNotPaid.setOnAction(e -> {
-            if (cbNotPaid.isSelected()) {
-                cbPaid.setSelected(false);
-            }
-        });
-
-    }
-
     private void setupList() {
         try {
             List<PaymentDTO> paymentDTOList = paymentBO.getAll();
@@ -129,7 +132,6 @@ public class PaymentMgmtPageController implements Initializable {
             AlertUtil.setErrorAlert("Nothing to showcase since there are no payments made");
             listPayment.getItems().clear();
         }
-        listPayment.setSelectionModel(null);
         listPayment.setCellFactory(lv -> new ListCell<PaymentDTO>() {
             @Override
             protected void updateItem(PaymentDTO payment, boolean empty) {
@@ -156,9 +158,13 @@ public class PaymentMgmtPageController implements Initializable {
 
                         Label lblStudent = new Label(studentName);
                         lblStudent.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+                        lblStudent.setTextFill(Color.BLACK);
                         Label lblAmount = new Label("💰 " + payment.getAmount().toString());
+                        lblAmount.setTextFill(Color.RED);
                         Label lblDate = new Label("📅 " + payment.getPaymentDate().toString());
+                        lblDate.setTextFill(Color.GREY);
                         Label lblStatus = new Label("🔴 " + payment.getStatus());
+                        lblStatus.setTextFill(Color.GREEN);
 
                         card.getChildren().addAll(lblStudent, lblAmount, lblDate, lblStatus);
 

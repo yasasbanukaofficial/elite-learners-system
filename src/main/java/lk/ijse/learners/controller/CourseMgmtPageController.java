@@ -58,36 +58,49 @@ public class CourseMgmtPageController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-       setupLists();
+        setupLists();
 
-       RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.COURSES).addListener((observable, oldValue, newValue) -> {
-           if (newValue) {
-               Platform.runLater(() -> {
-                   try {
-                       listCourses.getItems().setAll(courseBO.getAll());
-                   } catch (Exception e) {
-                       throw new RuntimeException(e);
-                   }
-                   RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES, false);
-               });
-           }
-       });
-       RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.STUDENT_ENROLLED_LIST).addListener((observable, oldValue, newValue) -> {
-           if (newValue) {
-               Platform.runLater(() -> {
-                   try {
-                       List<StudentDTO> stdEnrolled = courseBO.getAllStudentsByCourseId(courseDTO.getCourseId());
-                       listStdEnrolled.getItems().setAll(stdEnrolled);
-                   } catch (Exception e) {
-                       throw new RuntimeException(e);
-                   }
-                   RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.STUDENT_ENROLLED_LIST, false);
-               });
-           }
-       });
+        listCourses.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                setupForm(newValue);
+            }
+        });
+
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.COURSES).addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                Platform.runLater(() -> {
+                    try {
+                        List<CourseDTO> courseList = courseBO.getAll();
+                        listCourses.getItems().setAll(courseList);
+                        if (courseList.isEmpty()) {
+                            courseDTO = null;
+                        } else if (listCourses.getSelectionModel().getSelectedItem() == null) {
+                            listCourses.getSelectionModel().select(0);
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES, false);
+                });
+            }
+        });
+        RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.STUDENT_ENROLLED_LIST).addListener((observable, oldValue, newValue) -> {
+            if (newValue && courseDTO != null) {
+                Platform.runLater(() -> {
+                    try {
+                        List<StudentDTO> stdEnrolled = courseBO.getAllStudentsByCourseId(courseDTO.getCourseId());
+                        listStdEnrolled.getItems().setAll(stdEnrolled);
+                        lblEnrollmentCount.setText(String.valueOf(stdEnrolled.size()));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.STUDENT_ENROLLED_LIST, false);
+                });
+            }
+        });
 
         RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.INSTRUCTOR_ENROLLED_LIST).addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
+            if (newValue && courseDTO != null) {
                 Platform.runLater(() -> {
                     try {
                         List<InstructorDTO> instructorsEnrolled = courseBO.getAllInstructorsByCourseId(courseDTO.getCourseId());
@@ -149,14 +162,28 @@ public class CourseMgmtPageController implements Initializable {
         }
 
         try {
-            courseDTO.setName(txtCourseName.getText());
-            courseDTO.setDescription(txtDescription.getText());
-            courseDTO.setDuration(txtDuration.getText());
-            courseDTO.setFees(txtFees.getText());
+            // Check for changes before updating
+            if (txtCourseName.getText().equals(courseDTO.getName()) &&
+                    txtDescription.getText().equals(courseDTO.getDescription()) &&
+                    txtDuration.getText().equals(courseDTO.getDuration()) &&
+                    txtFees.getText().equals(courseDTO.getFees())) {
+                AlertUtil.setErrorAlert("No changes detected. Please modify some details before saving.");
+                return;
+            }
 
-            if (courseBO.update(courseDTO)) {
-                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES, true);
+            CourseDTO updatedCourse = new CourseDTO(
+                    courseDTO.getCourseId(),
+                    txtCourseName.getText(),
+                    txtDescription.getText(),
+                    txtDuration.getText(),
+                    txtFees.getText()
+            );
+
+            if (courseBO.update(updatedCourse)) {
                 AlertUtil.setInfoAlert("Course updated successfully");
+                listCourses.getItems().set(listCourses.getSelectionModel().getSelectedIndex(), updatedCourse);
+                listCourses.refresh();
+                this.courseDTO = updatedCourse;
             } else {
                 AlertUtil.setErrorAlert("Failed to update course");
             }
@@ -174,14 +201,18 @@ public class CourseMgmtPageController implements Initializable {
             List<CourseDTO> courseList = courseBO.getAll();
             listCourses.getItems().setAll(courseList);
             if (!courseList.isEmpty()) {
-                listCourses.getSelectionModel().select(0);
-                setupForm(courseList.get(0));
+                // Only select(0) if no item is currently selected
+                if (listCourses.getSelectionModel().getSelectedItem() == null) {
+                    listCourses.getSelectionModel().select(0);
+                    // The setupForm will be called by the listener attached in initialize()
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to load course list", e);
         }
 
-        listCourses.setSelectionModel(null);
+        // REMOVED: listCourses.setSelectionModel(null);
+
         listCourses.setCellFactory(lv -> new ListCell<CourseDTO>() {
             @Override
             protected void updateItem(CourseDTO course, boolean empty) {
@@ -207,7 +238,7 @@ public class CourseMgmtPageController implements Initializable {
 
                     card.getChildren().addAll(lblName, lblDuration, lblFees);
 
-                    card.setOnMouseClicked(event -> setupForm(course));
+                    // REMOVED: card.setOnMouseClicked(event -> setupForm(course));
 
                     setGraphic(card);
                 }

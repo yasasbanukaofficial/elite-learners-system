@@ -52,7 +52,7 @@ public class AdminMainLayoutController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-       showPage(ViewPath.STUDENT);
+       showPage(ViewPath.DASHBOARD);
     }
 
     public void visitStudentPgOnAction(MouseEvent mouseEvent) {
@@ -81,6 +81,10 @@ public class AdminMainLayoutController implements Initializable {
 
     public void visitSettingsOnAction(MouseEvent mouseEvent) {
         showPage(ViewPath.SETTINGS);
+    }
+
+    public void visitDashboard(MouseEvent mouseEvent) {
+        showPage(ViewPath.DASHBOARD);
     }
 
     public void logout(MouseEvent mouseEvent) {

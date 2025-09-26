@@ -15,7 +15,7 @@
          <children>
             <VBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="118.0" style="-fx-background-color: linear-gradient(to bottom, #F0F0F2, #DBE3EE);" HBox.hgrow="ALWAYS">
                <children>
-                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: black; -fx-background-radius: 900px;">
+                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#visitDashboard" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: black; -fx-background-radius: 900px;">
                      <children>
                         <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                            <image>

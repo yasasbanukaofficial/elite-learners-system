@@ -48,7 +48,6 @@ public class AddCourseFormController implements Initializable {
     public TextField txtCFee;
 
     public Button btnCancel;
-    public Button btnAddInstructor;
     public Button btnAddCourse;
     public ImageView btnCloseStdForm;
 
@@ -75,13 +74,11 @@ public class AddCourseFormController implements Initializable {
                     AlertUtil.setErrorAlert("Please add some instructors first!!");
                 });
                 btnAddCourse.setDisable(true);
-                btnAddInstructor.setDisable(true);
                 return;
             }
             availableInstructors.getItems().addAll(instructors);
         } catch (Exception e) {
             btnAddCourse.setDisable(true);
-            btnAddInstructor.setDisable(true);
             AlertUtil.setErrorAlert("No instructors available. Please add instructors first.");
             return;
         }
