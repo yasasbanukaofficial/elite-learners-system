@@ -6,15 +6,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import lk.ijse.learners.bo.BOFactory;
 import lk.ijse.learners.bo.context.EnrollmentContext;
 import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.bo.custom.CourseBO;
 import lk.ijse.learners.bo.custom.InstructorBO;
 import lk.ijse.learners.bo.custom.StudentBO;
-import lk.ijse.learners.bo.util.EntityDTOConverter;
 import lk.ijse.learners.controller.util.AlertUtil;
 import lk.ijse.learners.controller.util.ViewPath;
 import lk.ijse.learners.controller.util.WindowManagerUtil;
@@ -31,27 +30,24 @@ import java.util.ResourceBundle;
 
 public class CourseMgmtPageController implements Initializable {
     public AnchorPane ancCourse;
-    public StackPane btnOpenCourseForm;
-
     public TextField txtCourseName;
     public TextField txtDescription;
     public Label lblEnrollmentCount;
     public TextField txtDuration;
     public TextField txtFees;
-    public ListView <StudentDTO> listStdEnrolled;
-    public ListView <InstructorDTO> listInsAssigned;
+    public ListView<StudentDTO> listStdEnrolled;
+    public ListView<InstructorDTO> listInsAssigned;
     public Button btnDeleteCourses;
     public Button btnEdit;
-    public ListView <CourseDTO> listCourses;
-    public ListView <LessonDTO> listLesAssigned;
+    public ListView<CourseDTO> listCourses;
+    public ListView<LessonDTO> listLesAssigned;
 
     CourseBO courseBO = (CourseBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.COURSE);
     InstructorBO instructorBO = (InstructorBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.INSTRUCTOR);
     StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
-    private InstructorDTO instructorDTO;
     private CourseDTO courseDTO;
     private final EnrollmentContext enrollmentContext = EnrollmentContext.getInstance();
-    private EntityDTOConverter entityDTOConverter = new EntityDTOConverter();
+
     public void openCourseForm(MouseEvent mouseEvent) throws IOException {
         WindowManagerUtil.openForm(ViewPath.ADD_COURSE_FORM.getPath(), false);
     }
@@ -59,12 +55,6 @@ public class CourseMgmtPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupLists();
-
-        listCourses.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                setupForm(newValue);
-            }
-        });
 
         RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.COURSES).addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -84,6 +74,7 @@ public class CourseMgmtPageController implements Initializable {
                 });
             }
         });
+
         RefreshContext.getInstance().getRefreshFlag(RefreshContext.TableName.STUDENT_ENROLLED_LIST).addListener((observable, oldValue, newValue) -> {
             if (newValue && courseDTO != null) {
                 Platform.runLater(() -> {
@@ -112,8 +103,6 @@ public class CourseMgmtPageController implements Initializable {
                 });
             }
         });
-
-
     }
 
     public void editStdList(MouseEvent mouseEvent) {
@@ -161,16 +150,15 @@ public class CourseMgmtPageController implements Initializable {
             return;
         }
 
-        try {
-            // Check for changes before updating
-            if (txtCourseName.getText().equals(courseDTO.getName()) &&
-                    txtDescription.getText().equals(courseDTO.getDescription()) &&
-                    txtDuration.getText().equals(courseDTO.getDuration()) &&
-                    txtFees.getText().equals(courseDTO.getFees())) {
-                AlertUtil.setErrorAlert("No changes detected. Please modify some details before saving.");
-                return;
-            }
+        if (txtCourseName.getText().equals(courseDTO.getName()) &&
+                txtDescription.getText().equals(courseDTO.getDescription()) &&
+                txtDuration.getText().equals(courseDTO.getDuration()) &&
+                txtFees.getText().equals(courseDTO.getFees())) {
+            AlertUtil.setErrorAlert("No changes detected. Please modify some details before saving.");
+            return;
+        }
 
+        try {
             CourseDTO updatedCourse = new CourseDTO(
                     courseDTO.getCourseId(),
                     txtCourseName.getText(),
@@ -180,10 +168,9 @@ public class CourseMgmtPageController implements Initializable {
             );
 
             if (courseBO.update(updatedCourse)) {
-                AlertUtil.setInfoAlert("Course updated successfully");
-                listCourses.getItems().set(listCourses.getSelectionModel().getSelectedIndex(), updatedCourse);
                 listCourses.refresh();
                 this.courseDTO = updatedCourse;
+                AlertUtil.setInfoAlert("Course updated successfully");
             } else {
                 AlertUtil.setErrorAlert("Failed to update course");
             }
@@ -193,25 +180,19 @@ public class CourseMgmtPageController implements Initializable {
         }
     }
 
-    public void editLesList(MouseEvent mouseEvent) {
-    }
+    public void editLesList(MouseEvent mouseEvent) {}
 
     public void setupLists() {
         try {
             List<CourseDTO> courseList = courseBO.getAll();
             listCourses.getItems().setAll(courseList);
             if (!courseList.isEmpty()) {
-                // Only select(0) if no item is currently selected
-                if (listCourses.getSelectionModel().getSelectedItem() == null) {
-                    listCourses.getSelectionModel().select(0);
-                    // The setupForm will be called by the listener attached in initialize()
-                }
+                listCourses.getSelectionModel().select(0);
+                setupForm(courseList.get(0));
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to load course list", e);
         }
-
-        // REMOVED: listCourses.setSelectionModel(null);
 
         listCourses.setCellFactory(lv -> new ListCell<CourseDTO>() {
             @Override
@@ -221,24 +202,23 @@ public class CourseMgmtPageController implements Initializable {
                 if (empty || course == null) {
                     setGraphic(null);
                 } else {
-                    VBox card = new VBox(5);
+                    VBox card = new VBox(8);
                     card.setStyle(
                             "-fx-background-color: white; " +
-                                    "-fx-border-color: #ccc; " +
-                                    "-fx-border-radius: 8; " +
-                                    "-fx-background-radius: 8; " +
-                                    "-fx-padding: 10; "
+                                    "-fx-border-color: #ddd; " +
+                                    "-fx-border-radius: 10; " +
+                                    "-fx-background-radius: 10; " +
+                                    "-fx-padding: 12; "
                     );
 
                     Label lblName = new Label(course.getName());
-                    lblName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-
-                    Label lblDuration = new Label("Duration: " + course.getDuration());
-                    Label lblFees = new Label("Fees: " + course.getFees());
+                    lblName.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+                    Label lblDuration = new Label("⏳ " + course.getDuration());
+                    Label lblFees = new Label("💰 " + course.getFees());
 
                     card.getChildren().addAll(lblName, lblDuration, lblFees);
 
-                    // REMOVED: card.setOnMouseClicked(event -> setupForm(course));
+                    card.setOnMouseClicked(event -> setupForm(course));
 
                     setGraphic(card);
                 }
@@ -253,18 +233,17 @@ public class CourseMgmtPageController implements Initializable {
                 if (empty || instructor == null) {
                     setGraphic(null);
                 } else {
-                    VBox card = new VBox(8);
+                    VBox card = new VBox(6);
                     card.setStyle(
                             "-fx-background-color: white; " +
-                                    "-fx-border-color: #ddd; " +
-                                    "-fx-border-radius: 10; " +
-                                    "-fx-background-radius: 10; " +
-                                    "-fx-padding: 12; "
+                                    "-fx-border-color: #ccc; " +
+                                    "-fx-border-radius: 8; " +
+                                    "-fx-background-radius: 8; " +
+                                    "-fx-padding: 8; "
                     );
 
                     Label lblName = new Label(instructor.getName());
-                    lblName.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
+                    lblName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
                     Label lblEmail = new Label("📧 " + instructor.getEmail());
                     Label lblContact = new Label("📞 " + instructor.getContact());
                     Label lblAvailability = new Label("🟢 " + instructor.getAvailability());
@@ -294,9 +273,11 @@ public class CourseMgmtPageController implements Initializable {
 
                     Label lblName = new Label(student.getFirstName() + " " + student.getLastName());
                     lblName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-
+                    lblName.setTextFill(Color.BLACK);
                     Label lblEmail = new Label("📧 " + student.getEmail());
+                    lblEmail.setTextFill(Color.BLACK);
                     Label lblContact = new Label("📞 " + student.getContactNumber());
+                    lblContact.setTextFill(Color.BLACK);
 
                     card.getChildren().addAll(lblName, lblEmail, lblContact);
                     setGraphic(card);
@@ -315,7 +296,6 @@ public class CourseMgmtPageController implements Initializable {
                 }
 
                 this.courseDTO = course.get();
-
                 txtCourseName.setText(this.courseDTO.getName());
                 txtDescription.setText(this.courseDTO.getDescription());
                 txtDuration.setText(this.courseDTO.getDuration());
@@ -323,7 +303,6 @@ public class CourseMgmtPageController implements Initializable {
 
                 List<StudentDTO> enrolledStudents = courseBO.getAllStudentsByCourseId(this.courseDTO.getCourseId());
                 listStdEnrolled.getItems().setAll(enrolledStudents);
-
                 lblEnrollmentCount.setText(String.valueOf(enrolledStudents.size()));
 
                 List<InstructorDTO> assignedInstructors = courseBO.getAllInstructorsByCourseId(this.courseDTO.getCourseId());
@@ -335,5 +314,4 @@ public class CourseMgmtPageController implements Initializable {
             }
         }
     }
-
 }
