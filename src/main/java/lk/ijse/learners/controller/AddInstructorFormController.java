@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
+import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.bo.custom.InstructorBO;
 import lk.ijse.learners.controller.auth.Auth;
 import lk.ijse.learners.controller.util.AlertUtil;
@@ -83,6 +84,7 @@ public class AddInstructorFormController implements Initializable {
                 ));
                 AlertUtil.setInfoAlert("Successfully added instructor!");
                 WindowManagerUtil.closeForm(ancAddInstructorForm);
+                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.INSTRUCTORS, true);
                 return true;
             } catch (Exception e) {
                 throw new RuntimeException(e);
