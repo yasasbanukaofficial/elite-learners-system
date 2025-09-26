@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lk.ijse.learners.bo.BOFactory;
+import lk.ijse.learners.bo.context.RefreshContext;
 import lk.ijse.learners.bo.custom.CourseBO;
 import lk.ijse.learners.bo.custom.InstructorBO;
 import lk.ijse.learners.bo.exception.NotAvailableException;
@@ -122,6 +123,7 @@ public class AddCourseFormController implements Initializable {
                 ));
                 AlertUtil.setInfoAlert("Successfully added course!");
                 WindowManagerUtil.closeForm(ancAddCourseForm);
+                RefreshContext.getInstance().setRefreshFlag(RefreshContext.TableName.COURSES, true);
                 return true;
             } catch (Exception e) {
                 AlertUtil.setErrorAlert("Failed to add course!");
